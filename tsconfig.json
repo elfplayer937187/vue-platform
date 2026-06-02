@@ -1,0 +1,15 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ],
+  "compilerOptions": {
+    "strict": true,            // 保持其他严格检查
+    "noImplicitAny": false     // 只允许隐式 any
+  }
+}

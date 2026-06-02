@@ -1,0 +1,56 @@
+import { fileURLToPath, URL } from 'node:url'
+import { viteMockServe } from 'vite-plugin-mock'
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueDevTools from 'vite-plugin-vue-devtools'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import path from 'path'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    vue(),
+    vueDevTools(),
+    AutoImport({
+      resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
+    }),
+    Components({
+      resolvers: [ElementPlusResolver()],
+    }),
+    viteMockServe({
+      mockPath: 'mock',
+      enable: true,
+    }),
+    createSvgIconsPlugin({
+      // Specify the icon folder to be cached
+      iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
+      // Specify symbolId format
+      symbolId: 'icon-[dir]-[name]',
+    }),
+  ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `
+        @use "@/styles/variable.scss" as *;
+        `,
+      },
+    },
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://117.72.157.194:10086',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
+})
