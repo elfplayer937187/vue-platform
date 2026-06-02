@@ -3,13 +3,16 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router/index.ts'
+import globalComponents from './components/index.ts'
 import '@/styles/index.scss'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
+// 注册 SVG 精灵图（vite-plugin-svg-icons 需要）
+import 'virtual:svg-icons-register'
+
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component)
-}
+app.use(globalComponents)
+
 app.mount('#app')

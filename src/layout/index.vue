@@ -15,7 +15,7 @@
     </div>
     <!-- 内容 -->
     <div class="content">
-      <p style="height: 1000px">11</p>
+      <router-view></router-view>
     </div>
   </div>
 </template>
