@@ -12,7 +12,7 @@ const router = createRouter({
       meta: {
         title: '登录',
         IsShow: true,
-        Icon: 'Money',
+        Icon: 'User',
       },
     },
     // 首页一级路由
@@ -23,9 +23,9 @@ const router = createRouter({
       meta: {
         title: '首页',
         IsShow: true,
-        Icon: 'House',
+        Icon: 'HomeFilled',
       },
-      redirect:'/home',
+      redirect: '/home',
       children: [
         {
           path: '/home',
@@ -34,7 +34,7 @@ const router = createRouter({
           meta: {
             title: 'Home',
             IsShow: false,
-            Icon: 'House',
+            Icon: 'HomeFilled',
           },
         },
       ],
@@ -47,6 +47,7 @@ const router = createRouter({
       meta: {
         title: '数据展示',
         IsShow: true,
+        Icon: 'Monitor',
       },
     },
     // 404
@@ -57,6 +58,7 @@ const router = createRouter({
       meta: {
         title: '404页',
         IsShow: false,
+        Icon: 'WarningFilled',
       },
     },
     // 任意路由
@@ -76,7 +78,7 @@ const router = createRouter({
       meta: {
         title: '权限管理',
         IsShow: true,
-        Icon: 'House',
+        Icon: 'Lock',
       },
       children: [
         {
@@ -86,7 +88,7 @@ const router = createRouter({
           meta: {
             title: '用户信息',
             IsShow: true,
-            Icon: 'House',
+            Icon: 'User',
           },
         },
         {
@@ -96,7 +98,7 @@ const router = createRouter({
           meta: {
             title: '其他角色信息',
             IsShow: true,
-            Icon: 'House',
+            Icon: 'Avatar',
           },
         },
         {
@@ -106,7 +108,7 @@ const router = createRouter({
           meta: {
             title: '菜单管理',
             IsShow: true,
-            Icon: 'House',
+            Icon: 'Menu',
           },
         },
       ],
@@ -119,7 +121,7 @@ const router = createRouter({
       meta: {
         title: '商品管理',
         IsShow: true,
-        Icon: 'House',
+        Icon: 'Goods',
       },
       children: [
         {
@@ -129,7 +131,7 @@ const router = createRouter({
           meta: {
             title: '属性管理',
             IsShow: true,
-            Icon: 'House',
+            Icon: 'Setting',
           },
         },
         {
@@ -139,7 +141,7 @@ const router = createRouter({
           meta: {
             title: 'sku管理',
             IsShow: true,
-            Icon: 'House',
+            Icon: 'Box',
           },
         },
         {
@@ -149,7 +151,7 @@ const router = createRouter({
           meta: {
             title: 'spu管理',
             IsShow: true,
-            Icon: 'House',
+            Icon: 'Document',
           },
         },
         {
@@ -159,7 +161,7 @@ const router = createRouter({
           meta: {
             title: '品牌管理',
             IsShow: true,
-            Icon: 'House',
+            Icon: 'Stamp',
           },
         },
       ],

@@ -11,13 +11,20 @@
           </el-icon>
         </template>
 
-        {{ item.meta.title }}
+        <template #title>
+          <span>{{ item.meta.title }}</span>
+        </template>
       </el-menu-item>
     </template>
     <!-- 二级但是只有一个子路由 -->
     <template v-if="item.meta.IsShow">
       <el-sub-menu v-if="item.children && item.children.length == 1" :index="item.path">
-        <template #title>{{ item.meta.title }}</template>
+        <template #title>
+          <el-icon v-if="item.meta.Icon">
+            <component :is="item.meta.Icon"></component>
+          </el-icon>
+          <span>{{ item.meta.title }}</span>
+        </template>
         <el-menu-item :index="item.children[0].path" @click="goRoute">{{
           item.children[0].meta.title
         }}</el-menu-item>
@@ -25,8 +32,14 @@
     </template>
     <!-- 二级多个路由 -->
     <template v-if="item.meta.IsShow">
+      
       <el-sub-menu v-if="item.children && item.children.length > 1" :index="item.path">
-        <template #title>{{ item.meta.title }}</template>
+        <template #title>
+          <el-icon v-if="item.meta.Icon">
+            <component :is="item.meta.Icon"></component>
+          </el-icon>
+          <span>{{ item.meta.title }}</span>
+        </template>
         <Menup :menuList="item.children"></Menup>
       </el-sub-menu>
     </template>
