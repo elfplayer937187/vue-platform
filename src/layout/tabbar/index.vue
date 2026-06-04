@@ -2,11 +2,9 @@
   <div class="tabbar" >
     <div class="tabbar-left">
       <!-- 图标静态 -->
-      <el-button @click="ChangeFold">
-        <el-icon>
+        <el-icon @click="ChangeFold">
             <component :is="iconComponent"></component>
         </el-icon>
-      </el-button>
       <!-- 左侧面包屑 -->
       <el-breadcrumb separator-icon="ArrowRight" class="bread-crumb">
         <el-breadcrumb-item style="margin-left: 10px">权限管理</el-breadcrumb-item>
@@ -54,7 +52,7 @@ const {ChangeFold}=layoutSettings
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+  transition: all 1s;
   .tabbar-left {
     margin-left: 20px;
     display: flex;
