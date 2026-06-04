@@ -40,7 +40,7 @@
           </el-icon>
           <span>{{ item.meta.title }}</span>
         </template>
-        <Menup :menuList="item.children"></Menup>
+        <Menup :menu-list="item.children"></Menup>
       </el-sub-menu>
     </template>
   </template>
