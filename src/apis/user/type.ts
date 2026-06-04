@@ -29,5 +29,5 @@ interface user{
 // 定义服务器返回用户信息的相关数据类型
 export interface userResponseData{
     code:number,
-    data:user
+    data:user,
 }

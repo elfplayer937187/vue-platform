@@ -4,7 +4,10 @@
  </template>
  
  <script lang="ts" setup>
- 
+//  挂载时获取用户信息
+
+
+
  </script>
  
  <style scoped lang="scss">
