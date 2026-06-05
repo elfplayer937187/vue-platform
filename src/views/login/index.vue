@@ -69,28 +69,32 @@ const path:any=$router.query.redirect
 const login=async ()=>{
   // 当所有表单校验成功再发请求
   // 保证表单校验完成再发请求
-  const res=await LoginRule.value.validate()
-  console.log(res);
-  
+  await LoginRule.value.validate()
   // 点击登录请求
   // 给仓库发送登路请求
   isloading.value=true
   try{
+    // 获取用户token和姓名
     await useUser.loginUser(LoginForm)
+    await useUser.GetUserInfo()
+    
     router.push({path:path||'/'})
     ElNotification({
       title: `Hi,${hour}`,
       type: 'success',
       message: '欢迎回来！',
     })
+    
   } catch (error) {
+    // console.dir(error)
     ElNotification({
       title: '登录失败',
       type: 'error',
       message: error as string ,
     })
-    isloading.value=false
+    
   }
+  isloading.value=false
 
 }
 function CheckUsername(rule:any,value:string,callback:(error?: string | Error) => void){

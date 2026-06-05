@@ -35,6 +35,7 @@ router.beforeEach(async (to:any,from:any,next:any)=>{
                     // token过期和用户手动修改token->退出登录并且清除信息，跳转到登录页
                     UserStore.userLogout()
                     next({path:'/login',query:{redirect:to.path}})
+                    console.dir(error)
                 }
             }
         }
