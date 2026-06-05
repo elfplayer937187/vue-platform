@@ -17,9 +17,7 @@
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    e @click="refreshComponnt"
     <!-- 右侧 -->
-    @click="fullScreen"
     <div class="tabbar-right">
       <!-- 刷新按钮 -->
       <el-button @click="refreshComponent" type="primary" icon="Refresh" circle></el-button>
@@ -37,7 +35,7 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -51,20 +49,24 @@ import useLayoutSettings from '@/stores/modules/LayoutSettings'
 import { useRoute } from 'vue-router'
 import useUserStore from '@/stores/modules/user'
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+// 初始化路由器
+const $router = useRouter()
 // 使用layoutstore
 const layoutSettings = useLayoutSettings()
 const { iconComponent } = storeToRefs(layoutSettings)
 const { ChangeFold } = layoutSettings
 const { refresh } = storeToRefs(layoutSettings)
-// 使用userStore挂载图片和姓名
+// 使用userStore挂载图片和姓名,退出登录操作
 const UserStore = useUserStore()
 const { username, avatar } = storeToRefs(UserStore)
-console.log(username, avatar)
-
+const { userLogout } = UserStore
+// 刷新业务修改refresh值
 const $route = useRoute()
 function refreshComponent() {
   refresh.value = !refresh.value
 }
+// 全屏
 function fullScreen() {
   const full = document.fullscreenElement
   if (!full) {
@@ -75,7 +77,17 @@ function fullScreen() {
 }
 onMounted(() => {
   UserStore.GetUserInfo()
+  console.log($route.path);
+  
 })
+// 退出登录点击的回调
+function logout() {
+  // 向服务器发请求[退出登录接口]
+  // 清空数据[token|username|avatar]
+  userLogout()
+  // 跳转登录
+  $router.push({path:'/login',query:{redirect:$route.path}})
+}
 </script>
 
 <style scoped lang="scss">

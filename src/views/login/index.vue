@@ -45,6 +45,7 @@ import useUserStore from '@/stores/modules/user';
 import { useRouter } from 'vue-router';
 import { ElNotification } from 'element-plus';
 import { getTime } from '@/utils/time';
+import { useRoute } from 'vue-router';
 // 手动导入 ElNotification 的样式（函数式调用不会被 unplugin 自动加载）
 import 'element-plus/es/components/notification/style/css';
 // 引入用户仓库
@@ -61,6 +62,9 @@ const LoginForm=reactive({
 const hour=getTime()
 // 获取ref
 const LoginRule=ref()
+// 获取route的query参数并且跳转
+const $router=useRoute()
+const path:any=$router.query.redirect
 // 处理登录
 const login=async ()=>{
   // 当所有表单校验成功再发请求
@@ -73,7 +77,7 @@ const login=async ()=>{
   isloading.value=true
   try{
     await useUser.loginUser(LoginForm)
-    router.push('/')
+    router.push({path:path||'/'})
     ElNotification({
       title: `Hi,${hour}`,
       type: 'success',
