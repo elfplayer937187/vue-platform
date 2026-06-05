@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { reqLogin, reqUserInfo } from '@/apis/user'
-import type { LoginType } from '@/apis/user/type'
 import {SET_TOKEN,GET_TOKEN,REMOVE_TOKEN}from '@/utils/token'
 import router from '@/router/index'
 import type { RouterType } from './types/RouterType'
 import {ref} from 'vue'
+import type { LoginType } from '@/apis/user/type'
 const useUserStore = defineStore('User', {
   // 数据
   state():RouterType {
@@ -18,21 +18,21 @@ const useUserStore = defineStore('User', {
   },
   actions: {
     // 用户登录
-    async loginUser(LoginForm: any) {
+    async loginUser(LoginForm: LoginType) {
       
         const resp = await reqLogin(LoginForm)
         // 成功就记录token
         
-        // console.log(resp);
+        console.log(resp);
         
         if(resp.code===200){
-            this.token=(resp.data as string)
+            this.token=(resp.data)
             SET_TOKEN(this.token)
             // console.log(this.token);
             
             return '成功'
         }else{
-          throw resp.data.message
+          throw('登录失败')
           // 等价于 Promise.reject('resp.data.message')
         }
       
