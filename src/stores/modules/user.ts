@@ -18,15 +18,18 @@ const useUserStore = defineStore('User', {
   },
   actions: {
     // 用户登录
-    async loginUser(LoginForm: LoginType) {
+    async loginUser(LoginForm: any) {
       
         const resp = await reqLogin(LoginForm)
         // 成功就记录token
         
+        // console.log(resp);
         
         if(resp.code===200){
-            this.token=(resp.data.token as string)
+            this.token=(resp.data as string)
             SET_TOKEN(this.token)
+            // console.log(this.token);
+            
             return '成功'
         }else{
           throw resp.data.message
@@ -36,11 +39,12 @@ const useUserStore = defineStore('User', {
     },
     // 获取用户信息并存储在仓库
     async GetUserInfo(){
-      
+        console.trace('GetUserInfo 调用来源')
         const res=await reqUserInfo()
+        
         if(res.code===200){
-          this.username=res.data.checkUser.username
-          this.avatar=res.data.checkUser.avatar
+          this.username=res.data.name
+          this.avatar=res.data.avatar
           return 'ok'
         }else{
           return Promise.reject('获取用户信息失败')

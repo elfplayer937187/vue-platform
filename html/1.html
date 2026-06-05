@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        axios({
+            method:'post',
+            url: 'http://117.72.157.194:10086/admin/acl/index/login',
+            data:{
+                username:'admin',
+                password:'111111'
+            }
+        }).then((res)=>{
+            console.log(res);
+            
+        }).reject((error)=>{
+            console.dir(error);
+            
+        })
+    </script>
+</body>
+</html>
+
