@@ -52,7 +52,7 @@ defineProps(['menuList'])
 const $router=useRouter()
 
 const goRoute = (vc: { index: string; indexPath: string[]; active: boolean }) => {
-  console.log(vc.index)  // vc.index 才是路径字符串，如 '/login'、'/acl/user'
+// vc.index 才是路径字符串，如 '/login'、'/acl/user'
   $router.push(vc.index)
 }
 </script>

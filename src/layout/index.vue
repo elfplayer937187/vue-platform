@@ -88,7 +88,7 @@ const {
     left: $base-menu-width;
     width: calc(100% - $base-menu-width);
     height: calc(100% - $base-menu-topheight);
-    background-color: green;
+    background-color: white;
     top: $base-menu-topheight;
     padding: 20px;
     overflow: auto;

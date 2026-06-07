@@ -23,8 +23,6 @@ const useUserStore = defineStore('User', {
         const resp = await reqLogin(LoginForm)
         // 成功就记录token
         
-        console.log(resp);
-        
         if(resp.code===200){
             this.token=(resp.data)
             SET_TOKEN(this.token)
@@ -39,7 +37,6 @@ const useUserStore = defineStore('User', {
     },
     // 获取用户信息并存储在仓库
     async GetUserInfo(){
-        console.trace('GetUserInfo 调用来源')
         const res=await reqUserInfo()
         
         if(res.code===200){

@@ -77,8 +77,6 @@ function fullScreen() {
 }
 onMounted(() => {
   UserStore.GetUserInfo()
-  console.log($route.path);
-  
 })
 // 退出登录点击的回调
 function logout() {
