@@ -1,6 +1,6 @@
 
 // 已有品牌数据类型
-type RecordsData = {
+export type RecordsData = {
   createTime: number,
   updateTime: string,
   id?: number,
@@ -20,4 +20,15 @@ export interface getTrademarkListResponseType {
     pages: number
   },
   ok: boolean
+}
+export interface tradeMarkType{
+  id?:number,
+  tmName: string,
+  logoUrl: string
+}
+export interface AppendChangeType{
+  code:number,
+  message:string,
+  data:null,
+  ok:boolean
 }
