@@ -69,12 +69,21 @@
       <el-table-column prop="prop" label="品牌操作" width="width">
         <template #default="{ row }">
           <el-button type="primary" icon="Edit" @click="changeValue(row)"></el-button>
-          <el-button type="primary" icon="Delete"></el-button>
+          <el-button type="primary" icon="Delete" @click="showDeleteDialog(row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
+    <!-- 删除的dialog -->
+    <el-dialog v-model="DeleteDialogVisible" class="delete-dialog" title="是否删除？" width="500" destroy-on-close center>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="DeleteDialogVisible = false">否</el-button>
+          <el-button type="primary" @click="deleteValue">是</el-button>
+        </div>
+      </template>
+    </el-dialog>
     <!-- 分页器 -->
-    <div class="demo-pagination-block" ref="cio">
+    <div class="demo-pagination-block">
       <div class="demonstration"></div>
       <el-pagination
         v-model:current-page="currentPage"
@@ -94,12 +103,12 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, reactive } from 'vue'
-import { getTrademarkList, appendTrademarkList } from '@/apis/product/trademark'
+import { getTrademarkList, appendTrademarkList, removeTradeMarkList } from '@/apis/product/trademark'
 import type {
   RecordsType,
   getTrademarkListResponseType,
   tradeMarkType,
-  RecordsData
+  RecordsData,
 } from '@/apis/product/trademark/type'
 import useUserStore from '@/stores/modules/user'
 import { ElMessage } from 'element-plus'
@@ -107,7 +116,7 @@ import 'element-plus/es/components/message/style/css'
 import type { UploadProps, FormRules } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 // 获取确认表单的元素
-const formRef=ref()
+const formRef = ref()
 
 // 上传文件地址
 const trademarkParams = reactive<tradeMarkType>({
@@ -128,6 +137,10 @@ const background = ref(true)
 const total = ref<number>(0)
 // tradeMarklist列表
 const tradeMarkList = ref<RecordsType>([])
+  // 控制删除表单是否可见
+const DeleteDialogVisible=ref<boolean>(false)
+// delete获取的row
+let deleteRow=-1
 // 获取列表
 const HasTradeMark = async () => {
   const res: getTrademarkListResponseType = await getTrademarkList(
@@ -181,7 +194,7 @@ const uploading1 = async () => {
   try {
     await formRef.value.validate()
     const res = await appendTrademarkList(trademarkParams)
-    
+
     if (res.code === 200) {
       // 添加成功关闭对话框，重新渲染页面，提示信息
       dialogVisible.value = false
@@ -198,40 +211,49 @@ const uploading1 = async () => {
         message: '添加信息失败',
       })
     }
-  } catch(error) {
-    if((error as any).logoUrl||(error as any).tmName){
+  } catch (error) {
+    if ((error as any).logoUrl || (error as any).tmName) {
       ElMessage({
-        type:'error',
-        message:'图片或者姓名未添加或者出错'
+        type: 'error',
+        message: '图片或者姓名未添加或者出错',
       })
-      
-    }
-
-    else{
+    } else {
       ElMessage({
-        type:'error',
-        message:'网络异常'
+        type: 'error',
+        message: '网络异常',
       })
     }
-    
-    
-    
   }
 }
 
 // 修改数据
-const changeValue = (row:RecordsData) => {
-  console.log(row);
+const changeValue = (row: RecordsData) => {
+  console.log(row)
   // 1.拿到id,url,name,   2.打开dialog    3.渲染到dialog
-  dialogVisible.value=true
-  trademarkParams.id=row.id
-  trademarkParams.logoUrl=row.logoUrl
-  trademarkParams.tmName=row.tmName
-
+  dialogVisible.value = true
+  trademarkParams.id = row.id
+  trademarkParams.logoUrl = row.logoUrl
+  trademarkParams.tmName = row.tmName
+}
+// 删除数据
+const deleteValue = async () => {
+  try{
+    await removeTradeMarkList(deleteRow)
+    ElMessage({
+      type:'success',
+      message:'删除成功！'
+    })
+  }catch{
+    ElMessage({
+      type:'error',
+      message:'删除失败！'
+    })
+  }
+  DeleteDialogVisible.value=false
+  HasTradeMark()
 }
 // dialog名称校验
 const validatetmName = (rule: any, value: any, callback: any) => {
-
   if (value.trim().length <= 2) {
     return callback(new Error('logo名称必须大于2'))
   } else if (value.trim().length >= 10) {
@@ -250,10 +272,15 @@ const validatePasslogoUrl = (rule: any, value: any, callback: any) => {
 }
 // 定义表单验证规则（不要用 reactive 包裹 FormRules）
 const rules: FormRules<typeof trademarkParams> = {
-  tmName: [{ validator: validatetmName, trigger: 'change' }],
+  tmName: [{ validator: validatetmName, trigger: 'blur' }],
   logoUrl: [{ validator: validatePasslogoUrl, trigger: 'blur' }],
 }
 
+// 显示删除dialog
+const showDeleteDialog=(row:RecordsData)=>{
+  deleteRow=(row.id as number)
+  DeleteDialogVisible.value=true
+}
 </script>
 
 <style lang="scss" scoped>
@@ -263,6 +290,7 @@ const rules: FormRules<typeof trademarkParams> = {
 .demo-pagination-block {
   margin-top: 10px;
 }
+
 </style>
 <style>
 .avatar-uploader .el-upload {

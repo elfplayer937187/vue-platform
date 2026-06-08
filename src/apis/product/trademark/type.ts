@@ -26,9 +26,15 @@ export interface tradeMarkType{
   tmName: string,
   logoUrl: string
 }
-export interface AppendChangeType{
-  code:number,
-  message:string,
+// 
+export interface AppendChangeType extends baseTrademarkType{
   data:null,
-  ok:boolean
+}
+export interface DeleteTrademarkType extends baseTrademarkType{
+  data:string,
+}
+interface baseTrademarkType{
+    code:number,
+    message:string,
+    ok:boolean
 }
