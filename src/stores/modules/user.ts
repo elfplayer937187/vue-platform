@@ -3,7 +3,6 @@ import { reqLogin, reqUserInfo } from '@/apis/user'
 import {SET_TOKEN,GET_TOKEN,REMOVE_TOKEN}from '@/utils/token'
 import router from '@/router/index'
 import type { RouterType } from './types/RouterType'
-import {ref} from 'vue'
 import type { LoginType } from '@/apis/user/type'
 const useUserStore = defineStore('User', {
   // 数据

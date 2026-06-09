@@ -284,6 +284,12 @@ const showDeleteDialog=(row:RecordsData)=>{
 </script>
 
 <style lang="scss" scoped>
+:deep(.delete-dialog){
+  .el-dialog__header{
+    
+  }
+}
+
 .Plus {
   margin-bottom: 10px;
 }
