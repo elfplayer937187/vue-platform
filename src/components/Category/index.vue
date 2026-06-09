@@ -40,4 +40,16 @@ onMounted(async()=>{
 .el-form-item{
     width: 300px;
 }
+.el-card {
+   :deep(.el-card__body) {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     height: 100%;
+   }
+   :deep(.el-form-item) {
+    align-items: center;
+    margin-bottom: 0px;
+   }
+ }
 </style>
