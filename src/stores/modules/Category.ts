@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getFirstCategory, getSecondCategory, getThirdCategory } from '@/apis/product/attr'
-import type { dataType,ResponseAttrType } from '@/apis/product/attr/type' 
-import type { selectType } from './types/CategoryType'
+import type { dataType} from '@/apis/product/attr/type' 
 const useCategoryStore = defineStore('Category', () => {
   const selectFirst = ref<dataType[]>()
   const selectSecond = ref<dataType[]>()
@@ -20,10 +19,13 @@ const useCategoryStore = defineStore('Category', () => {
         selectFirst.value = res.data
         // 将第一选项框的值默认为返回数据的第一个
         C1Id.value=(res.data[0] as dataType).id
-        await getSecond()
+        // 打印selectFirst
+        // console.log(selectFirst.value);
         
+        await getSecond()
+        return 'ok'
       } else {
-        console.log('获取第一选项框失败')
+        throw('获取第一选项框失败')
       }
     } catch {
       throw('网络异常')
@@ -35,9 +37,11 @@ const useCategoryStore = defineStore('Category', () => {
       const res=await getSecondCategory(C1Id.value)
       selectSecond.value=res.data
       C2Id.value=(res.data[0] as dataType).id
+      // console.log(2,selectSecond.value);
+
       await getThird()
       // console.log(selectSecond.value);
-      
+      return 'ok'
     }catch{
       throw('网络异常');
     }
@@ -47,7 +51,8 @@ const useCategoryStore = defineStore('Category', () => {
       const res=await getThirdCategory(C2Id.value)
       selectThird.value=res.data
       C3Id.value=(res.data[0] as dataType).id
-      
+      // console.log(3,selectThird.value);
+      return 'ok'
     }catch{
       throw('没有id');
       
