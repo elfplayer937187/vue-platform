@@ -9,6 +9,8 @@ const useCategoryStore = defineStore('Category', () => {
   const C1Id = ref<number|string>('')
   const C2Id = ref<number|string>('')
   const C3Id = ref<number|string>('')
+  // 控制表单是否开启
+  const Isdisabled=ref<boolean>(false)
   const getFirst = async () => {
     try {
       // 获取分类一数据
@@ -68,7 +70,8 @@ const useCategoryStore = defineStore('Category', () => {
     C3Id,
     getFirst,
     getSecond,
-    getThird
+    getThird,
+    Isdisabled
   }
 })
 export default useCategoryStore
