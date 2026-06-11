@@ -13,19 +13,19 @@ export interface dataType {
 export interface ResponseAttrType extends BaseAttrType {
   data: dataType[]
 }
-// AttrINfo基本类型
+// 三级属性值对象基本类型
 interface attrValueListType{
-    id: number,
+    id?: number,
     valueName: string,
-    attrId: number
+    attrId?: number
 }
-
+// 属性对象
 export interface ListItemType {
-  id: number,
-  attrName: string,
-  categoryId: number,
+  id?: number,  //已有属性id
+  attrName: string, //新增添加属性名
+  categoryId: number|string,//给哪个三级分类新增的id
   categoryLevel: number,
-  attrValueList: attrValueListType[]
+  attrValueList: attrValueListType[]  //新增添加属性值数组
 }
 // 定义AttrINfo的响应式返回类型
 export interface getAttrInfoListResponseType extends BaseAttrType {

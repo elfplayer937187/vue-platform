@@ -20,8 +20,8 @@
     <!-- 右侧 -->
     <div class="tabbar-right">
       <!-- 刷新按钮 -->
-      <el-button @click="refreshComponent" type="primary" icon="Refresh" circle></el-button>
-      <el-button @click="fullScreen" type="primary" icon="FullScreen" circle></el-button>
+      <el-button type="primary" icon="Refresh" circle @click="refreshComponent"></el-button>
+      <el-button type="primary" icon="FullScreen" circle @click="fullScreen"></el-button>
       <el-button type="primary" icon="Setting" circle></el-button>
       <span class="el-dropdown-link">
         <img :src="avatar" style="width: 24px; height: 24px; margin: 0 10px" alt="" />
