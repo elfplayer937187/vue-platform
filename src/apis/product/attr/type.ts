@@ -31,3 +31,7 @@ export interface ListItemType {
 export interface getAttrInfoListResponseType extends BaseAttrType {
   data: ListItemType[]
 }
+// 定义删除第三接口标签响应返回值类型
+export interface deleteThirdResponseType extends BaseAttrType{
+  data:string
+}

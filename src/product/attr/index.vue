@@ -28,7 +28,7 @@
           <el-table-column prop="prop" label="操作" width="200px" align="center">
             <template #default="{ row }">
               <el-button type="primary" icon="Edit" @click="HandleEdit(row)"></el-button>
-              <el-button type="primary" icon="Delete"></el-button>
+              <el-button type="primary" icon="Delete" @click="HandleDelete(row.id)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -96,7 +96,7 @@ import Category from '@/components/Category/index.vue'
 import useCategoryStore from '@/stores/modules/Category'
 import { watch, ref, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
-import { appendThridTag, getCategoryTag } from '@/apis/product/attr'
+import { appendThridTag, deleteThirdCategory, getCategoryTag } from '@/apis/product/attr'
 import type { ListItemType } from '@/apis/product/attr/type'
 import 'element-plus/dist/index.css'
 import { ElMessage } from 'element-plus'
@@ -172,6 +172,36 @@ const HandleEdit = (row:any) => {
   // 深拷贝实现,浅拷贝会有标签bug
   Object.assign(AppendParams,JSON.parse(JSON.stringify(row)))
 }
+// 处理第一界面删除
+const HandleDelete=async(attrId:number)=>{
+  try{
+    // 发请求删除当前attrid，并且重新渲染
+    const res=await deleteThirdCategory(attrId)
+    if(res.code===200){
+      // 刷新界面并且提示删除成功
+      ElMessage({
+        type:"success",
+        message:"删除成功"
+      })
+      await getAttr()
+      return 'ok'
+    }else{
+      ElMessage({
+        type:"error",
+        message:"删除失败"
+      })
+      throw('删除失败')
+    }
+  
+  }catch{
+      ElMessage({
+        type:"error",
+        message:"网络异常"
+      })
+    throw('网络异常')
+  }
+  
+}
 // 保存第二界面值
 const saveAppendParams = async () => {
   // 收集参数发请求
@@ -183,7 +213,8 @@ const saveAppendParams = async () => {
         message: '保存成功',
       })
       showChange.value = false
-      // 重新渲染第一界面列表
+      // 重新渲染第一界面列表,并且把数据解除禁用
+      Isdisabled.value=false
       await getAttr()
       return 'ok'
     } else {
@@ -223,6 +254,7 @@ const handleDelete2 = (name: string) => {
     return item.valueName !== name
   })
 }
+
 </script>
 
 <style scoped lang="scss">
