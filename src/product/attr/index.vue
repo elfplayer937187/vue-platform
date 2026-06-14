@@ -8,6 +8,7 @@
         <el-button type="primary" icon="Plus" style="margin-bottom: 10px" @click="AppendValue"
           >添加元素</el-button
         >
+        <!-- 第一视图表格 -->
         <el-table style="width: 100%" :border="true" :data="AttrList">
           <el-table-column prop="prop" label="序号" width="80px" align="center" type="index">
           </el-table-column>
@@ -33,9 +34,11 @@
           </el-table-column>
         </el-table>
       </div>
+      <!-- 点击添加属性之后的卡片界面 -->
       <div v-show="showChange">
         <!-- 添加元素静态组件 -->
         <el-form ref="form">
+          <!-- 输入框 -->
           <el-form-item label="属性名称">
             <el-input
               placeholder="请输入文本"
@@ -43,6 +46,7 @@
               v-model="AppendParams.attrName"
             ></el-input>
           </el-form-item>
+          <!--添加属性值 取消(不保留数据)两个按钮 -->
           <el-form-item label="">
             <el-button
               @click="appendAttr"
@@ -54,6 +58,7 @@
             >
             <el-button type="primary" @click="HandleCancel">取消(不保留数据)</el-button>
           </el-form-item>
+          <!-- 下方表格 -->
           <el-form-item label="">
             <el-table :data="AppendParams.attrValueList" style="width: 100%" border>
               <el-table-column prop="prop" label="序号" width="100px" align="center" type="index">
@@ -94,7 +99,7 @@
 <script lang="ts" setup>
 import Category from '@/components/Category/index.vue'
 import useCategoryStore from '@/stores/modules/Category'
-import { watch, ref, reactive } from 'vue'
+import { watch, ref, reactive,onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { appendThridTag, deleteThirdCategory, getCategoryTag } from '@/apis/product/attr'
 import type { ListItemType } from '@/apis/product/attr/type'
@@ -120,6 +125,7 @@ const AppendParams = reactive<ListItemType>({
   // 初始设定为空数组
   attrValueList: [],
 })
+
 // 判断AppendParams里面的list的属性都不为空值
 // 判断是否可以禁用保存按钮：数组为空或有空值 → 禁用
 const EachValueNameNotNull = () => {
