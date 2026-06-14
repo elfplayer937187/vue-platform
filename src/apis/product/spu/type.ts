@@ -51,3 +51,34 @@ export interface ImageType{
 export interface ImageResponseType extends BaseType{
     data:ImageType[]
 }
+
+
+// 销售属性类型
+export interface AttrResponseType extends BaseType {
+    data:AttrType[]
+}
+export interface AttrType{
+    baseSaleAttrId:number,
+    id:number,
+    saleAttrName:string,
+    spuId:number,
+    spuSaleAttrValueList:spuSaleType[]
+}
+export interface spuSaleType{
+    ID:number,
+    baseSaleAttrId:number,
+    createTime:any,
+    id:number,
+    saleAttrValueName:string,
+    spuId:number,
+    updateTime:any
+}
+
+// 销售列表
+export interface HasResponseType extends BaseType{
+    data:HasType[]
+}
+export interface HasType{
+    id:number,
+    name:string
+}

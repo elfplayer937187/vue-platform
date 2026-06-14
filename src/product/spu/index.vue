@@ -4,8 +4,10 @@
     <Category></Category>
     <!-- spu列表和spuForm的显示 -->
     <el-card class="append-spu">
-      <div v-show="ShowWhat===0" class="SPUList">
-        <el-button type="primary" icon="Plus" class="Plus" @click="HandleAppendSPU">添加SPU</el-button>
+      <div v-show="ShowWhat === 0" class="SPUList">
+        <el-button type="primary" icon="Plus" class="Plus" @click="HandleAppendSPU"
+          >添加SPU</el-button
+        >
         <el-table style="width: 100%" :data="SPUList">
           <el-table-column prop="prop" label="序号" width="100px" type="index" align="center">
           </el-table-column>
@@ -20,10 +22,12 @@
             </template>
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="width">
-            <el-button type="primary" icon="Plus"></el-button>
-            <el-button type="warning" icon="Edit"></el-button>
-            <el-button type="info" icon="InfoFilled"></el-button>
-            <el-button type="danger" icon="Delete"></el-button>
+            <template #default="{ row }">
+              <el-button type="primary" icon="Plus"></el-button>
+              <el-button type="warning" icon="Edit" @click="HandleEdit(row)"></el-button>
+              <el-button type="info" icon="InfoFilled"></el-button>
+              <el-button type="danger" icon="Delete"></el-button>
+            </template>
           </el-table-column>
         </el-table>
         <!-- 分页器 -->
@@ -38,8 +42,8 @@
           @change="getSPUpagination"
         />
       </div>
-      <div v-show="ShowWhat===1" class="spuForm">
-        <spuForm @canceled="UpdateSpu"></spuForm>
+      <div v-show="ShowWhat === 1" class="spuForm">
+        <spuForm @canceled="UpdateSpu" ref="spuVC"></spuForm>
       </div>
     </el-card>
   </div>
@@ -55,13 +59,15 @@ import { storeToRefs } from 'pinia'
 import type { SPUType } from '@/apis/product/spu/type'
 // 获取Category传递的信息
 const CategoryStore = useCategoryStore()
-const { C3Id,Isdisabled } = storeToRefs(CategoryStore)
+const { C3Id, Isdisabled } = storeToRefs(CategoryStore)
 // SPU分页列表
 const SPUList = ref<SPUType[]>()
 // 现在的页数
 const currentPage = ref<number>(1)
 const pageSize = ref<number>(3)
 const total = ref<number>(0)
+// 初始化定义spuForm
+const spuVC = ref()
 // spuForm定义
 /* 
 0:主界面
@@ -90,14 +96,19 @@ const getSPUpagination = async () => {
 // 监听三级分类获取列表
 watch(C3Id, getSPUpagination)
 // 按钮 添加SPU
-const HandleAppendSPU=()=>{
-  Isdisabled.value=true
-  ShowWhat.value=1
+const HandleAppendSPU = () => {
+  Isdisabled.value = true
+  ShowWhat.value = 1
 }
 // 接子组件传递的参数
-const UpdateSpu=(num:number)=>{
-  ShowWhat.value=num
-  Isdisabled.value=false
+const UpdateSpu = (num: number) => {
+  ShowWhat.value = num
+  Isdisabled.value = false
+}
+// 处理编辑事件
+const HandleEdit = (row: SPUType) => {
+  spuVC.value.initHasSpuData(row)
+  ShowWhat.value=1
 }
 </script>
 
