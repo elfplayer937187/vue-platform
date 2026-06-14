@@ -2,7 +2,7 @@
   <!-- 上方的card -->
   <el-card>
     <el-form label-width="80px" :inline="true">
-      <el-form-item label="一级菜单" >
+      <el-form-item label="一级菜单">
         <el-select v-model="C1Id" placeholder="请选择" :disabled="Isdisabled" @change="getSecond">
           <el-option
             v-for="data in selectFirst"
@@ -40,21 +40,25 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted} from 'vue'
+import { onMounted } from 'vue'
 import useCategoryStore from '@/stores/modules/Category'
 import { storeToRefs } from 'pinia'
+
+// 接收父组件传递的getAttr函数
+
+
 const CategoryStore = useCategoryStore()
-const { selectFirst, selectSecond, selectThird, C1Id, C2Id, C3Id,Isdisabled } = storeToRefs(CategoryStore)
+const { selectFirst, selectSecond, selectThird, C1Id, C2Id, C3Id, Isdisabled } =
+  storeToRefs(CategoryStore)
 const { getFirst, getSecond, getThird } = CategoryStore
+
 // 挂载的时候自动加载三个id默认为1的选项
 onMounted(async () => {
   await getFirst()
   // console.log(C1Id.value);
   // console.log(C2Id.value);
   // console.log(C3Id.value);
-  
 })
-
 </script>
 
 <style scoped lang="scss">
