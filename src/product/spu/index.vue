@@ -25,7 +25,7 @@
             <template #default="{ row }">
               <el-button type="primary" icon="Plus"></el-button>
               <el-button type="warning" icon="Edit" @click="HandleEdit(row,(C3Id as number))"></el-button>
-              <el-button type="info" icon="InfoFilled"></el-button>
+              <el-button type="info" icon="InfoFilled" @click="HandleInfo"></el-button>
               <el-button type="danger" icon="Delete"></el-button>
             </template>
           </el-table-column>
@@ -119,6 +119,10 @@ const Handle2Save=async()=>{
   ShowWhat.value=0
   // 重新渲染列表
   await getSPUpagination()
+}
+// 处理第二视图查看Info事件
+const HandleInfo=()=>{
+  // ShowWhat.value==
 }
 </script>
 
