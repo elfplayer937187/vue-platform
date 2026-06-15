@@ -26,8 +26,8 @@ export interface SPUType{
     description: string,
     category3Id: number|string, 
     tmId: string|number,        //品牌id
-    spuImageList: ImageType[]|null,
-    spuSaleAttrList: AttrType[]|null,
+    spuImageList: ImageType[],
+    spuSaleAttrList: AttrType[],
     
 }
 // 普通返回类型

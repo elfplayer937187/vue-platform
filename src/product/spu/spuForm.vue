@@ -46,7 +46,12 @@
       </el-form-item>
       <!-- 销售属性选择 -->
       <el-form-item label="SPU销售属性" label-width="100px">
-        <el-select placeholder="" style="width: 300px; margin-right: 40px">
+        <!-- 选择未选择的销售属性 -->
+        <el-select
+          v-model="UnchosedHasId"
+          :placeholder="`还有${has?.length}项未选择`"
+          style="width: 300px; margin-right: 40px"
+        >
           <el-option
             v-for="PerHas in has"
             :key="PerHas.id"
@@ -54,7 +59,8 @@
             :value="PerHas.id"
           ></el-option>
         </el-select>
-        <el-button type="primary" icon="Plus" class="SPU-appendbtn">添加属性值</el-button>
+
+        <el-button type="primary" icon="Plus" class="SPU-appendbtn" @click="HandleAppendAttr" :disabled="UnchosedHasId===''">添加属性值</el-button>
       </el-form-item>
       <!-- 销售表 -->
       <el-form-item label="" label-width="100px">
@@ -73,13 +79,15 @@
                 :key="List.id"
                 class="SaleAttrTag"
                 type="success"
+                closable
                 >{{ List.saleAttrValueName }}</el-tag
               >
+              <el-button type="primary" icon="Plus" style="height: 25px"></el-button>
             </template>
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="width">
             <template #default="{ row }">
-              <el-button type="danger" icon="Delete"></el-button>
+              <el-button type="danger" icon="Delete" @click="HandleRowDelete(row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -95,7 +103,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import type { SPUType, TradeMarkDataType } from '@/apis/product/spu/type'
+import type { AttrType, HasType, SPUType, TradeMarkDataType } from '@/apis/product/spu/type'
 import useUserStore from '@/stores/modules/user'
 import {
   reqGetAllTradeMark,
@@ -110,7 +118,8 @@ import { Plus } from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
 
 // 存储一下Has
-const has = ref<any>()
+const has = ref<HasType[]>([])
+const UnchosedHasId = ref<string | number>('')
 // 获得token
 const headers = { token: useUserStore().token }
 
@@ -176,7 +185,7 @@ const FormParams = reactive<SPUType>({
   spuName: '',
   description: '',
   spuImageList: [],
-  spuSaleAttrList: null,
+  spuSaleAttrList: [],
   category3Id: -1,
   tmId: 1,
 })
@@ -191,7 +200,23 @@ const HandleCancel = () => {
 }
 // 所有品牌数据
 const TradeMarkList = ref<TradeMarkDataType[]>()
-
+// 获取属性赋值给has
+const FilterHas = async () => {
+  // 获取属性[共三种]
+  const PreHas = await reqGetSPUHas()
+  // 过滤元素赋值给has
+  if (FormParams.spuImageList !== null) {
+    has.value = PreHas.data.filter((item) => {
+      // item:{id,name} name在spuSaleAttrList[i].saleAttrName
+      for (let i = 0; i < (FormParams.spuSaleAttrList?.length as number); i++) {
+        if (item.name === (FormParams.spuSaleAttrList as any)[i].saleAttrName) {
+          return false
+        }
+      }
+      return true
+    })
+  }
+}
 // 处理父组件中编辑事件
 const initHasSpuData = async (row: SPUType, C3Id: number) => {
   FormParams.category3Id = C3Id
@@ -211,19 +236,11 @@ const initHasSpuData = async (row: SPUType, C3Id: number) => {
     }
   })
 
-  //   获取商品属性名称
-  //   const SaleAttrNames=await reqGetAllTradeMarkAttrList(id)
-  //   console.log(SaleAttrNames);
-
-  // 获取属性[共三种]
-  const PreHas = await reqGetSPUHas()
-  has.value = PreHas.data
-
-  //   FormParams.Has=Attrs.data
   //   获取属性列表
   const PreAttrId = await reqGetAllTradeMarkAttrList(FormParams.id)
   FormParams.spuSaleAttrList = PreAttrId.data
-  //   console.log(PreAttrId)
+  // 获取属性赋值给has
+  await FilterHas()
 }
 
 // 保存第二界面数据
@@ -259,6 +276,20 @@ const SaveLoad = async () => {
       message: '网络异常',
     })
   }
+}
+// 处理SPU销售属性表单整行删除
+const HandleRowDelete = async(row: AttrType) => {
+  ;(FormParams.spuSaleAttrList as any) = FormParams.spuSaleAttrList?.filter((item) => {
+    console.log(item.id, row.id)
+    return item.id !== row.id
+  })
+  // 重新渲染has
+  await FilterHas()
+}
+// 处理第二界面添加属性值按钮
+const HandleAppendAttr=()=>{
+  
+
 }
 defineExpose({ initHasSpuData, ClearFormParams })
 </script>
