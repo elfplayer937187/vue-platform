@@ -24,7 +24,7 @@
           <el-table-column prop="prop" label="操作" width="width">
             <template #default="{ row }">
               <el-button type="primary" icon="Plus"></el-button>
-              <el-button type="warning" icon="Edit" @click="HandleEdit(row)"></el-button>
+              <el-button type="warning" icon="Edit" @click="HandleEdit(row,(C3Id as number))"></el-button>
               <el-button type="info" icon="InfoFilled"></el-button>
               <el-button type="danger" icon="Delete"></el-button>
             </template>
@@ -43,7 +43,7 @@
         />
       </div>
       <div v-show="ShowWhat === 1" class="spuForm">
-        <spuForm @canceled="UpdateSpu" ref="spuVC"></spuForm>
+        <spuForm ref="spuVC" @canceled="UpdateSpu" @changeDisabled="Handle2Save"></spuForm>
       </div>
     </el-card>
   </div>
@@ -99,6 +99,8 @@ watch(C3Id, getSPUpagination)
 const HandleAppendSPU = () => {
   Isdisabled.value = true
   ShowWhat.value = 1
+  // 让子组件全部赋空值
+  spuVC.value.ClearFormParams()
 }
 // 接子组件传递的参数
 const UpdateSpu = (num: number) => {
@@ -106,9 +108,17 @@ const UpdateSpu = (num: number) => {
   Isdisabled.value = false
 }
 // 处理编辑事件
-const HandleEdit = (row: SPUType) => {
-  spuVC.value.initHasSpuData(row)
+const HandleEdit = (row: SPUType,C3Id:number) => {
+  spuVC.value.initHasSpuData(row,C3Id)
   ShowWhat.value=1
+  Isdisabled.value=true
+}
+// 处理第二视图保存事件
+const Handle2Save=async()=>{
+  Isdisabled.value=false
+  ShowWhat.value=0
+  // 重新渲染列表
+  await getSPUpagination()
 }
 </script>
 

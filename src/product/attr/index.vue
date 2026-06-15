@@ -41,19 +41,19 @@
           <!-- 输入框 -->
           <el-form-item label="属性名称">
             <el-input
+              v-model="AppendParams.attrName"
               placeholder="请输入文本"
               style="width: 300px"
-              v-model="AppendParams.attrName"
             ></el-input>
           </el-form-item>
           <!--添加属性值 取消(不保留数据)两个按钮 -->
           <el-form-item label="">
             <el-button
-              @click="appendAttr"
               type="primary"
               class="append-attr"
               icon="Plus"
               :disabled="AppendParams.attrName.trim().length === 0"
+              @click="appendAttr"
               >添加属性值</el-button
             >
             <el-button type="primary" @click="HandleCancel">取消(不保留数据)</el-button>
@@ -84,7 +84,7 @@
             </el-table>
             <el-form-item label="" class="under-button">
               <!-- disabled:数组为空 -->
-              <el-button type="primary" @click="saveAppendParams" :disabled="EachValueNameNotNull()"
+              <el-button type="primary" :disabled="EachValueNameNotNull()" @click="saveAppendParams"
                 >保存</el-button
               >
               <el-button @click="HandleSaveCancel">取消(保留数据)</el-button>
