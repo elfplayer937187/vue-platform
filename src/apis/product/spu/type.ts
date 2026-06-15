@@ -1,17 +1,15 @@
+// Response基本类型
+interface BaseType{
+    code:number,
+    message:string,
+    ok:boolean
+}
+
 // 分页列表类型
 export interface PaginationResponseType extends BaseType{
     data:DataType
 }
-// spuType
-export interface SPUType{
-    id?: number,
-    spuName:string,
-    description: string,
-    category3Id: number|string,
-    tmId: number,
-    spuImageList: any,
-    spuSaleAttrList: any
-}
+// 分页列表内容属性值
 interface DataType{
     records:SPUType[],
     total:number,
@@ -21,13 +19,24 @@ interface DataType{
     pages:number
 
 }
-interface BaseType{
-    code:number,
-    message:string,
-    ok:boolean
+// spuType
+export interface SPUType{
+    id?: number|string,    //已有spuId
+    spuName:string,
+    description: string,
+    category3Id: number|string, 
+    tmId: string|number,        //品牌id
+    spuImageList: ImageType[]|null,
+    spuSaleAttrList: AttrType[]|null,
+    
+}
+// 普通返回类型
+export interface BaseResponseType extends BaseType{
+    data:string
 }
 
-// 品牌类型定义
+// 品牌类型定义（13种品牌select）
+
 export interface TradeMarkType extends BaseType {
     data:TradeMarkDataType[]
 }
@@ -40,39 +49,54 @@ export interface TradeMarkDataType{
 
 // 图片类型
 export interface ImageType{
-    ID:number,
-    id:number,
-    createTime:any,
-    imgName:string,
-    imgUrl:string,
-    spuId:number,
-    updateTime:any
+    ID?:number,
+    id?:number,
+    createTime?:any,
+    imgName?:string,
+    imgUrl?:string,
+    spuId?:number,
+    updateTime?:any
+    name?:string,
+    url?:string
 }
 export interface ImageResponseType extends BaseType{
     data:ImageType[]
 }
 
 
-// 销售属性类型
+
+/* 
+第二界面最后一个表格里面的属性
+*/
 export interface AttrResponseType extends BaseType {
     data:AttrType[]
 }
+// SaleAttr
+/* 
+只需要收集 属性id，属性名称，属性列表
+*/
 export interface AttrType{
     baseSaleAttrId:number,
-    id:number,
-    saleAttrName:string,
-    spuId:number,
+    saleAttrName:string,//*
     spuSaleAttrValueList:spuSaleType[]
+    id?:number,
+    spuId?:number,
 }
+// saleAttrValue
+/* 
+只需要收集属性tagid，tagname，
+*/
 export interface spuSaleType{
-    ID:number,
+    ID?:number,
     baseSaleAttrId:number,
-    createTime:any,
-    id:number,
     saleAttrValueName:string,
-    spuId:number,
-    updateTime:any
+    createTime?:any,
+    id?:number,
+    spuId?:number,
+    updateTime?:any
 }
+
+
 
 // 销售列表
 export interface HasResponseType extends BaseType{
@@ -82,3 +106,4 @@ export interface HasType{
     id:number,
     name:string
 }
+
