@@ -74,7 +74,7 @@ export interface AttrResponseType extends BaseType {
 
 
 
-// 销售属性列表
+// 销售属性列表行
 export interface AttrType{
     baseSaleAttrId:number,
     saleAttrName:string,//*
@@ -82,7 +82,7 @@ export interface AttrType{
     id?:number,
     spuId?:number,
     flag?:boolean,
-    inputContent?:string
+    InputContent?:string
 }
 // 销售属性tag对象
 export interface spuSaleType{
@@ -93,9 +93,8 @@ export interface spuSaleType{
     id?:number,
     spuId?:number,
     updateTime?:any,
-
-
-
+    // flag?:boolean,
+    // InputContent?:any
 }
 
 

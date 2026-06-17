@@ -96,11 +96,13 @@ const getSPUpagination = async () => {
 // 监听三级分类获取列表
 watch(C3Id, getSPUpagination)
 // 按钮 添加SPU
-const HandleAppendSPU = () => {
+const HandleAppendSPU = async() => {
   Isdisabled.value = true
   ShowWhat.value = 1
   // 让子组件全部赋空值
   spuVC.value.ClearFormParams()
+  // 发送请求拿到数据
+  await spuVC.value.initAppendData(C3Id.value)
 }
 // 接子组件传递的参数
 const UpdateSpu = (num: number) => {

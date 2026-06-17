@@ -3,10 +3,9 @@
     <el-form ref="form" label-width="80px">
       <!-- 名称 -->
       <el-form-item label="SPU名称">
-        <el-input
-v-model="FormParams.spuName" placeholder="请输入名�?></el-input>
+        <el-input v-model="FormParams.spuName" placeholder="请输入名称"></el-input>
       </el-form-item>
-      <!-- 所有品牌数�?-->
+      <!-- 所有品牌数据 -->
       <el-form-item label="SPU品牌">
         <el-select v-model="FormParams.tmId" placeholder="">
           <el-option
@@ -22,7 +21,7 @@ v-model="FormParams.spuName" placeholder="请输入名�?></el-input>
         <el-input
           v-model="FormParams.description"
           type="textarea"
-          placeholder="请输入你的文本"
+          placeholder="请输入你的描述..."
         ></el-input>
       </el-form-item>
       <!-- 照片 -->
@@ -47,7 +46,7 @@ v-model="FormParams.spuName" placeholder="请输入名�?></el-input>
       </el-form-item>
       <!-- 销售属性选择 -->
       <el-form-item label="SPU销售属性" label-width="100px">
-        <!-- 选择未选择的销售属�?-->
+        <!-- 选择未选择的销售属性 -->
         <el-select
           v-model="UnchosedHasId"
           :placeholder="`还有${has?.length}项未选择`"
@@ -61,30 +60,50 @@ v-model="FormParams.spuName" placeholder="请输入名�?></el-input>
           ></el-option>
         </el-select>
 
-        <el-button type="primary" icon="Plus" class="SPU-appendbtn" :disabled="!UnchosedHasId" @click="HandleAppendAttr">添加属性</el-button>
+        <el-button
+          type="primary"
+          icon="Plus"
+          class="SPU-appendbtn"
+          :disabled="!has.length"
+          @click="HandleAppendAttr"
+          >添加属性值</el-button
+        >
       </el-form-item>
       <!-- 销售表 -->
       <el-form-item label="" label-width="100px">
         <el-table style="width: 100%" border :data="FormParams.spuSaleAttrList">
           <el-table-column prop="prop" label="序号" width="100px" type="index" align="center">
           </el-table-column>
-          <el-table-column prop="prop" label="销售属性名" width="width">
+          <el-table-column prop="prop" label="销售属性名字" width="width">
             <template #default="{ row }">
               {{ row.saleAttrName }}
             </template>
           </el-table-column>
-          <el-table-column prop="prop" label="销售属性" width="width">
+          <el-table-column prop="prop" label="销售属性值" width="width">
             <template #default="{ row }">
               <el-tag
-                v-for="List in row.spuSaleAttrValueList"
-                :key="List.id"
+                v-for="tag in row.spuSaleAttrValueList"
+                :key="tag.saleAttrValueName"
                 class="SaleAttrTag"
                 type="success"
                 closable
-                >{{ List.saleAttrValueName }}</el-tag
+                @close="HandleTagClose(row, tag.saleAttrValueName)"
+                >{{ tag.saleAttrValueName }}</el-tag
               >
-              <el-input v-show="row.flag" :ref="(el: any) => inputEls[row.id] = el" v-model="row.inputContent" size="small" placeholder="" style="width: 60px;margin-right: 10px;" @blur="toEditBlur(row)"></el-input>
-              <el-button type="primary" icon="Plus" style="height: 25px" @click="toEdit(row)"></el-button>
+              <el-input
+                v-show="row.flag"
+                v-model="row.InputContent"
+                size="small"
+                style="width: 60px; margin-right: 10px"
+                placeholder="请输入新标签"
+                @blur="toEditBlur(row)"
+              ></el-input>
+              <el-button
+                type="primary"
+                icon="Plus"
+                style="height: 25px"
+                @click="toEdit(row)"
+              ></el-button>
             </template>
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="width">
@@ -96,7 +115,7 @@ v-model="FormParams.spuName" placeholder="请输入名�?></el-input>
       </el-form-item>
       <!-- 按钮 -->
       <el-form-item label="" label-width="100px">
-        <el-button type="primary" @click="SaveLoad">保存</el-button>
+        <el-button type="primary" :disabled="!CheckIfTagMiss()" @click="SaveLoad">保存</el-button>
         <el-button type="primary" @click="HandleCancel">取消</el-button>
       </el-form-item>
     </el-form>
@@ -117,30 +136,29 @@ import {
 import { ElMessage } from 'element-plus'
 import type { UploadProps } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import 'element-plus/dist/index.css' // 关键：引入所有组件样?
+import 'element-plus/dist/index.css' // 关键：引入所有组件样式
 
 // 存储一下Has
 const has = ref<HasType[]>([])
 const UnchosedHasId = ref<string | number>('')
+// 临时存储添加的
 // 获得token
 const headers = { token: useUserStore().token }
 
 // 图片预览
 const dialogVisible = ref(false)
 const dialogImageUrl = ref('')
-// 存储每行 el-input 实例，用于点击添加时自动聚焦
-const inputEls: Record<number, any> = {}
 
-// 上传前校验：只允许图片且不超200MB
+// 上传前校验：只允许图片且不超过2MB
 const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
   const isImage = rawFile.type.startsWith('image/')
   const isLt2M = rawFile.size / 1024 / 1024 < 2
   if (!isImage) {
-    ElMessage.error('只能上传图片文件')
+    ElMessage.error('只能上传图片文件！')
     return false
   }
   if (!isLt2M) {
-    ElMessage.error('图片大小不能超过 2MB?')
+    ElMessage.error('图片大小不能超过 2MB！')
     return false
   }
   return true
@@ -160,7 +178,7 @@ const handleUploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => 
 
 // 删除图片回调
 const handleRemove: UploadProps['onRemove'] = () => {
-  // el-upload ?v-model:file-list 会自动从列表中移除，无需手动操作
+  // el-upload 的 v-model:file-list 会自动从列表中移除，无需手动操作
 }
 
 // 图片预览回调
@@ -173,7 +191,7 @@ const handlePreview: UploadProps['onPreview'] = (uploadFile) => {
 const FormParamsSpace = reactive<SPUType>({
   // 存储id
   id: '', //spu的id
-  // 编辑初始?
+  // 编辑初始化
   spuName: '',
   description: '',
   spuImageList: [],
@@ -185,7 +203,7 @@ const FormParamsSpace = reactive<SPUType>({
 const FormParams = reactive<SPUType>({
   // 存储id
   id: '', //spu的id
-  // 编辑初始�?
+  // 编辑初始化
   spuName: '',
   description: '',
   spuImageList: [],
@@ -197,12 +215,12 @@ const FormParams = reactive<SPUType>({
 const ClearFormParams = () => {
   Object.assign(FormParams, FormParamsSpace)
 }
-// cancel按钮传给父组件信�?
+// cancel按钮传给父组件信息
 const $emit = defineEmits(['Canceled', 'changeDisabled'])
 const HandleCancel = () => {
   $emit('Canceled', 0)
 }
-// 所有品牌数�?
+// 所有品牌数据
 const TradeMarkList = ref<TradeMarkDataType[]>()
 // 获取属性赋值给has
 const FilterHas = async () => {
@@ -220,6 +238,16 @@ const FilterHas = async () => {
       return true
     })
   }
+}
+// 处理父组件新增事件
+const initAppendData=async(C3Id:number)=>{
+  // 传入c3Id
+  FormParams.category3Id = C3Id
+  // 获取品牌
+  const AllTrademark = await reqGetAllTradeMark()
+  TradeMarkList.value = AllTrademark.data
+  // 获取has信息
+  await FilterHas()
 }
 // 处理父组件中编辑事件
 const initHasSpuData = async (row: SPUType, C3Id: number) => {
@@ -240,7 +268,7 @@ const initHasSpuData = async (row: SPUType, C3Id: number) => {
     }
   })
 
-  //   获取属性列表?
+  //   获取属性列表
   const PreAttrId = await reqGetAllTradeMarkAttrList(FormParams.id)
   FormParams.spuSaleAttrList = PreAttrId.data
   // 获取属性赋值给has
@@ -250,7 +278,7 @@ const initHasSpuData = async (row: SPUType, C3Id: number) => {
 // 保存第二界面数据
 const SaveLoad = async () => {
   try {
-    // 将图片列表从 el-upload 格式 { name, url } 转回服务端格?{ imgName, imgUrl }
+    // 将图片列表从 el-upload 格式 { name, url } 转回服务端格式 { imgName, imgUrl }
     const params: SPUType = {
       ...FormParams,
       spuImageList: FormParams.spuImageList
@@ -258,7 +286,7 @@ const SaveLoad = async () => {
             imgName: (item.name || item.imgName)!,
             imgUrl: (item.url || item.imgUrl)!,
           }))
-        : null,
+        : [],
     }
     const res = await reqAddSPU(params)
     if (res.code === 200) {
@@ -273,6 +301,8 @@ const SaveLoad = async () => {
         type: 'error',
         message: '保存失败',
       })
+      console.log(res);
+      
     }
   } catch {
     ElMessage({
@@ -281,8 +311,8 @@ const SaveLoad = async () => {
     })
   }
 }
-// 处理SPU销售属性表单整行删�?
-const HandleRowDelete = async(row: AttrType) => {
+// 处理SPU销售属性表单整行删除
+const HandleRowDelete = async (row: AttrType) => {
   ;(FormParams.spuSaleAttrList as any) = FormParams.spuSaleAttrList?.filter((item) => {
     console.log(item.id, row.id)
     return item.id !== row.id
@@ -290,55 +320,74 @@ const HandleRowDelete = async(row: AttrType) => {
   // 重新渲染has
   await FilterHas()
 }
-// 处理第二界面添加属性值按
-const HandleAppendAttr=async()=>{
-  // 获取属性id，属性name,属性list:根据UnchosedHasId获取对应has拿到id,name
-  if(UnchosedHasId.value!==''){
-    for (let i=0;i<has.value.length;i++){
-      if (UnchosedHasId.value===has.value[i]?.id){
-        // 赋
+// 处理第二界面添加属性值按钮
+const HandleAppendAttr = async () => {
+  // 处理添加属性值,has有值,根据id找name
+  if (has.value.length) {
+    // 遍历has添加与选中id相同的一列
+    for (let i = 0; i < has.value.length; i++) {
+      if (UnchosedHasId.value === has.value[i]?.id) {
         FormParams.spuSaleAttrList.push({
-          baseSaleAttrId:UnchosedHasId.value,
-          saleAttrName:(has.value[i]?.name as string),
-          spuSaleAttrValueList:[]
+          baseSaleAttrId: UnchosedHasId.value,
+          saleAttrName: has.value[i]?.name as string,
+          spuSaleAttrValueList: [],
         })
         break
       }
     }
-    // 重新计算属性
+    // 更新列表
     await FilterHas()
-    // 重新赋值默认id
-    if(has.value.length!==0){
-      UnchosedHasId.value=(has.value[0]?.id as number)
-    }else{
-      UnchosedHasId.value=''
-    }
-  }else{
-    alert('请输入文本')
+    // 修改默认值
+    UnchosedHasId.value = has.value.length ? (has.value[0]?.id as number) : ''
   }
-
 }
-// 处理编辑页面tag添加
-const toEdit=async (row:AttrType)=>{
-  row.flag=true
-  row.inputContent=''
+// 处理tag添加事件
+const toEdit = (row: AttrType) => {
+  row.InputContent = ''
+  row.flag = true
 }
-// tag-input失去焦点
-const toEditBlur=(row:AttrType)=>{
-  if(row.inputContent?.trim()){
-
-    // push到sputaglist
-    row.spuSaleAttrValueList.push({baseSaleAttrId:row.baseSaleAttrId,saleAttrValueName:(row.inputContent as string)})
+// 处理tag失去焦点事件
+const toEditBlur = (row: AttrType) => {
+  row.flag = false
+  // 判断是否重复
+  if (
+    !row.spuSaleAttrValueList.every((item) => {
+      return item.saleAttrValueName !== row.InputContent
+    })
+  ) {
+    ElMessage({
+      type: 'error',
+      message: '输入的标签不能重复！',
+    })
+    return
   }
-  row.flag=false
+  // push到spuAttrList
+  if (row.InputContent?.trim().length !== 0) {
+    row.spuSaleAttrValueList.push({
+      baseSaleAttrId: row.baseSaleAttrId,
+      saleAttrValueName: row.InputContent as string,
+    })
+  }
 }
-defineExpose({ initHasSpuData, ClearFormParams })
+// tag关闭事件
+const HandleTagClose = (row: AttrType, name: string) => {
+  row.spuSaleAttrValueList = row.spuSaleAttrValueList.filter((item) => {
+    return item.saleAttrValueName !== name
+  })
+}
+// 检查tag数据是否缺失
+const CheckIfTagMiss = () => {
+  return FormParams.spuSaleAttrList.every((item) => {
+    return item.spuSaleAttrValueList.length !== 0
+  })
+}
+
+defineExpose({ initHasSpuData, ClearFormParams,initAppendData })
 </script>
 
 <style lang="scss" scoped>
 .SaleAttrTag {
   margin-right: 10px;
-  margin-bottom: 10px;
 }
 </style>
 <style scoped>
