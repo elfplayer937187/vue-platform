@@ -241,6 +241,8 @@ const FilterHas = async () => {
 }
 // 处理父组件新增事件
 const initAppendData=async(C3Id:number)=>{
+  // 先清空旧数据，避免残留编辑时的 id 导致走到更新接口
+  ClearFormParams()
   // 传入c3Id
   FormParams.category3Id = C3Id
   // 获取品牌
@@ -288,7 +290,11 @@ const SaveLoad = async () => {
           }))
         : [],
     }
+    // 新增时 id 为空字符串，后端 Long 类型解析会报"请求参数错误"，传 null 让后端忽略
+    if (!params.id) (params as any).id = null
     const res = await reqAddSPU(params)
+    console.log(params);
+    
     if (res.code === 200) {
       ElMessage({
         type: 'success',
