@@ -71,21 +71,20 @@ export interface ImageResponseType extends BaseType{
 export interface AttrResponseType extends BaseType {
     data:AttrType[]
 }
-// SaleAttr
-/* 
-只需要收集 属性id，属性名称，属性列表
-*/
+
+
+
+// 销售属性列表
 export interface AttrType{
     baseSaleAttrId:number,
     saleAttrName:string,//*
     spuSaleAttrValueList:spuSaleType[]
     id?:number,
     spuId?:number,
+    flag?:boolean,
+    inputContent?:string
 }
-// saleAttrValue
-/* 
-只需要收集属性tagid，tagname，
-*/
+// 销售属性tag对象
 export interface spuSaleType{
     ID?:number,
     baseSaleAttrId:number,
@@ -93,12 +92,15 @@ export interface spuSaleType{
     createTime?:any,
     id?:number,
     spuId?:number,
-    updateTime?:any
+    updateTime?:any,
+
+
+
 }
 
 
 
-// 销售列表
+// 销售类型列表[3种]
 export interface HasResponseType extends BaseType{
     data:HasType[]
 }
