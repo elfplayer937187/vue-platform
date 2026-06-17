@@ -1,12 +1,13 @@
-﻿<template>
+<template>
   <div>
     <el-form ref="form" label-width="80px">
-      <!-- 鍚嶇О -->
-      <el-form-item label="SPU鍚嶇О">
-        <el-input v-model="FormParams.spuName" placeholder="璇疯緭鍏ュ悕锟?></el-input>
+      <!-- 名称 -->
+      <el-form-item label="SPU名称">
+        <el-input
+v-model="FormParams.spuName" placeholder="请输入名�?></el-input>
       </el-form-item>
-      <!-- 鎵€鏈夊搧鐗屾暟锟?-->
-      <el-form-item label="SPU鍝佺墝">
+      <!-- 所有品牌数�?-->
+      <el-form-item label="SPU品牌">
         <el-select v-model="FormParams.tmId" placeholder="">
           <el-option
             v-for="data in TradeMarkList"
@@ -16,16 +17,16 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <!-- 鎻忚堪鐨則extarea -->
-      <el-form-item label="SPU鎻忚堪">
+      <!-- 描述的textarea -->
+      <el-form-item label="SPU描述">
         <el-input
           v-model="FormParams.description"
           type="textarea"
-          placeholder="璇疯緭鍏ヤ綘鐨勬弿锟?.."
+          placeholder="请输入你的文本"
         ></el-input>
       </el-form-item>
-      <!-- 鐓х墖 -->
-      <el-form-item label="SPU鐓х墖">
+      <!-- 照片 -->
+      <el-form-item label="SPU照片">
         <el-upload
           v-model:file-list="FormParams.spuImageList"
           :headers="headers"
@@ -39,17 +40,17 @@
         >
           <el-icon><Plus /></el-icon>
         </el-upload>
-        <!-- 鍥剧墖棰勮寮圭獥 -->
+        <!-- 图片预览弹窗 -->
         <el-dialog v-model="dialogVisible">
           <img :src="dialogImageUrl" style="width: 100%" alt="" />
         </el-dialog>
       </el-form-item>
-      <!-- 閿€鍞睘鎬ч€夋嫨 -->
-      <el-form-item label="SPU閿€鍞睘锟? label-width="100px">
-        <!-- 閫夋嫨鏈€夋嫨鐨勯攢鍞睘锟?-->
+      <!-- 销售属性选择 -->
+      <el-form-item label="SPU销售属性" label-width="100px">
+        <!-- 选择未选择的销售属�?-->
         <el-select
           v-model="UnchosedHasId"
-          :placeholder="`杩樻湁${has?.length}椤规湭閫夋嫨`"
+          :placeholder="`还有${has?.length}项未选择`"
           style="width: 300px; margin-right: 40px"
         >
           <el-option
@@ -60,19 +61,19 @@
           ></el-option>
         </el-select>
 
-        <el-button type="primary" icon="Plus" class="SPU-appendbtn" :disabled="!UnchosedHasId" @click="HandleAppendAttr">娣诲姞灞炴€э拷?/el-button>
+        <el-button type="primary" icon="Plus" class="SPU-appendbtn" :disabled="!UnchosedHasId" @click="HandleAppendAttr">添加属性</el-button>
       </el-form-item>
-      <!-- 閿€鍞〃 -->
+      <!-- 销售表 -->
       <el-form-item label="" label-width="100px">
         <el-table style="width: 100%" border :data="FormParams.spuSaleAttrList">
-          <el-table-column prop="prop" label="搴忓彿" width="100px" type="index" align="center">
+          <el-table-column prop="prop" label="序号" width="100px" type="index" align="center">
           </el-table-column>
-          <el-table-column prop="prop" label="閿€鍞睘鎬у悕锟? width="width">
+          <el-table-column prop="prop" label="销售属性名" width="width">
             <template #default="{ row }">
               {{ row.saleAttrName }}
             </template>
           </el-table-column>
-          <el-table-column prop="prop" label="閿€鍞睘鎬э拷? width="width">
+          <el-table-column prop="prop" label="销售属性" width="width">
             <template #default="{ row }">
               <el-tag
                 v-for="List in row.spuSaleAttrValueList"
@@ -82,29 +83,29 @@
                 closable
                 >{{ List.saleAttrValueName }}</el-tag
               >
-              <el-input :ref="(el: any) => inputEls[row.id] = el" @blur="toEditBlur(row)" v-model="row.inputContent" v-show="row.flag" size="small" placeholder="" style="width: 60px;margin-right: 10px;"></el-input>
-              <el-button @click="toEdit(row)" type="primary" icon="Plus" style="height: 25px"></el-button>
+              <el-input v-show="row.flag" :ref="(el: any) => inputEls[row.id] = el" v-model="row.inputContent" size="small" placeholder="" style="width: 60px;margin-right: 10px;" @blur="toEditBlur(row)"></el-input>
+              <el-button type="primary" icon="Plus" style="height: 25px" @click="toEdit(row)"></el-button>
             </template>
           </el-table-column>
-          <el-table-column prop="prop" label="鎿嶄綔" width="width">
+          <el-table-column prop="prop" label="操作" width="width">
             <template #default="{ row }">
               <el-button type="danger" icon="Delete" @click="HandleRowDelete(row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-form-item>
-      <!-- 鎸夐挳 -->
+      <!-- 按钮 -->
       <el-form-item label="" label-width="100px">
-        <el-button type="primary" @click="SaveLoad">淇濆瓨</el-button>
-        <el-button type="primary" @click="HandleCancel">鍙栨秷</el-button>
+        <el-button type="primary" @click="SaveLoad">保存</el-button>
+        <el-button type="primary" @click="HandleCancel">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, nextTick } from 'vue'
-import type { AttrType, HasType, SPUType, TradeMarkDataType,spuSaleType } from '@/apis/product/spu/type'
+import { reactive, ref } from 'vue'
+import type { AttrType, HasType, SPUType, TradeMarkDataType } from '@/apis/product/spu/type'
 import useUserStore from '@/stores/modules/user'
 import {
   reqGetAllTradeMark,
@@ -116,75 +117,75 @@ import {
 import { ElMessage } from 'element-plus'
 import type { UploadProps } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import 'element-plus/dist/index.css' // 鍏抽敭锛氬紩鍏ユ墍鏈夌粍浠舵牱锟?
+import 'element-plus/dist/index.css' // 关键：引入所有组件样?
 
-// 瀛樺偍涓€涓婬as
+// 存储一下Has
 const has = ref<HasType[]>([])
 const UnchosedHasId = ref<string | number>('')
-// 鑾峰緱token
+// 获得token
 const headers = { token: useUserStore().token }
 
-// 鍥剧墖棰勮
+// 图片预览
 const dialogVisible = ref(false)
 const dialogImageUrl = ref('')
-// 瀛樺偍姣忚 el-input 瀹炰緥锛岀敤浜庣偣鍑绘坊鍔犳椂鑷姩鑱氱劍
+// 存储每行 el-input 实例，用于点击添加时自动聚焦
 const inputEls: Record<number, any> = {}
 
-// 涓婁紶鍓嶆牎楠岋細鍙厑璁稿浘鐗囦笖涓嶈秴锟?MB
+// 上传前校验：只允许图片且不超200MB
 const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
   const isImage = rawFile.type.startsWith('image/')
   const isLt2M = rawFile.size / 1024 / 1024 < 2
   if (!isImage) {
-    ElMessage.error('鍙兘涓婁紶鍥剧墖鏂囦欢锟?)
+    ElMessage.error('只能上传图片文件')
     return false
   }
   if (!isLt2M) {
-    ElMessage.error('鍥剧墖澶у皬涓嶈兘瓒呰繃 2MB锟?)
+    ElMessage.error('图片大小不能超过 2MB?')
     return false
   }
   return true
 }
 
-// 涓婁紶鎴愬姛鍥炶皟
+// 上传成功回调
 const handleUploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
   if (response.code === 200) {
-    // 鏈嶅姟鍣ㄨ繑鍥炵殑鍥剧墖鍦板潃璧嬬粰褰撳墠鏂囦欢
+    // 服务器返回的图片地址赋给当前文件
     uploadFile.url = response.data
     uploadFile.name = response.data
-    ElMessage.success('涓婁紶鎴愬姛')
+    ElMessage.success('上传成功')
   } else {
-    ElMessage.error('涓婁紶澶辫触')
+    ElMessage.error('上传失败')
   }
 }
 
-// 鍒犻櫎鍥剧墖鍥炶皟
+// 删除图片回调
 const handleRemove: UploadProps['onRemove'] = () => {
-  // el-upload 锟?v-model:file-list 浼氳嚜鍔ㄤ粠鍒楄〃涓Щ闄わ紝鏃犻渶鎵嬪姩鎿嶄綔
+  // el-upload ?v-model:file-list 会自动从列表中移除，无需手动操作
 }
 
-// 鍥剧墖棰勮鍥炶皟
+// 图片预览回调
 const handlePreview: UploadProps['onPreview'] = (uploadFile) => {
   dialogImageUrl.value = uploadFile.url!
   dialogVisible.value = true
 }
 
-// 鏁版嵁澶囦唤
+// 数据备份
 const FormParamsSpace = reactive<SPUType>({
-  // 瀛樺偍id
-  id: '', //spu鐨刬d
-  // 缂栬緫鍒濆锟?
+  // 存储id
+  id: '', //spu的id
+  // 编辑初始?
   spuName: '',
   description: '',
   spuImageList: [],
-  spuSaleAttrList: null,
+  spuSaleAttrList: [],
   category3Id: -1,
   tmId: '',
 })
-// 琛ㄦ牸鏁版嵁
+// 表格数据
 const FormParams = reactive<SPUType>({
-  // 瀛樺偍id
-  id: '', //spu鐨刬d
-  // 缂栬緫鍒濆锟?
+  // 存储id
+  id: '', //spu的id
+  // 编辑初始�?
   spuName: '',
   description: '',
   spuImageList: [],
@@ -192,25 +193,25 @@ const FormParams = reactive<SPUType>({
   category3Id: -1,
   tmId: 1,
 })
-// 娓呴櫎琛ㄦ牸鏁版嵁
+// 清除表格数据
 const ClearFormParams = () => {
   Object.assign(FormParams, FormParamsSpace)
 }
-// cancel鎸夐挳浼犵粰鐖剁粍浠朵俊锟?
+// cancel按钮传给父组件信�?
 const $emit = defineEmits(['Canceled', 'changeDisabled'])
 const HandleCancel = () => {
   $emit('Canceled', 0)
 }
-// 鎵€鏈夊搧鐗屾暟锟?
+// 所有品牌数�?
 const TradeMarkList = ref<TradeMarkDataType[]>()
-// 鑾峰彇灞炴€ц祴鍊肩粰has
+// 获取属性赋值给has
 const FilterHas = async () => {
-  // 鑾峰彇灞炴€鍏变笁绉峕
+  // 获取属性[共三种]
   const PreHas = await reqGetSPUHas()
-  // 杩囨护鍏冪礌璧嬪€肩粰has
+  // 过滤元素赋值给has
   if (FormParams.spuImageList !== null) {
     has.value = PreHas.data.filter((item) => {
-      // item:{id,name} name鍦╯puSaleAttrList[i].saleAttrName
+      // item:{id,name} name在spuSaleAttrList[i].saleAttrName
       for (let i = 0; i < (FormParams.spuSaleAttrList?.length as number); i++) {
         if (item.name === (FormParams.spuSaleAttrList as any)[i].saleAttrName) {
           return false
@@ -220,7 +221,7 @@ const FilterHas = async () => {
     })
   }
 }
-// 澶勭悊鐖剁粍浠朵腑缂栬緫浜嬩欢
+// 处理父组件中编辑事件
 const initHasSpuData = async (row: SPUType, C3Id: number) => {
   FormParams.category3Id = C3Id
   FormParams.spuName = row.spuName
@@ -229,7 +230,7 @@ const initHasSpuData = async (row: SPUType, C3Id: number) => {
   FormParams.tmId = row.tmId
   const AllTrademark = await reqGetAllTradeMark()
   TradeMarkList.value = AllTrademark.data
-  // 鑾峰彇鍥剧墖
+  // 获取图片
   const Images = await reqGetAllTradeMarkImage(FormParams.id)
 
   FormParams.spuImageList = Images.data.map((item) => {
@@ -239,17 +240,17 @@ const initHasSpuData = async (row: SPUType, C3Id: number) => {
     }
   })
 
-  //   鑾峰彇灞炴€у垪锟?
+  //   获取属性列表?
   const PreAttrId = await reqGetAllTradeMarkAttrList(FormParams.id)
   FormParams.spuSaleAttrList = PreAttrId.data
-  // 鑾峰彇灞炴€ц祴鍊肩粰has
+  // 获取属性赋值给has
   await FilterHas()
 }
 
-// 淇濆瓨绗簩鐣岄潰鏁版嵁
+// 保存第二界面数据
 const SaveLoad = async () => {
   try {
-    // 灏嗗浘鐗囧垪琛ㄤ粠 el-upload 鏍煎紡 { name, url } 杞洖鏈嶅姟绔牸锟?{ imgName, imgUrl }
+    // 将图片列表从 el-upload 格式 { name, url } 转回服务端格?{ imgName, imgUrl }
     const params: SPUType = {
       ...FormParams,
       spuImageList: FormParams.spuImageList
@@ -263,39 +264,39 @@ const SaveLoad = async () => {
     if (res.code === 200) {
       ElMessage({
         type: 'success',
-        message: '淇濆瓨鎴愬姛',
+        message: '保存成功',
       })
-      // 瑙﹀彂浜嬩欢鏀瑰彉瑙嗗浘
+      // 触发事件改变视图
       $emit('changeDisabled')
     } else {
       ElMessage({
         type: 'error',
-        message: '淇濆瓨澶辫触',
+        message: '保存失败',
       })
     }
   } catch {
     ElMessage({
       type: 'error',
-      message: '缃戠粶寮傚父',
+      message: '网络异常',
     })
   }
 }
-// 澶勭悊SPU閿€鍞睘鎬ц〃鍗曟暣琛屽垹锟?
+// 处理SPU销售属性表单整行删�?
 const HandleRowDelete = async(row: AttrType) => {
   ;(FormParams.spuSaleAttrList as any) = FormParams.spuSaleAttrList?.filter((item) => {
     console.log(item.id, row.id)
     return item.id !== row.id
   })
-  // 閲嶆柊娓叉煋has
+  // 重新渲染has
   await FilterHas()
 }
-// 澶勭悊绗簩鐣岄潰娣诲姞灞炴€у€兼寜锟?
+// 处理第二界面添加属性值按
 const HandleAppendAttr=async()=>{
-  // 鑾峰彇灞炴€d锛屽睘鎬ame,灞炴€ist:鏍规嵁UnchosedHasId鑾峰彇瀵瑰簲has鎷垮埌id,name
+  // 获取属性id，属性name,属性list:根据UnchosedHasId获取对应has拿到id,name
   if(UnchosedHasId.value!==''){
     for (let i=0;i<has.value.length;i++){
       if (UnchosedHasId.value===has.value[i]?.id){
-        // 璧嬶拷?
+        // 赋
         FormParams.spuSaleAttrList.push({
           baseSaleAttrId:UnchosedHasId.value,
           saleAttrName:(has.value[i]?.name as string),
@@ -304,29 +305,29 @@ const HandleAppendAttr=async()=>{
         break
       }
     }
-    // 閲嶆柊璁＄畻灞烇拷?
+    // 重新计算属性
     await FilterHas()
-    // 閲嶆柊璧嬪€奸粯璁d
+    // 重新赋值默认id
     if(has.value.length!==0){
       UnchosedHasId.value=(has.value[0]?.id as number)
     }else{
       UnchosedHasId.value=''
     }
   }else{
-    alert('璇烽€夋嫨鏂囨湰?鈥?
+    alert('请输入文本')
   }
 
 }
-// 澶勭悊缂栬緫椤甸潰tag娣诲姞
+// 处理编辑页面tag添加
 const toEdit=async (row:AttrType)=>{
   row.flag=true
   row.inputContent=''
-  await nextTick()`n  inputEls[row.id as number]?.focus()`n}
-// tag-input澶卞幓鐒︾偣
+}
+// tag-input失去焦点
 const toEditBlur=(row:AttrType)=>{
   if(row.inputContent?.trim()){
 
-    // push鍒皊putaglist锟?
+    // push到sputaglist
     row.spuSaleAttrValueList.push({baseSaleAttrId:row.baseSaleAttrId,saleAttrValueName:(row.inputContent as string)})
   }
   row.flag=false
