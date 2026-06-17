@@ -4,7 +4,9 @@ interface BaseType{
     message:string,
     ok:boolean
 }
-
+export interface DeleteType extends BaseType{
+    data:string
+}
 // 分页列表类型
 export interface PaginationResponseType extends BaseType{
     data:DataType
@@ -65,15 +67,10 @@ export interface ImageResponseType extends BaseType{
 
 
 
-/* 
-第二界面最后一个表格里面的属性
-*/
+// SPU属性列表响应类型
 export interface AttrResponseType extends BaseType {
     data:AttrType[]
 }
-
-
-
 // 销售属性列表行
 export interface AttrType{
     baseSaleAttrId:number,

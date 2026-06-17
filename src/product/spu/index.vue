@@ -26,7 +26,7 @@
               <el-button type="primary" icon="Plus"></el-button>
               <el-button type="warning" icon="Edit" @click="HandleEdit(row,(C3Id as number))"></el-button>
               <el-button type="info" icon="InfoFilled" @click="HandleInfo"></el-button>
-              <el-button type="danger" icon="Delete"></el-button>
+              <el-button type="danger" icon="Delete" @click="HandleDelete(row.id)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -53,10 +53,12 @@
 import spuForm from '@/product/spu/spuForm.vue'
 import Category from '@/components/Category/index.vue'
 import { ref, watch } from 'vue'
-import { reqGetSPUpagination } from '@/apis/product/spu'
+import { reqGetDeleteSPU, reqGetSPUpagination } from '@/apis/product/spu'
 import useCategoryStore from '@/stores/modules/Category'
 import { storeToRefs } from 'pinia'
 import type { SPUType } from '@/apis/product/spu/type'
+import { ElMessage } from 'element-plus'
+import 'element-plus/dist/index.css' // 关键：引入所有组件样式
 // 获取Category传递的信息
 const CategoryStore = useCategoryStore()
 const { C3Id, Isdisabled } = storeToRefs(CategoryStore)
@@ -115,6 +117,35 @@ const HandleEdit = (row: SPUType,C3Id:number) => {
   ShowWhat.value=1
   Isdisabled.value=true
 }
+// 处理删除事件
+const HandleDelete=async(id:number)=>{
+  try{
+    const res=await reqGetDeleteSPU(id)
+    if(res.code===200){
+      ElMessage({
+        type:'success',
+        message:'删除成功'
+      })
+      await getSPUpagination()
+      return 'ok'
+
+    }
+    else{
+      ElMessage({
+        type:'error',
+        message:'删除失败'
+      })
+      throw res.message
+    }
+  }catch(error){
+    ElMessage({
+      type:'error',
+      message:'网络异常'
+    })
+    throw error
+  }
+
+}
 // 处理第二视图保存事件
 const Handle2Save=async()=>{
   Isdisabled.value=false
@@ -126,6 +157,7 @@ const Handle2Save=async()=>{
 const HandleInfo=()=>{
   // ShowWhat.value==
 }
+
 </script>
 
 <style scoped lang="scss">
