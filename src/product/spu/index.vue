@@ -23,7 +23,7 @@
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="width">
             <template #default="{ row }">
-              <el-button type="primary" icon="Plus"></el-button>
+              <el-button type="primary" icon="Plus" @click="ShowWhat=2"></el-button>
               <el-button type="warning" icon="Edit" @click="HandleEdit(row,(C3Id as number))"></el-button>
               <el-button type="info" icon="InfoFilled" @click="HandleInfo"></el-button>
               <el-button type="danger" icon="Delete" @click="HandleDelete(row.id)"></el-button>
@@ -45,11 +45,15 @@
       <div v-show="ShowWhat === 1" class="spuForm">
         <spuForm ref="spuVC" @canceled="UpdateSpu" @change-disabled="Handle2Save"></spuForm>
       </div>
+      <div v-show="ShowWhat===2" class="sku">
+        <sku></sku>
+      </div>
     </el-card>
   </div>
 </template>
 
 <script lang="ts" setup>
+import sku from '@/product/spu/sku.vue'
 import spuForm from '@/product/spu/spuForm.vue'
 import Category from '@/components/Category/index.vue'
 import { ref, watch } from 'vue'
