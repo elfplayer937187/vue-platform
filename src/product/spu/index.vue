@@ -43,7 +43,7 @@
         />
       </div>
       <div v-show="ShowWhat === 1" class="spuForm">
-        <spuForm ref="spuVC" @canceled="UpdateSpu" @changeDisabled="Handle2Save"></spuForm>
+        <spuForm ref="spuVC" @canceled="UpdateSpu" @change-disabled="Handle2Save"></spuForm>
       </div>
     </el-card>
   </div>
