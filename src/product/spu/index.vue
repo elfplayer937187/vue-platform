@@ -46,7 +46,7 @@
         <spuForm ref="spuVC" @canceled="UpdateSpu" @change-disabled="Handle2Save"></spuForm>
       </div>
       <div v-show="ShowWhat===2" class="sku">
-        <sku ref="skuVC" :ShowWhat="ShowWhat" @ChangeShowWhat="ShowWhat=0"></sku>
+        <sku ref="skuVC" @change-show-what="ShowWhat=0"></sku>
       </div>
     </el-card>
   </div>
@@ -116,7 +116,7 @@ const HandleAppendSPU = async() => {
 // 添加SKU
 const AppendSKU=(row:SPUType)=>{
 
-  skuVC.value.initSKUData(C1Id.value,C2Id.value,row)
+  skuVC.value.initSKUData(C1Id.value,C2Id.value,row,C3Id.value)
   ShowWhat.value=2
 }
 // 接子组件传递的参数

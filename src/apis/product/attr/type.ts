@@ -25,7 +25,7 @@ export interface ListItemType {
   attrName: string, //新增添加属性名
   categoryId: number|string,//给哪个三级分类新增的id
   categoryLevel: number,
-  choseId?:number
+  platformChose?:string
   attrValueList: attrValueListType[]  //新增添加属性值数组
 }
 // 定义AttrINfo的响应式返回类型
