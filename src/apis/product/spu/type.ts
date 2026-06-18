@@ -79,7 +79,8 @@ export interface AttrType{
     id?:number,
     spuId?:number,
     flag?:boolean,
-    InputContent?:string
+    InputContent?:string,
+    choseTagId?:number
 }
 // 销售属性tag对象
 export interface spuSaleType{
