@@ -168,8 +168,11 @@ const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
 const handleUploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
   if (response.code === 200) {
     // 服务器返回的图片地址赋给当前文件
+    console.log(response);
+    // 去除前缀
     uploadFile.url = response.data
-    uploadFile.name = response.data
+    const Prename = response.data.split('/')
+    uploadFile.name=Prename[Prename.length-1]
     ElMessage.success('上传成功')
   } else {
     ElMessage.error('上传失败')
