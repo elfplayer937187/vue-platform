@@ -15,6 +15,7 @@ enum API{
 export const getFirstCategory=()=>request.get<any,ResponseAttrType>(API.CATEGORYONE_URL)
 export const getSecondCategory=(id:number|string)=>request.get<any,ResponseAttrType>(API.CATEGORYTWO_URL+`/${id}`)
 export const getThirdCategory=(id:number|string)=>request.get<any,ResponseAttrType>(API.CATEGORYTHREE_URL+`/${id}`)
+// 获取Attr列表每一项
 export const getCategoryTag=(C1id:string|number,C2Id:string|number,C3Id:string|number)=>request.get<any,getAttrInfoListResponseType>(API.CATEGORYTAG_URL+`/${C1id}/${C2Id}/${C3Id}`)
 // 添加三级属性标签接口
 export const appendThridTag=(obj:ListItemType)=>request.post<any,any>(API.APPENDTHIRDTAG_URL,obj)

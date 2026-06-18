@@ -23,7 +23,7 @@
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="width">
             <template #default="{ row }">
-              <el-button type="primary" icon="Plus" @click="ShowWhat=2"></el-button>
+              <el-button type="primary" icon="Plus" @click="AppendSKU(row)"></el-button>
               <el-button type="warning" icon="Edit" @click="HandleEdit(row,(C3Id as number))"></el-button>
               <el-button type="info" icon="InfoFilled" @click="HandleInfo"></el-button>
               <el-button type="danger" icon="Delete" @click="HandleDelete(row.id)"></el-button>
@@ -46,7 +46,7 @@
         <spuForm ref="spuVC" @canceled="UpdateSpu" @change-disabled="Handle2Save"></spuForm>
       </div>
       <div v-show="ShowWhat===2" class="sku">
-        <sku></sku>
+        <sku ref="skuVC" :ShowWhat="ShowWhat" @ChangeShowWhat="ShowWhat=0"></sku>
       </div>
     </el-card>
   </div>
@@ -65,7 +65,7 @@ import { ElMessage } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
 // 获取Category传递的信息
 const CategoryStore = useCategoryStore()
-const { C3Id, Isdisabled } = storeToRefs(CategoryStore)
+const { C1Id,C2Id,C3Id, Isdisabled } = storeToRefs(CategoryStore)
 // SPU分页列表
 const SPUList = ref<SPUType[]>()
 // 现在的页数
@@ -74,6 +74,7 @@ const pageSize = ref<number>(3)
 const total = ref<number>(0)
 // 初始化定义spuForm
 const spuVC = ref()
+const skuVC=ref()
 // spuForm定义
 /* 
 0:主界面
@@ -99,8 +100,10 @@ const getSPUpagination = async () => {
     throw '网络异常'
   }
 }
+
 // 监听三级分类获取列表
 watch(C3Id, getSPUpagination)
+
 // 按钮 添加SPU
 const HandleAppendSPU = async() => {
   Isdisabled.value = true
@@ -109,6 +112,12 @@ const HandleAppendSPU = async() => {
   spuVC.value.ClearFormParams()
   // 发送请求拿到数据
   await spuVC.value.initAppendData(C3Id.value)
+}
+// 添加SKU
+const AppendSKU=(row:SPUType)=>{
+
+  skuVC.value.initSKUData(C1Id.value,C2Id.value,row)
+  ShowWhat.value=2
 }
 // 接子组件传递的参数
 const UpdateSpu = (num: number) => {

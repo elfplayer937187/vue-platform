@@ -10,7 +10,7 @@ import type {
   SPUType,
 } from './type'
 enum API {
-  // 获取SPU拥有的销售列表【颜色，尺寸，尺码】
+  // 获取SPU全部的销售属性【颜色，尺寸，尺码】
   GETSPUHAS_URL = '/admin/product/baseSaleAttrList',
   // 删除SPU接口
   DELETESPU_URL = '/admin/product/deleteSpu',
