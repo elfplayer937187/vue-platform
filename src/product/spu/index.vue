@@ -25,7 +25,7 @@
             <template #default="{ row }">
               <el-button type="primary" icon="Plus" @click="AppendSKU(row)"></el-button>
               <el-button type="warning" icon="Edit" @click="HandleEdit(row,(C3Id as number))"></el-button>
-              <el-button type="info" icon="InfoFilled" @click="HandleInfo"></el-button>
+              <el-button type="info" icon="InfoFilled" @click="HandleInfo(row)"></el-button>
               <el-button type="danger" icon="Delete" @click="HandleDelete(row.id)"></el-button>
             </template>
           </el-table-column>
@@ -48,6 +48,30 @@
       <div v-show="ShowWhat===2" class="sku">
         <sku ref="skuVC" @change-show-what="ShowWhat=0"></sku>
       </div>
+      <el-dialog v-model="dialogVisible" title="SKU列表" width="80vw">
+        <el-table :data="skuList" style="width: 100%">
+            <el-table-column prop="prop" label="SKU名字" width="width">
+              <template #default="{row}">
+                <span>{{ row.skuName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="prop" label="SKU价格" width="width">
+              <template #default="{row}">
+                <span>{{ row.price }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="prop" label="SKU重量" width="width">
+              <template #default="{row}">
+                {{ row.weight }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="prop" label="SKU图片" width="width">
+              <template #default="{row}">
+                  <el-image  :src="row.skuDefaultImg"></el-image>
+              </template>
+            </el-table-column>
+        </el-table>
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -62,7 +86,9 @@ import useCategoryStore from '@/stores/modules/Category'
 import { storeToRefs } from 'pinia'
 import type { SPUType } from '@/apis/product/spu/type'
 import { ElMessage } from 'element-plus'
+import { reqShowSKUInfo } from '@/apis/product/sku'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
+import type { SKUType } from '@/apis/product/sku/type'
 // 获取Category传递的信息
 const CategoryStore = useCategoryStore()
 const { C1Id,C2Id,C3Id, Isdisabled } = storeToRefs(CategoryStore)
@@ -75,6 +101,10 @@ const total = ref<number>(0)
 // 初始化定义spuForm
 const spuVC = ref()
 const skuVC=ref()
+// 初始化dialog状态
+const dialogVisible=ref<boolean>(false)
+// 存储Sku列表
+const skuList=ref<SKUType[]>([])
 // spuForm定义
 /* 
 0:主界面
@@ -167,8 +197,20 @@ const Handle2Save=async()=>{
   await getSPUpagination()
 }
 // 处理第二视图查看Info事件
-const HandleInfo=()=>{
-  // ShowWhat.value==
+const HandleInfo=async(row:SPUType)=>{
+
+  try{
+    const res=await reqShowSKUInfo((row.id as number))
+    if(res.code===200){
+      skuList.value=res.data
+      console.log(skuList.value);
+      
+      dialogVisible.value=true
+    }
+  }catch{
+    throw '获取信息失败'
+  }
+
 }
 
 </script>
