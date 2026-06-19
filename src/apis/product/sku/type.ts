@@ -8,6 +8,9 @@ interface BaseType {
   ok: true,
 }
 
+export interface SKUResponseType extends BaseType{
+  data:SKUType[]
+}
 // SKU商品
 export interface SKUType {
   // 父级的
