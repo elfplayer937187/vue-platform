@@ -19,6 +19,7 @@ export interface SKUType {
   tmId: string|number, //品牌id,
 
   //   基础属性
+  id?:number,
   weight: string|number,
   price: string|number,
   skuDesc: string,
@@ -61,4 +62,17 @@ export interface skuSaleType {
   saleAttrName?: string,
   saleAttrValueName?: string,
   skuId?: number
+}
+
+// sku分页列表返回类型
+export interface skuPaginationDataType{
+    current:number,
+    pages:number,
+    records:SKUType[],
+    searchCount:boolean,
+    size:number,
+    total:number
+}
+export interface skuPaginationResponseType extends BaseType{
+  data:skuPaginationDataType
 }

@@ -154,7 +154,9 @@ const AttrList = ref<ListItemType[]>([])
 // 监视第三项api,如果有一个变了说明列表改变
 watch(C3Id, () => {
   // 得到元素，存储到AttrList,然后加载界面
-  getAttr()
+
+    getAttr()
+  
 })
 // 获取第一界面属性值列表
 const getAttr = async () => {

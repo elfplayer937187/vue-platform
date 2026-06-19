@@ -80,14 +80,14 @@
 import sku from '@/product/spu/sku.vue'
 import spuForm from '@/product/spu/spuForm.vue'
 import Category from '@/components/Category/index.vue'
-import { ref, watch } from 'vue'
+import {  ref, watch } from 'vue'
 import { reqGetDeleteSPU, reqGetSPUpagination } from '@/apis/product/spu'
 import useCategoryStore from '@/stores/modules/Category'
 import { storeToRefs } from 'pinia'
 import type { SPUType } from '@/apis/product/spu/type'
 import { ElMessage } from 'element-plus'
-import { reqShowSKUInfo } from '@/apis/product/sku'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
+import { reqShowSKUInfo } from '@/apis/product/sku'
 import type { SKUType } from '@/apis/product/sku/type'
 // 获取Category传递的信息
 const CategoryStore = useCategoryStore()
@@ -130,9 +130,13 @@ const getSPUpagination = async () => {
     throw '网络异常'
   }
 }
-
 // 监听三级分类获取列表
-watch(C3Id, getSPUpagination)
+watch(C3Id, ()=>{
+  // 使用空值守卫
+  if(C3Id.value){
+    getSPUpagination()
+  }
+},{immediate:true})
 
 // 按钮 添加SPU
 const HandleAppendSPU = async() => {
