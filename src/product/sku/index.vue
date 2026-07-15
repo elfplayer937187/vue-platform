@@ -57,8 +57,8 @@
       layout="total, jumper, prev, pager, next,->, sizes"
       :total="total"
       class="pagination"
-      @change="getSKUPagination()"
       :size="size"
+      @change="getSKUPagination()"
     />
     <!-- 抽屉栏 -->
     <el-drawer v-model="ShowDrawer">
@@ -82,9 +82,9 @@
           <el-col :span="6">平台属性</el-col>
           <el-col :span="18">
             <el-tag
-              type="success"
               v-for="SaleAttr in SKUInfo?.skuAttrValueList"
               :key="SaleAttr.id"
+              type="success"
               >{{ SaleAttr.attrName }}</el-tag
             >
           </el-col>
@@ -93,9 +93,9 @@
           <el-col :span="6">销售属性</el-col>
           <el-col :span="18">
             <el-tag
-              type="warning"
               v-for="AttrSale in SKUInfo?.skuSaleAttrValueList"
               :key="AttrSale.id"
+              type="warning"
               >{{ AttrSale.saleAttrName }}</el-tag
             >
           </el-col>
