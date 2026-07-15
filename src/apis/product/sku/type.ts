@@ -7,7 +7,9 @@ interface BaseType {
   message: string,
   ok: true,
 }
-
+export interface SKUInfoResponseType extends BaseType{
+  data:SKUType
+}
 export interface SKUResponseType extends BaseType{
   data:SKUType[]
 }
@@ -17,7 +19,7 @@ export interface SKUType {
   category3Id: string|number, //,
   spuID: string|number, //spuId,
   tmId: string|number, //品牌id,
-
+  isSale?:number,
   //   基础属性
   id?:number,
   weight: string|number,

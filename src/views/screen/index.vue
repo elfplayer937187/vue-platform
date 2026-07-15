@@ -1,5 +1,5 @@
 <template>
-  screen
+  <div>screen</div>
 </template>
 
 <script lang="ts" setup>
