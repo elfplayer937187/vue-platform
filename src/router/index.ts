@@ -87,7 +87,7 @@ const router = createRouter({
           component: () => import('@/views/acl/user/index.vue'),
           name: 'user',
           meta: {
-            title: '用户信息',
+            title: '用户管理',
             IsShow: true,
             Icon: 'User',
           },
@@ -97,7 +97,7 @@ const router = createRouter({
           component: () => import('@/views/acl/role/index.vue'),
           name: 'role',
           meta: {
-            title: '其他角色信息',
+            title: '角色管理',
             IsShow: true,
             Icon: 'Avatar',
           },
