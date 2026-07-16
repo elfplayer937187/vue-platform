@@ -21,10 +21,10 @@
       </div>
       <!-- 表格 -->
       <el-table
-        @selection-change="HandleRowSelect"
         :data="UserList"
         style="width: 100%"
         :border="true"
+        @selection-change="HandleRowSelect"
       >
         <el-table-column prop="prop" width="width" type="selection"> </el-table-column>
         <el-table-column
@@ -64,11 +64,20 @@
             {{ row.updateTime }}
           </template>
         </el-table-column>
-        <el-table-column prop="prop" label="操作" width="300px" align="center">
+        <el-table-column prop="prop" label="操作" width="350px" align="center">
           <template #default="{ row }">
-            <el-button type="primary">分配角色</el-button>
-            <el-button type="primary" @click="HandleEditUser(row.id)">编辑</el-button>
-            <el-button type="primary" @click="HandleDeleteUser(row.id)">删除</el-button>
+            <el-button type="primary" icon="Arrow-left" @click="HandleGivenRole(row.name,row.id)"
+              >分配角色</el-button
+            >
+            <el-button
+              type="primary"
+              icon="Edit"
+              @click="HandleEditUser(row.id, row.name, row.username)"
+              >编辑</el-button
+            >
+            <el-button type="primary" icon="Delete" @click="HandleDeleteUser(row.id)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -104,7 +113,7 @@
             <el-form-item label="用户昵称" prop="username">
               <el-input v-model="AddUserInfo.username" placeholder=""></el-input>
             </el-form-item>
-            <el-form-item label="用户密码" prop="password" v-show="!IsEdit">
+            <el-form-item v-show="!IsEdit" label="用户密码" prop="password">
               <el-input v-model="AddUserInfo.password" placeholder=""></el-input>
             </el-form-item>
           </el-form>
@@ -115,12 +124,49 @@
           >
         </template>
       </el-drawer>
+      <!-- 复选框抽屉 -->
+      <el-drawer v-model="ShowGivenRoleDrawer">
+        <template #header="{ titleId, titleClass }">
+          <h4 :id="titleId" :class="titleClass">分配角色</h4>
+        </template>
+        <template #default>
+          <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item label="用户姓名">
+              <el-input v-model="AddUserInfo.name" placeholder="" :disabled="true"></el-input>
+            </el-form-item>
+            <el-form-item label="用户职位">
+              <!-- 多选框 -->
+              <!-- 全选框 -->
+              <el-checkbox
+                v-model="checkAll"
+                :indeterminate="isIndeterminate"
+                @change="handleCheckAllChange"
+              >
+                全选
+              </el-checkbox>
+              <el-checkbox-group v-model="RoleList" @change="HandleGroupItemChange">
+                <el-checkbox
+                  v-for="(role, index) in AllRoles"
+                  :key="index"
+                  :label="role"
+                  :value="role"
+                  >{{ role }}</el-checkbox
+                >
+              </el-checkbox-group>
+            </el-form-item>
+          </el-form>
+        </template>
+        <template #footer>
+          <el-button @click="ShowGivenRoleDrawer=false">取消</el-button>
+          <el-button type="primary" @click="HanldeUpdateRoleSave">保存</el-button>
+        </template>
+      </el-drawer>
     </el-card>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, reactive, toRaw } from 'vue'
+import { computed, onMounted, ref, reactive } from 'vue'
 import type { Reactive } from 'vue'
 import {
   reqGetUserPagination,
@@ -129,9 +175,20 @@ import {
   reqUpdateUser,
   reqBatchRemoveUser,
 } from '@/apis/acl/user/user'
+import { reqGetAllUserRole } from '@/apis/acl/role/role'
 import type { UserType, AddUserType } from '@/apis/acl/user/type'
-import { ElMessage, ElMessageBox, type FormRules } from 'element-plus'
+import { ElMessage, ElMessageBox, type CheckboxValueType, type FormRules } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
+// 控制isIndeterminate
+const isIndeterminate = ref<boolean>(false)
+// 全选
+const checkAll = ref<boolean>(false)
+// 多选框选中的职位
+const RoleList = ref<string[]>([])
+// 所有职位
+const AllRoles = ref<string[]>([])
+// 是否展示分配角色drawer
+const ShowGivenRoleDrawer = ref<boolean>(false)
 // 获取新增表单实例
 const FormRef = ref()
 // 是否展示Drawer
@@ -148,10 +205,11 @@ const pageNum = ref<number>(1)
 const pageSizeList = [3, 5, 7, 9, 12]
 // 界面大小
 const pageSize = ref<number>(pageSizeList[Math.floor(pageSizeList.length / 2)] as number)
-// 总数
-const total = ref<number>(400)
+
 // 整个表
 const UserList = ref<UserType[]>()
+// 总数
+const total = ref<number>(0)
 // 保存 新增或者编辑 信息
 const AddUserInfo = ref<AddUserType>({ name: '', password: '', username: '', id: '' })
 // 实现drawer保存是否禁用
@@ -163,6 +221,7 @@ const GetUserPagination = async () => {
   const res = await reqGetUserPagination(pageNum.value, pageSize.value)
   if (res.code === 200) {
     UserList.value = res.data.records
+    total.value = res.data.total
   }
 }
 // 挂载时获取分页列表
@@ -191,6 +250,7 @@ const SaveAddUser = async () => {
         })
         // 清空添加数据
         AddUserInfo.value = { name: '', password: '', username: '', id: '' }
+        window.location.reload()
       }
     }
   })
@@ -233,6 +293,11 @@ const userRulesForEdit = reactive<FormRules<typeof AddUserInfo>>({
 })
 // 删除User
 const HandleDeleteUser = async (id: number) => {
+  await ElMessageBox.confirm('您确定要删除吗？', '', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
   const res = await reqDeleteUser(id)
   console.log(res)
 
@@ -245,14 +310,17 @@ const HandleDeleteUser = async (id: number) => {
   }
 }
 // 处理更新User
-const HandleEditUser = async (id: number) => {
+const HandleEditUser = async (id: number, name: string, rolename: string) => {
   // 传入id
   AddUserInfo.value.id = id
   IsEdit.value = true
   ShowDrawer.value = true
+  AddUserInfo.value.name = name
+  AddUserInfo.value.username = rolename
 }
 // 处理添加User
 const HandleAddUser = () => {
+  AddUserInfo.value = { name: '', password: '', username: '', id: '' }
   IsEdit.value = false
   ShowDrawer.value = true
 }
@@ -262,32 +330,60 @@ const HandleRowSelect = (selection: any) => {
   // console.log(RemoveIdList);
 }
 // 删除之前
-const HandlePreDelete=async()=>{
-  await ElMessageBox.confirm(
-    '您确定要删除吗？',
-    '',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  )
+const HandlePreDelete = async () => {
+  await ElMessageBox.confirm('您确定要删除吗？', '', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
   await BatchRemove()
-    
 }
 // 处理批量删除
-const BatchRemove=async()=>{
-  const res=await reqBatchRemoveUser(RemoveIdList)
-  if(res.code===200){
+const BatchRemove = async () => {
+  const res = await reqBatchRemoveUser(RemoveIdList)
+  if (res.code === 200) {
     ElMessage({
-      type:'success',
-      message:'批量删除成功'
+      type: 'success',
+      message: '批量删除成功',
     })
     // 清空remove
-    RemoveIdList=[]
+    RemoveIdList = []
     // 刷新
     GetUserPagination()
   }
+}
+// 处理分配角色
+const HandleGivenRole = async(name: string ,id:number) => {
+
+  ShowGivenRoleDrawer.value = true
+  AddUserInfo.value.name = name
+  const res=await reqGetAllUserRole(id)
+  AllRoles.value=res.data.allRolesList.map(obj=>obj.roleName)
+  // console.log(res);
+    checkAll.value=false
+}
+// 处理checkbox全选改变
+const handleCheckAllChange = (val: CheckboxValueType) => {
+  RoleList.value = val ? AllRoles.value : []
+  isIndeterminate.value = false
+}
+// 处理checkbox单个标签变化
+const HandleGroupItemChange = (value: CheckboxValueType[]) => {
+  const checkCnt = value.length
+  if (checkCnt === 0) {
+    isIndeterminate.value = false
+    checkAll.value = false
+  } else if (checkCnt > 0 && checkCnt < AllRoles.value.length) {
+    checkAll.value=false
+    isIndeterminate.value=true
+  }else{
+    isIndeterminate.value=false
+    checkAll.value=true
+  }
+}
+// 处理保存角色信息的按钮
+const HanldeUpdateRoleSave=()=>{
+
 }
 </script>
 

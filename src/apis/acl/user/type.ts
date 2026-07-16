@@ -1,4 +1,4 @@
-interface BaseType {
+export interface BaseType {
   code: number
   message: string
   ok: boolean
