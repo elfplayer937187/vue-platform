@@ -17,16 +17,16 @@ enum API {
   GETSKUINFO_URL='/admin/product/getSkuInfo'
 }
 // 添加sku接口
-export const reqAppendSKUInfo = (obj: SKUType) => request.post<string, DefaultResponseType>(API.APPENDSKUINFO_URL, obj)
+export const reqAppendSKUInfo = (obj: SKUType) => request.post<any, DefaultResponseType>(API.APPENDSKUINFO_URL, obj)
 // 展示sku接口
-export const reqShowSKUInfo=(spuId:number)=>request.get<string,SKUResponseType>(API.SHOWSKUINFO_URL+`/${spuId}`)
+export const reqShowSKUInfo=(spuId:number)=>request.get<any,SKUResponseType>(API.SHOWSKUINFO_URL+`/${spuId}`)
 // 获取SKU分页列表
-export const reqGetSKUPagination=(page:number,limit:number)=>request.get<string,skuPaginationResponseType>(API.GETSKUPAGINATION_URL+`/${page}/${limit}`)
+export const reqGetSKUPagination=(page:number,limit:number)=>request.get<any,skuPaginationResponseType>(API.GETSKUPAGINATION_URL+`/${page}/${limit}`)
 // 删除sku接口
-export const reqDeleteSKU=(skuId:number)=>request.delete<string,DefaultResponseType>(API.DELETESKUINFO_URL+`/${skuId}`)
+export const reqDeleteSKU=(skuId:number)=>request.delete<any,DefaultResponseType>(API.DELETESKUINFO_URL+`/${skuId}`)
 // 上架sku接口
-export const reqOnSale=(skuId:number)=>request.get<string,DefaultResponseType>(API.ONSALE_URL+`/${skuId}`)
+export const reqOnSale=(skuId:number)=>request.get<any,DefaultResponseType>(API.ONSALE_URL+`/${skuId}`)
 // 下架sku接口
-export const reqCancelSale=(skuId:number)=>request.get<string,DefaultResponseType>(API.CANCELSALE_URL+`/${skuId}`)
+export const reqCancelSale=(skuId:number)=>request.get<any,DefaultResponseType>(API.CANCELSALE_URL+`/${skuId}`)
 // 获取商品详情接口
-export const reqGetSKUInfo=(skuId:number)=>request.get<string,SKUInfoResponseType>(API.GETSKUINFO_URL+`/${skuId}`)
+export const reqGetSKUInfo=(skuId:number)=>request.get<any,SKUInfoResponseType>(API.GETSKUINFO_URL+`/${skuId}`)
