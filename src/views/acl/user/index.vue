@@ -66,7 +66,7 @@
         </el-table-column>
         <el-table-column prop="prop" label="操作" width="350px" align="center">
           <template #default="{ row }">
-            <el-button type="primary" icon="Arrow-left" @click="HandleGivenRole(row.name,row.id)"
+            <el-button type="primary" icon="Arrow-left" @click="HandleGivenRole(row.name, row.id)"
               >分配角色</el-button
             >
             <el-button
@@ -157,7 +157,7 @@
           </el-form>
         </template>
         <template #footer>
-          <el-button @click="ShowGivenRoleDrawer=false">取消</el-button>
+          <el-button @click="ShowGivenRoleDrawer = false">取消</el-button>
           <el-button type="primary" @click="HanldeUpdateRoleSave">保存</el-button>
         </template>
       </el-drawer>
@@ -353,14 +353,18 @@ const BatchRemove = async () => {
   }
 }
 // 处理分配角色
-const HandleGivenRole = async(name: string ,id:number) => {
-
+const HandleGivenRole = async (name: string, id: number) => {
   ShowGivenRoleDrawer.value = true
   AddUserInfo.value.name = name
-  const res=await reqGetAllUserRole(id)
-  AllRoles.value=res.data.allRolesList.map(obj=>obj.roleName)
-  // console.log(res);
-    checkAll.value=false
+  const res = await reqGetAllUserRole(id)
+  // 获取全部职位
+  AllRoles.value = res.data.allRolesList.map((obj) => obj.roleName)
+  // 清空ShowUpdateDrawer的数据
+  checkAll.value = false
+  isIndeterminate.value = false
+  // 获取已勾选职位
+  RoleList.value = res.data.assignRoles.map(obj=>obj.roleName)
+  
 }
 // 处理checkbox全选改变
 const handleCheckAllChange = (val: CheckboxValueType) => {
@@ -374,17 +378,15 @@ const HandleGroupItemChange = (value: CheckboxValueType[]) => {
     isIndeterminate.value = false
     checkAll.value = false
   } else if (checkCnt > 0 && checkCnt < AllRoles.value.length) {
-    checkAll.value=false
-    isIndeterminate.value=true
-  }else{
-    isIndeterminate.value=false
-    checkAll.value=true
+    checkAll.value = false
+    isIndeterminate.value = true
+  } else {
+    isIndeterminate.value = false
+    checkAll.value = true
   }
 }
 // 处理保存角色信息的按钮
-const HanldeUpdateRoleSave=()=>{
-
-}
+const HanldeUpdateRoleSave = () => {}
 </script>
 
 <style scoped lang="scss">
