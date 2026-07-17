@@ -2,12 +2,12 @@
   <div>
     <!-- 上边的card -->
     <el-card>
-      <el-form ref="Searchform" :model="searchItem" label-width="80px">
+      <el-form ref="Searchform" label-width="80px" @submit.prevent>
         <el-form-item label="用户名:">
-          <el-input v-model="UserName" placeholder="请输入用户名"></el-input>
+          <el-input  v-model="SearchUserName" placeholder="请输入用户名"  @keyup.enter="HandleTargetSearch"></el-input>
           <div class="right">
-            <el-button type="primary">搜索</el-button>
-            <el-button>重置</el-button>
+            <el-button type="primary" @click="HandleTargetSearch">搜索</el-button>
+            <el-button @click="GetUserPagination()">重置</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -175,7 +175,8 @@ import {
   reqUpdateUser,
   reqBatchRemoveUser,
 } from '@/apis/acl/user/user'
-import { reqGetAllUserRole } from '@/apis/acl/role/role'
+import { reqGetAllUserRole, reqDoAssignRole } from '@/apis/acl/role/role'
+import type { RoleType } from '@/apis/acl/role/type'
 import type { UserType, AddUserType } from '@/apis/acl/user/type'
 import { ElMessage, ElMessageBox, type CheckboxValueType, type FormRules } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
@@ -185,8 +186,12 @@ const isIndeterminate = ref<boolean>(false)
 const checkAll = ref<boolean>(false)
 // 多选框选中的职位
 const RoleList = ref<string[]>([])
-// 所有职位
+// 所有职位（展示用名称）
 const AllRoles = ref<string[]>([])
+// 所有职位原始数据（含id，用于保存时反查）
+const allRolesData = ref<RoleType[]>([])
+// 当前分配角色的用户ID
+const currentUserId = ref<number>(0)
 // 是否展示分配角色drawer
 const ShowGivenRoleDrawer = ref<boolean>(false)
 // 获取新增表单实例
@@ -199,7 +204,7 @@ const DrawerTitle = computed(() => {
   return IsEdit.value ? '编辑用户' : '新增用户'
 })
 // 搜索框搜索的名称
-const UserName = ref<string>()
+const SearchUserName = ref<string>('')
 // 现在的页码
 const pageNum = ref<number>(1)
 const pageSizeList = [3, 5, 7, 9, 12]
@@ -217,12 +222,13 @@ const SaveIsDisabled = ref<boolean>(false)
 // 添加删除的id
 let RemoveIdList: number[] = []
 // 获取分页列表
-const GetUserPagination = async () => {
-  const res = await reqGetUserPagination(pageNum.value, pageSize.value)
+const GetUserPagination = async (username:string='') => {
+  const res = await reqGetUserPagination(pageNum.value, pageSize.value,username)
   if (res.code === 200) {
     UserList.value = res.data.records
     total.value = res.data.total
   }
+  return res
 }
 // 挂载时获取分页列表
 onMounted(() => {
@@ -356,15 +362,17 @@ const BatchRemove = async () => {
 const HandleGivenRole = async (name: string, id: number) => {
   ShowGivenRoleDrawer.value = true
   AddUserInfo.value.name = name
+  currentUserId.value = id
   const res = await reqGetAllUserRole(id)
+  // 保存完整角色数据用于后续反查ID
+  allRolesData.value = res.data.allRolesList
   // 获取全部职位
   AllRoles.value = res.data.allRolesList.map((obj) => obj.roleName)
   // 清空ShowUpdateDrawer的数据
   checkAll.value = false
   isIndeterminate.value = false
   // 获取已勾选职位
-  RoleList.value = res.data.assignRoles.map(obj=>obj.roleName)
-  
+  RoleList.value = res.data.assignRoles.map((obj) => obj.roleName)
 }
 // 处理checkbox全选改变
 const handleCheckAllChange = (val: CheckboxValueType) => {
@@ -386,7 +394,31 @@ const HandleGroupItemChange = (value: CheckboxValueType[]) => {
   }
 }
 // 处理保存角色信息的按钮
-const HanldeUpdateRoleSave = () => {}
+const HanldeUpdateRoleSave = async () => {
+  // 从角色名反查角色ID
+  const roleIdList = allRolesData.value
+    .filter((role) => RoleList.value.includes(role.roleName))
+    .map((role) => role.id)
+  // 发送请求
+  const res = await reqDoAssignRole({
+    userId: currentUserId.value,
+    roleIdList,
+  })
+  if (res.code === 200) {
+    ElMessage({ type: 'success', message: '分配角色成功' })
+    ShowGivenRoleDrawer.value = false
+    GetUserPagination()
+  }
+}
+// 处理搜索
+const HandleTargetSearch=async()=>{
+  // console.log(111);
+  await GetUserPagination(SearchUserName.value)
+  SearchUserName.value=''
+  
+}
+// 处理重置
+
 </script>
 
 <style scoped lang="scss">
