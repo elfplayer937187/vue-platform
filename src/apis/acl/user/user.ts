@@ -10,10 +10,10 @@ enum API{
   // 更新用户接口
   UPDATEUSER_URL="/admin/acl/user/update",
   // 批量删除接口
-  BATCHREMOVE_URL="/admin/acl/user/batchRemove"
+  BATCHREMOVE_URL="/admin/acl/user/batchRemove",
 }
 // 获取分页列表
-export const reqGetUserPagination=(page:number,limit:number)=>request.get<any,PageListType>(API.GETUSER_PAGINATION_URL+`/${page}/${limit}`)
+export const reqGetUserPagination=(page:number,limit:number,username?:string)=>request.get<any,PageListType>(API.GETUSER_PAGINATION_URL+`/${page}/${limit}?username=${username}`)
 // 新增用户接口
 export const reqAddUser=(obj:AddUserType)=>request.post<any,DefaultType>(API.ADDUSER_URL,obj)
 // 删除用户接口
