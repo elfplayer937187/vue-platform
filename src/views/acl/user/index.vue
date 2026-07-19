@@ -4,7 +4,11 @@
     <el-card>
       <el-form ref="Searchform" label-width="80px" @submit.prevent>
         <el-form-item label="用户名:">
-          <el-input  v-model="SearchUserName" placeholder="请输入用户名"  @keyup.enter="HandleTargetSearch"></el-input>
+          <el-input
+            v-model="SearchUserName"
+            placeholder="请输入用户名"
+            @keyup.enter="HandleTargetSearch"
+          ></el-input>
           <div class="right">
             <el-button type="primary" @click="HandleTargetSearch">搜索</el-button>
             <el-button @click="GetUserPagination()">重置</el-button>
@@ -222,8 +226,8 @@ const SaveIsDisabled = ref<boolean>(false)
 // 添加删除的id
 let RemoveIdList: number[] = []
 // 获取分页列表
-const GetUserPagination = async (username:string='') => {
-  const res = await reqGetUserPagination(pageNum.value, pageSize.value,username)
+const GetUserPagination = async (username: string = '') => {
+  const res = await reqGetUserPagination(pageNum.value, pageSize.value, username)
   if (res.code === 200) {
     UserList.value = res.data.records
     total.value = res.data.total
@@ -245,7 +249,7 @@ const SaveAddUser = async () => {
       const res = IsEdit.value
         ? await reqUpdateUser(AddUserInfo.value)
         : await reqAddUser(AddUserInfo.value)
-      console.log(res)
+      // console.log(res)
 
       if (res.code === 200) {
         GetUserPagination()
@@ -337,6 +341,12 @@ const HandleRowSelect = (selection: any) => {
 }
 // 删除之前
 const HandlePreDelete = async () => {
+  if (RemoveIdList.length === 0) {
+    return ElMessage({
+      type: 'error',
+      message: '请选择要删除的选项',
+    })
+  }
   await ElMessageBox.confirm('您确定要删除吗？', '', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -346,6 +356,12 @@ const HandlePreDelete = async () => {
 }
 // 处理批量删除
 const BatchRemove = async () => {
+  if (RemoveIdList.length === 0) {
+    return ElMessage({
+      type: 'error',
+      message: '请选择要删除的选项',
+    })
+  }
   const res = await reqBatchRemoveUser(RemoveIdList)
   if (res.code === 200) {
     ElMessage({
@@ -411,14 +427,12 @@ const HanldeUpdateRoleSave = async () => {
   }
 }
 // 处理搜索
-const HandleTargetSearch=async()=>{
+const HandleTargetSearch = async () => {
   // console.log(111);
   await GetUserPagination(SearchUserName.value)
-  SearchUserName.value=''
-  
+  SearchUserName.value = ''
 }
 // 处理重置
-
 </script>
 
 <style scoped lang="scss">
