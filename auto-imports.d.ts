@@ -7,6 +7,8 @@
 export {}
 declare global {
   const ElForm: typeof import('element-plus/es').ElForm
+  const ElMe: typeof import('element-plus/es').ElMe
+  const ElMessa: typeof import('element-plus/es').ElMessa
   const ElMessage: typeof import('element-plus/es').ElMessage
   const ElMessageB: typeof import('element-plus/es').ElMessageB
 }

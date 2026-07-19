@@ -134,7 +134,7 @@
           <h4 :id="titleId" :class="titleClass">分配角色</h4>
         </template>
         <template #default>
-          <el-form ref="form" :model="form" label-width="80px">
+          <el-form ref="form" label-width="80px">
             <el-form-item label="用户姓名">
               <el-input v-model="AddUserInfo.name" placeholder="" :disabled="true"></el-input>
             </el-form-item>
