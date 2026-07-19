@@ -41,3 +41,24 @@ export interface RolePageListType extends BaseType {
     total: number
   }
 }
+
+// 角色菜单响应类型
+export interface RoleAssignRespType extends BaseType{
+  data:RoleAssignType[]
+}
+// 权限类型
+export interface RoleAssignType {
+  ID:number,
+  children:RoleAssignType[]|null,
+  code:string,
+  createTime?:any,
+  id:number,
+  level:number,
+  name:string,
+  pid:number,
+  select:boolean,
+  status:string,
+  toCode:string,
+  type:number,
+  updateTime?:any
+}
