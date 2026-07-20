@@ -1,4 +1,4 @@
-export interface selectType{
-    name:string,
-    id:string
+export interface selectType {
+  name: string
+  id: string
 }

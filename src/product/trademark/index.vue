@@ -74,7 +74,14 @@
       </el-table-column>
     </el-table>
     <!-- 删除的dialog -->
-    <el-dialog v-model="DeleteDialogVisible" class="delete-dialog" title="是否删除？" width="500" destroy-on-close center>
+    <el-dialog
+      v-model="DeleteDialogVisible"
+      class="delete-dialog"
+      title="是否删除？"
+      width="500"
+      destroy-on-close
+      center
+    >
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="DeleteDialogVisible = false">否</el-button>
@@ -103,7 +110,11 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, reactive } from 'vue'
-import { getTrademarkList, appendTrademarkList, removeTradeMarkList } from '@/apis/product/trademark'
+import {
+  getTrademarkList,
+  appendTrademarkList,
+  removeTradeMarkList,
+} from '@/apis/product/trademark'
 import type {
   RecordsType,
   getTrademarkListResponseType,
@@ -137,10 +148,10 @@ const background = ref(true)
 const total = ref<number>(0)
 // tradeMarklist列表
 const tradeMarkList = ref<RecordsType>([])
-  // 控制删除表单是否可见
-const DeleteDialogVisible=ref<boolean>(false)
+// 控制删除表单是否可见
+const DeleteDialogVisible = ref<boolean>(false)
 // delete获取的row
-let deleteRow=-1
+let deleteRow = -1
 // 获取列表
 const HasTradeMark = async () => {
   const res: getTrademarkListResponseType = await getTrademarkList(
@@ -237,19 +248,19 @@ const changeValue = (row: RecordsData) => {
 }
 // 删除数据
 const deleteValue = async () => {
-  try{
+  try {
     await removeTradeMarkList(deleteRow)
     ElMessage({
-      type:'success',
-      message:'删除成功！'
+      type: 'success',
+      message: '删除成功！',
     })
-  }catch{
+  } catch {
     ElMessage({
-      type:'error',
-      message:'删除失败！'
+      type: 'error',
+      message: '删除失败！',
     })
   }
-  DeleteDialogVisible.value=false
+  DeleteDialogVisible.value = false
   HasTradeMark()
 }
 // dialog名称校验
@@ -277,16 +288,15 @@ const rules: FormRules<typeof trademarkParams> = {
 }
 
 // 显示删除dialog
-const showDeleteDialog=(row:RecordsData)=>{
-  deleteRow=(row.id as number)
-  DeleteDialogVisible.value=true
+const showDeleteDialog = (row: RecordsData) => {
+  deleteRow = row.id as number
+  DeleteDialogVisible.value = true
 }
 </script>
 
 <style lang="scss" scoped>
-:deep(.delete-dialog){
-  .el-dialog__header{
-    
+:deep(.delete-dialog) {
+  .el-dialog__header {
   }
 }
 
@@ -296,7 +306,6 @@ const showDeleteDialog=(row:RecordsData)=>{
 .demo-pagination-block {
   margin-top: 10px;
 }
-
 </style>
 <style>
 .avatar-uploader .el-upload {

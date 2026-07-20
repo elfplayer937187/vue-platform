@@ -85,7 +85,8 @@
   <!-- 分配权限的drawer -->
   <el-drawer title="分配角色权限" v-model="ShowDrawer" :destroy-on-close="true">
     <template #default>
-      <el-tree ref="treeRef"
+      <el-tree
+        ref="treeRef"
         style="max-width: 600px"
         :data="data"
         show-checkbox
@@ -96,7 +97,7 @@
       />
     </template>
     <template #footer>
-      <el-button @click="ShowDrawer=false">取消</el-button>
+      <el-button @click="ShowDrawer = false">取消</el-button>
       <el-button type="primary" @click="HandleSaveDoAssign">确认</el-button>
     </template>
   </el-drawer>
@@ -109,7 +110,7 @@ import {
   reqAddRole,
   reqDeleteRole,
   reqGetRoleAssign,
-  reqDoAssignForRole
+  reqDoAssignForRole,
 } from '@/apis/acl/role/role'
 import type { RoleRecordType, RoleAssignType } from '@/apis/acl/role/type'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -124,7 +125,7 @@ const DefaultSelectIdList = ref<number[]>([])
 const treeRef = ref()
 // drawer配置
 const ShowDrawer = ref<boolean>(false)
-const NowDrawerId=ref<number|null>()
+const NowDrawerId = ref<number | null>()
 // 处理搜索的name
 const roleName = ref<string>('')
 // 整个列表数据
@@ -238,7 +239,7 @@ const DeeplySearchSelectData = (Assigns: RoleAssignType[] | null) => {
 const HandleAssignButton = async (RoleId: number) => {
   data.value = []
   DefaultSelectIdList.value = []
-  NowDrawerId.value=RoleId
+  NowDrawerId.value = RoleId
   const res = await reqGetRoleAssign(RoleId)
   // console.log(res);
   if (res.code === 200) {

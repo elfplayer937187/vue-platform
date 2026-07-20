@@ -23,7 +23,9 @@
           :disabled="CheckIsDisabled(row)"
           >{{ row.level !== 3 ? '添加菜单' : '添加功能' }}</el-button
         >
-        <el-button type="primary" :disabled="row.id === 1">编辑</el-button>
+        <el-button type="primary" @click="HandleUpdatePermissionBtn(row)" :disabled="row.id === 1"
+          >编辑</el-button
+        >
         <el-button type="primary" @click="HandleDeletePermission(row.id)" :disabled="row.id === 1"
           >删除</el-button
         >
@@ -33,11 +35,11 @@
   <!-- dialog -->
   <el-dialog title="Tips" v-model="ShowDialog" width="600px">
     <template #default>
-      <el-form ref="form" label-width="80px">
-        <el-form-item label="名称">
+      <el-form ref="form" :model="{name:AddPermissionObj.name,code:AddPermissionObj.code}" :rules="formRules" label-width="80px">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="AddPermissionObj.name" placeholder=""></el-input>
         </el-form-item>
-        <el-form-item label="权限值">
+        <el-form-item label="权限值" prop="code">
           <el-input v-model="AddPermissionObj.code" placeholder=""></el-input>
         </el-form-item>
       </el-form>
@@ -57,10 +59,23 @@ import {
   reqAddPermission,
   reqDeletePermission,
 } from '../../../apis/acl/permission/permission'
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive, watch } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
-
+import type { FormInstance, FormRules } from 'element-plus'
+// 获取表单实例
+const form=ref<FormInstance>()
+// 验证整个保存表单
+const formRules = reactive<FormRules<{ name: string; code: string }>>({
+  name: [
+    { required: true, message: '请输入名称', trigger: 'change' },
+    { min: 1, max: 20, message: '长度必须为1-20', trigger: 'change' },
+  ],
+  code: [
+    { required: true, message: '请输入权限值', trigger: 'change' },
+    { min: 1, max: 20, message: '长度必须为1-20', trigger: 'change' },
+  ],
+})
 // dialog相关
 const ShowDialog = ref<boolean>(false)
 const AddPermissionObj = reactive<AddPermissionType>({
@@ -68,7 +83,6 @@ const AddPermissionObj = reactive<AddPermissionType>({
   name: '',
   level: '',
   pid: '',
-  type: 1,
 })
 // 存放整个表的值
 const tableData = ref<RoleAssignType[]>([])
@@ -77,7 +91,7 @@ const tableData = ref<RoleAssignType[]>([])
 const GetPermissionData = async () => {
   const res = await reqGetPermission()
   if (res.code === 200) {
-    console.log(res.data)
+    // console.log(res.data)
 
     tableData.value = res.data
   }
@@ -88,21 +102,24 @@ onMounted(async () => {
 })
 // 按钮禁用项
 const CheckIsDisabled = (row: RoleAssignType) => {
-  return row.level!==4 ? false : true
+  return row.level !== 4 ? false : true
 }
 
-// 处理permission按钮
+// 处理permission添加按钮
 const HandleAddPermissionBtn = (row: RoleAssignType) => {
+  AddPermissionObj.name = ''
+  AddPermissionObj.code = ''
   AddPermissionObj.level = row.level + 1
   AddPermissionObj.pid = row.id
+  AddPermissionObj.id = undefined
   ShowDialog.value = true
 }
 // 处理保存信息
 const HandleSavePermission = async () => {
-  console.log(AddPermissionObj.level)
-
+  await form.value?.validate()
   const res = await reqAddPermission(AddPermissionObj)
   console.log(res)
+
   ShowDialog.value = false
   GetPermissionData()
 }
@@ -113,13 +130,23 @@ const HandleDeletePermission = async (id: number) => {
     cancelButtonText: '取消',
     type: 'warning',
   })
-  const res=await reqDeletePermission(id)
-  if(res.code===200){
-    console.log(res);
+  const res = await reqDeletePermission(id)
+  if (res.code === 200) {
+    console.log(res)
     GetPermissionData()
-    
   }
 }
+// 处理permission更新按钮
+const HandleUpdatePermissionBtn = (row: RoleAssignType) => {
+  Object.assign(AddPermissionObj, row)
+  ShowDialog.value = true
+}
+// 重置校验值
+watch(ShowDialog,(val)=>{
+  if(!val){
+    form.value?.resetFields()
+  }
+})
 </script>
 
 <style scoped lang="scss"></style>

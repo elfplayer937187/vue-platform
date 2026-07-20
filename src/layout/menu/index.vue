@@ -32,7 +32,6 @@
     </template>
     <!-- 二级多个路由 -->
     <template v-if="item.meta.IsShow">
-      
       <el-sub-menu v-if="item.children && item.children.length > 1" :index="item.path">
         <template #title>
           <el-icon v-if="item.meta.Icon">
@@ -47,12 +46,12 @@
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 defineProps(['menuList'])
-const $router=useRouter()
+const $router = useRouter()
 
 const goRoute = (vc: { index: string; indexPath: string[]; active: boolean }) => {
-// vc.index 才是路径字符串，如 '/login'、'/acl/user'
+  // vc.index 才是路径字符串，如 '/login'、'/acl/user'
   $router.push(vc.index)
 }
 </script>

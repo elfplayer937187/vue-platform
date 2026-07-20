@@ -6,13 +6,12 @@ const useLayoutSettings = defineStore('LayoutSettings', () => {
   const refresh = ref(true)
   function ChangeFold() {
     isFold.value = !isFold.value
-    
   }
   return {
     isFold,
     iconComponent,
     ChangeFold,
-    refresh
+    refresh,
   }
 })
 export default useLayoutSettings

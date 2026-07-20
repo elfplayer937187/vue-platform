@@ -22,7 +22,7 @@
       <!-- 刷新按钮 -->
       <el-button type="primary" icon="Refresh" circle @click="refreshComponent"></el-button>
       <el-button type="primary" icon="FullScreen" circle @click="fullScreen"></el-button>
-      <el-button type="primary" icon="Setting" circle></el-button>
+      <el-button type="primary" icon="Setting" circle @click="HandleSettingBtn"></el-button>
       <span class="el-dropdown-link">
         <img :src="avatar" style="width: 24px; height: 24px; margin: 0 10px" alt="" />
       </span>
@@ -40,6 +40,21 @@
         </template>
       </el-dropdown>
     </div>
+    <el-drawer title="主题设置" v-model="ShowDrawer">
+      <el-form ref="form" label-width="80px">
+        <el-form-item label="主题颜色" class="right-align-item">
+          <el-color-picker v-model="color" size="large" @change="HandleColorChange" />
+        </el-form-item>
+        <el-form-item label="暗黑模式" class="right-align-item">
+          <el-switch
+            v-model="settingIsDark"
+            active-action-icon="Moon"
+            inactive-action-icon="Sunny"
+            @change="HandleDarkChange"
+          />
+        </el-form-item>
+      </el-form>
+    </el-drawer>
   </div>
 </template>
 
@@ -48,8 +63,17 @@ import { storeToRefs } from 'pinia'
 import useLayoutSettings from '@/stores/modules/LayoutSettings'
 import { useRoute } from 'vue-router'
 import useUserStore from '@/stores/modules/user'
-import { onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+// 控制主题drawer
+const ShowDrawer = ref<boolean>(false)
+// 侧边栏主题颜色（从 localStorage 恢复）
+const THEME_COLOR_KEY = 'app-theme-color'
+const color = ref(localStorage.getItem(THEME_COLOR_KEY) || '#409EFF')
+// 暗黑模式是否开启（从 localStorage 恢复）
+const DARK_MODE_KEY = 'app-dark-mode'
+const settingIsDark = ref(localStorage.getItem(DARK_MODE_KEY) === 'true')
+
 // 初始化路由器
 const $router = useRouter()
 // 使用layoutstore
@@ -77,6 +101,21 @@ function fullScreen() {
 }
 onMounted(() => {
   UserStore.GetUserInfo()
+  // 恢复持久化的暗黑模式和主题颜色
+  if (settingIsDark.value) {
+    document.querySelector('html')?.classList.add('dark')
+  }
+  if (color.value !== '#409EFF') {
+    document.documentElement.style.setProperty('--el-color-primary', color.value)
+  }
+})
+// 持久化暗黑模式
+watch(settingIsDark, (val) => {
+  localStorage.setItem(DARK_MODE_KEY, String(val))
+})
+// 持久化主题颜色
+watch(color, (val) => {
+  localStorage.setItem(THEME_COLOR_KEY, val)
 })
 // 退出登录点击的回调
 function logout() {
@@ -84,15 +123,39 @@ function logout() {
   // 清空数据[token|username|avatar]
   userLogout()
   // 跳转登录
-  $router.push({path:'/login',query:{redirect:$route.path}})
+  $router.push({ path: '/login', query: { redirect: $route.path } })
+}
+// 处理主题设置按钮
+const HandleSettingBtn = () => {
+  ShowDrawer.value = true
+}
+// 处理暗黑模式
+const HandleDarkChange = () => {
+  // 获取html根节点
+  const html = document.querySelector('html')
+  settingIsDark.value
+    ? (html as HTMLElement).classList.add('dark')
+    : (html as HTMLHtmlElement).classList.remove('dark')
+}
+// 处理主题颜色
+const HandleColorChange = () => {
+  const el = document.documentElement
+  // const el = document.getElementById('xxx')
+
+  // 获取 css 变量
+  getComputedStyle(el).getPropertyValue(`--el-color-primary`)
+
+  // 设置 css 变量
+  el.style.setProperty('--el-color-primary', color.value)
 }
 </script>
 
 <style scoped lang="scss">
+
 .tabbar {
   width: 100%;
   height: $base-menu-topheight;
-  background-color: white;
+  // background-color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -108,6 +171,12 @@ function logout() {
   .tabbar-right {
     display: flex;
     align-items: center;
+  }
+}
+.right-align-item {
+  :deep(.el-form-item__content) {
+    display: flex;
+    justify-content: flex-end; /* 内容右对齐 */
   }
 }
 </style>

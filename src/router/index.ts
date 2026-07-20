@@ -80,7 +80,7 @@ const router = createRouter({
         IsShow: true,
         Icon: 'Lock',
       },
-      redirect:'/acl/user',
+      redirect: '/acl/user',
       children: [
         {
           path: '/acl/user',
@@ -124,7 +124,7 @@ const router = createRouter({
         IsShow: true,
         Icon: 'Goods',
       },
-      redirect:'/Product/attr',
+      redirect: '/Product/attr',
       children: [
         {
           path: '/Product/attr',

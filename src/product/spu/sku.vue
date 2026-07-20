@@ -159,14 +159,14 @@ const initSKUData = async (
 }
 // 设置默认图片
 const SetDefaultImg = (row: ImageType) => {
-  console.log(row.imgUrl);
-  
+  console.log(row.imgUrl)
+
   // 所有前面多选框全部不选中
   ImageList.value.forEach((item) => {
     table.value.toggleRowSelection(item, false)
   })
   table.value.toggleRowSelection(row, true)
-    // 赋值
+  // 赋值
   SKUSaveForm.skuDefaultImg = row.imgUrl as string
 }
 

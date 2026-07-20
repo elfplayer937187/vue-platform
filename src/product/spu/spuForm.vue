@@ -168,11 +168,11 @@ const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
 const handleUploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
   if (response.code === 200) {
     // 服务器返回的图片地址赋给当前文件
-    console.log(response);
+    console.log(response)
     // 去除前缀
     uploadFile.url = response.data
     const Prename = response.data.split('/')
-    uploadFile.name=Prename[Prename.length-1]
+    uploadFile.name = Prename[Prename.length - 1]
     ElMessage.success('上传成功')
   } else {
     ElMessage.error('上传失败')
@@ -243,7 +243,7 @@ const FilterHas = async () => {
   }
 }
 // 处理父组件新增事件
-const initAppendData=async(C3Id:number)=>{
+const initAppendData = async (C3Id: number) => {
   // 先清空旧数据，避免残留编辑时的 id 导致走到更新接口
   ClearFormParams()
   // 传入c3Id
@@ -296,8 +296,8 @@ const SaveLoad = async () => {
     // 新增时 id 为空字符串，后端 Long 类型解析会报"请求参数错误"，传 null 让后端忽略
     if (!params.id) (params as any).id = null
     const res = await reqAddSPU(params)
-    console.log(params);
-    
+    console.log(params)
+
     if (res.code === 200) {
       ElMessage({
         type: 'success',
@@ -310,8 +310,7 @@ const SaveLoad = async () => {
         type: 'error',
         message: '保存失败',
       })
-      console.log(res);
-      
+      console.log(res)
     }
   } catch {
     ElMessage({
@@ -391,7 +390,7 @@ const CheckIfTagMiss = () => {
   })
 }
 
-defineExpose({ initHasSpuData, ClearFormParams,initAppendData })
+defineExpose({ initHasSpuData, ClearFormParams, initAppendData })
 </script>
 
 <style lang="scss" scoped>
