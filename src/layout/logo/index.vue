@@ -18,6 +18,7 @@ defineProps<{ isFold: boolean }>()
   justify-content: center;
   transition: all 0.3s ease;
   overflow: hidden;
+  border-bottom: 1px solid $base-menu-border-color;
 
   &.fold {
     width: $base-menu-minwidth;
@@ -29,8 +30,12 @@ defineProps<{ isFold: boolean }>()
     flex-shrink: 0;
   }
   p {
-    color: white;
+    color: $base-menu-active-text-color;
     white-space: nowrap;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-left: 10px;
   }
 }
 </style>

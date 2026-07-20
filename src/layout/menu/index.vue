@@ -47,9 +47,11 @@
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
+import { ref } from 'vue';
 defineProps(['menuList'])
 const $router = useRouter()
-
+// 当前激活的路由
+const ActiveRoute=ref<string>()
 const goRoute = (vc: { index: string; indexPath: string[]; active: boolean }) => {
   // vc.index 才是路径字符串，如 '/login'、'/acl/user'
   $router.push(vc.index)
