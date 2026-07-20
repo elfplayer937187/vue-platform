@@ -4,7 +4,7 @@ export interface GetPermissionRespType extends BaseType {
   data: RoleAssignType[]
 }
 export interface AddPermissionType {
-  id?:string|number,
+  id?: string | number
   code: string //权限数值
   level: number | string //几级菜单
   name: string //名称
