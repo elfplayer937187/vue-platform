@@ -14,34 +14,33 @@
 
 <script lang="ts" setup>
 //  挂载时获取用户信息
-import useUserStore from '@/stores/modules/user';
-import { storeToRefs } from 'pinia';
-import { getTime } from '@/utils/time';
-const UserStore=useUserStore()
-const {avatar,username}=storeToRefs(UserStore)
+import useUserStore from '@/stores/modules/user'
+import { storeToRefs } from 'pinia'
+import { getTime } from '@/utils/time'
+const UserStore = useUserStore()
+const { avatar, username } = storeToRefs(UserStore)
 </script>
 
 <style scoped lang="scss">
-.el-card{
-  :deep(.el-card__body){
+.el-card {
+  :deep(.el-card__body) {
     display: flex;
   }
-  :deep(.el-image__inner){
+  :deep(.el-image__inner) {
     border-radius: 50%;
   }
-  .right-text{
+  .right-text {
     margin-left: 20px;
     position: relative;
-    p{
+    p {
       position: absolute;
       bottom: 10%;
       width: 200px;
       font-style: italic;
       font-size: 12px;
       color: gray;
-      
     }
-    h3{
+    h3 {
       position: absolute;
       bottom: 50%;
       width: 200px;
@@ -50,10 +49,8 @@ const {avatar,username}=storeToRefs(UserStore)
     }
   }
 }
-.welcome{
+.welcome {
   display: flex;
   justify-content: center;
 }
-
-
 </style>

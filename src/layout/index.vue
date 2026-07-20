@@ -8,7 +8,7 @@
     <!-- 侧方导航 -->
     <div class="navigator" :class="{ fold: layoutSettings.isFold ? true : false }">
       <!-- logo -->
-      <Logo></Logo>
+      <Logo :is-fold="layoutSettings.isFold"></Logo>
       <!-- 展示菜单 -->
       <el-scrollbar class="scrollbar">
         <el-menu
@@ -53,12 +53,13 @@ const {
     width: $base-menu-width;
     height: 100vh;
     background-color: $base-menu-bgc;
+    transition: all 0.3s ease;
     &.fold {
       width: $base-menu-minwidth;
     }
 
     .scrollbar {
-      width: $base-menu-width;
+      width: 100%;
       height: calc(100% - $base-menu-logoheight);
       background-color: $base-menu-bgc;
 

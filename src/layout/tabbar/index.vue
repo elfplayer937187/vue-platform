@@ -151,7 +151,6 @@ const HandleColorChange = () => {
 </script>
 
 <style scoped lang="scss">
-
 .tabbar {
   width: 100%;
   height: $base-menu-topheight;

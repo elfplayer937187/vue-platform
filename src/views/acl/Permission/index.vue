@@ -35,7 +35,12 @@
   <!-- dialog -->
   <el-dialog title="Tips" v-model="ShowDialog" width="600px">
     <template #default>
-      <el-form ref="form" :model="{name:AddPermissionObj.name,code:AddPermissionObj.code}" :rules="formRules" label-width="80px">
+      <el-form
+        ref="form"
+        :model="{ name: AddPermissionObj.name, code: AddPermissionObj.code }"
+        :rules="formRules"
+        label-width="80px"
+      >
         <el-form-item label="名称" prop="name">
           <el-input v-model="AddPermissionObj.name" placeholder=""></el-input>
         </el-form-item>
@@ -64,7 +69,7 @@ import { ElMessageBox } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
 import type { FormInstance, FormRules } from 'element-plus'
 // 获取表单实例
-const form=ref<FormInstance>()
+const form = ref<FormInstance>()
 // 验证整个保存表单
 const formRules = reactive<FormRules<{ name: string; code: string }>>({
   name: [
@@ -142,8 +147,8 @@ const HandleUpdatePermissionBtn = (row: RoleAssignType) => {
   ShowDialog.value = true
 }
 // 重置校验值
-watch(ShowDialog,(val)=>{
-  if(!val){
+watch(ShowDialog, (val) => {
+  if (!val) {
     form.value?.resetFields()
   }
 })
