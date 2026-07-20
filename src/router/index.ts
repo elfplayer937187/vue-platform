@@ -32,7 +32,7 @@ const router = createRouter({
           name: 'home',
           component: () => import('@/views/home/home.vue'),
           meta: {
-            title: 'Home',
+            title: '首页',
             IsShow: false,
             Icon: 'HomeFilled',
           },

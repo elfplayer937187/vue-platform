@@ -12,9 +12,12 @@
       <!-- 展示菜单 -->
       <el-scrollbar class="scrollbar">
         <el-menu
+          :default-active="defaultActive"
+          :default-openeds="defaultOpeneds"
           :collapse="layoutSettings.isFold"
-          background-color="#001529"
-          text-color="white"
+          background-color="#0f172a"
+          text-color="#e2e8f0"
+          active-text-color="#fff"
           class="elmenu"
         >
           <Menup :menu-list="routes"></Menup>
@@ -29,6 +32,8 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import Logo from './logo/index.vue'
 import useStore from '@/stores/modules/user.ts'
 import Menup from '@/layout/menu/index.vue'
@@ -36,6 +41,8 @@ import Main from '@/layout/main/index.vue'
 import Tabbar from '@/layout/tabbar/index.vue'
 import useLayoutSettings from '@/stores/modules/LayoutSettings.ts'
 import { storeToRefs } from 'pinia'
+
+const $route = useRoute()
 const layoutSettings = useLayoutSettings()
 const { isFold } = storeToRefs(useLayoutSettings())
 const {
@@ -43,6 +50,13 @@ const {
     options: { routes },
   },
 } = useStore()
+
+// 当前激活菜单项
+const defaultActive = computed(() => $route.path)
+// 需要展开的父级子菜单（截取路径中间部分）
+const defaultOpeneds = computed(() =>
+  $route.matched.slice(1, -1).map((r) => r.path).filter(Boolean),
+)
 </script>
 
 <style scoped lang="scss">
@@ -69,6 +83,39 @@ const {
       }
       .elmenu {
         border-right: none;
+
+        // 菜单项默认状态
+        :deep(.el-menu-item) {
+          color: $base-menu-text-color;
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.06) !important;
+            color: $base-menu-active-text-color;
+          }
+          &.is-active {
+            background-color: $base-menu-hover-bgc !important;
+            color: $base-menu-active-text-color;
+            position: relative;
+            &::before {
+              content: '';
+              position: absolute;
+              left: 0;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 3px;
+              height: 20px;
+              background: #3b82f6;
+              border-radius: 0 2px 2px 0;
+            }
+          }
+        }
+        // 子菜单标题
+        :deep(.el-sub-menu__title) {
+          color: $base-menu-text-color;
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.06) !important;
+            color: $base-menu-active-text-color;
+          }
+        }
       }
     }
   }
