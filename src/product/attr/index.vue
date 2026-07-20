@@ -99,7 +99,7 @@
 <script lang="ts" setup>
 import Category from '@/components/Category/index.vue'
 import useCategoryStore from '@/stores/modules/Category'
-import { watch, ref, reactive,onMounted } from 'vue'
+import { watch, ref, reactive, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { appendThridTag, deleteThirdCategory, getCategoryTag } from '@/apis/product/attr'
 import type { ListItemType } from '@/apis/product/attr/type'
@@ -155,8 +155,7 @@ const AttrList = ref<ListItemType[]>([])
 watch(C3Id, () => {
   // 得到元素，存储到AttrList,然后加载界面
 
-    getAttr()
-  
+  getAttr()
 })
 // 获取第一界面属性值列表
 const getAttr = async () => {
@@ -174,41 +173,39 @@ const getAttr = async () => {
   }
 }
 // 处理第一界面编辑
-const HandleEdit = (row:any) => {
+const HandleEdit = (row: any) => {
   // 跳转第二界面,附上该赋值的值，并且把id传给appendParams
   showChange.value = true
   // 深拷贝实现,浅拷贝会有标签bug
-  Object.assign(AppendParams,JSON.parse(JSON.stringify(row)))
+  Object.assign(AppendParams, JSON.parse(JSON.stringify(row)))
 }
 // 处理第一界面删除
-const HandleDelete=async(attrId:number)=>{
-  try{
+const HandleDelete = async (attrId: number) => {
+  try {
     // 发请求删除当前attrid，并且重新渲染
-    const res=await deleteThirdCategory(attrId)
-    if(res.code===200){
+    const res = await deleteThirdCategory(attrId)
+    if (res.code === 200) {
       // 刷新界面并且提示删除成功
       ElMessage({
-        type:"success",
-        message:"删除成功"
+        type: 'success',
+        message: '删除成功',
       })
       await getAttr()
       return 'ok'
-    }else{
+    } else {
       ElMessage({
-        type:"error",
-        message:"删除失败"
+        type: 'error',
+        message: '删除失败',
       })
-      throw('删除失败')
+      throw '删除失败'
     }
-  
-  }catch{
-      ElMessage({
-        type:"error",
-        message:"网络异常"
-      })
-    throw('网络异常')
+  } catch {
+    ElMessage({
+      type: 'error',
+      message: '网络异常',
+    })
+    throw '网络异常'
   }
-  
 }
 // 保存第二界面值
 const saveAppendParams = async () => {
@@ -222,7 +219,7 @@ const saveAppendParams = async () => {
       })
       showChange.value = false
       // 重新渲染第一界面列表,并且把数据解除禁用
-      Isdisabled.value=false
+      Isdisabled.value = false
       await getAttr()
       return 'ok'
     } else {
@@ -262,7 +259,6 @@ const handleDelete2 = (name: string) => {
     return item.valueName !== name
   })
 }
-
 </script>
 
 <style scoped lang="scss">

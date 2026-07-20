@@ -8,9 +8,9 @@ const request = axios.create({
 })
 //请求拦截器
 request.interceptors.request.use((config) => {
-  const UserStore=useUserStore()
-  if(UserStore.token){
-    config.headers.token=UserStore.token
+  const UserStore = useUserStore()
+  if (UserStore.token) {
+    config.headers.token = UserStore.token
   }
   return config
 })

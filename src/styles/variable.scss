@@ -2,13 +2,22 @@
 
 // home左侧菜单
 // 宽
-$base-menu-width:260px;
-$base-menu-minwidth:50px;
+$base-menu-width: 260px;
+$base-menu-minwidth: 50px;
 // 颜色
-$base-menu-bgc:#001529;
+$base-menu-bgc: #001529;
 
 // home顶部
-$base-menu-topheight:60px;
+$base-menu-topheight: 60px;
 
 // logo的高
-$base-menu-logoheight:60px;
+$base-menu-logoheight: 60px;
+
+// tabbar的颜色
+$base-tabbar-bgc-light:white;
+$base-tabbar-bgc-dark:black;
+
+
+// content背景颜色
+$base-content-bgc-light:white;
+$base-content-bgc-dark:black;

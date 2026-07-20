@@ -3,33 +3,33 @@ export interface DefaultResponseType extends BaseType {
   data: string
 }
 interface BaseType {
-  code: number,
-  message: string,
-  ok: true,
+  code: number
+  message: string
+  ok: true
 }
-export interface SKUInfoResponseType extends BaseType{
-  data:SKUType
+export interface SKUInfoResponseType extends BaseType {
+  data: SKUType
 }
-export interface SKUResponseType extends BaseType{
-  data:SKUType[]
+export interface SKUResponseType extends BaseType {
+  data: SKUType[]
 }
 // SKU商品
 export interface SKUType {
   // 父级的
-  category3Id: string|number, //,
-  spuID: string|number, //spuId,
-  tmId: string|number, //品牌id,
-  isSale?:number,
+  category3Id: string | number //,
+  spuID: string | number //spuId,
+  tmId: string | number //品牌id,
+  isSale?: number
   //   基础属性
-  id?:number,
-  weight: string|number,
-  price: string|number,
-  skuDesc: string,
+  id?: number
+  weight: string | number
+  price: string | number
+  skuDesc: string
 
-  skuAttrValueList: skuAttrType[],
-  skuDefaultImg: string,
-  skuName: string,
-  skuSaleAttrValueList: skuSaleType[],
+  skuAttrValueList: skuAttrType[]
+  skuDefaultImg: string
+  skuName: string
+  skuSaleAttrValueList: skuSaleType[]
 
   skuImageList?: skuImageType[]
 }
@@ -37,12 +37,12 @@ export interface SKUType {
 // 平台属性
 export interface skuAttrType {
   // 必要
-  attrId: number,
-  valueId: number,
+  attrId: number
+  valueId: number
   // 不必要
-  attrName?: string,
-  id?: number,
-  skuId?: number,
+  attrName?: string
+  id?: number
+  skuId?: number
   valueName?: string
 }
 // sku图片类型
@@ -57,24 +57,24 @@ export interface skuImageType {
 // sku销售属性
 export interface skuSaleType {
   // 必要
-  saleAttrId: number,
-  saleAttrValueId: number,
+  saleAttrId: number
+  saleAttrValueId: number
   //
-  id?: number,
-  saleAttrName?: string,
-  saleAttrValueName?: string,
+  id?: number
+  saleAttrName?: string
+  saleAttrValueName?: string
   skuId?: number
 }
 
 // sku分页列表返回类型
-export interface skuPaginationDataType{
-    current:number,
-    pages:number,
-    records:SKUType[],
-    searchCount:boolean,
-    size:number,
-    total:number
+export interface skuPaginationDataType {
+  current: number
+  pages: number
+  records: SKUType[]
+  searchCount: boolean
+  size: number
+  total: number
 }
-export interface skuPaginationResponseType extends BaseType{
-  data:skuPaginationDataType
+export interface skuPaginationResponseType extends BaseType {
+  data: skuPaginationDataType
 }

@@ -4,7 +4,6 @@ import type {
   DoAssignRoleType,
   RolePageListType,
   RoleAssignRespType,
-  
 } from '@/apis/acl/role/type'
 import type { DefaultType } from '@/apis/acl/user/type'
 
@@ -19,9 +18,9 @@ enum API {
   // 删除角色
   DELETE_URL = '/admin/acl/role/remove',
   // 根据角色获取菜单接口
-  GETROLEASSIGN_URL='/admin/acl/permission/toAssign',
+  GETROLEASSIGN_URL = '/admin/acl/permission/toAssign',
   // 给角色分配权限
-  ADDASSIGNFORROLE_URL='/admin/acl/permission/doAssign'
+  ADDASSIGNFORROLE_URL = '/admin/acl/permission/doAssign',
 }
 
 // 获取该用户的角色信息
@@ -52,7 +51,11 @@ export const reqDeleteRole = (id: number) =>
   request.delete<any, DefaultType>(API.DELETE_URL + `/${id}`)
 
 // 获取角色菜单
-export const reqGetRoleAssign=(roleId:number)=>request.get<any,RoleAssignRespType>(API.GETROLEASSIGN_URL+`/${roleId}`)
+export const reqGetRoleAssign = (roleId: number) =>
+  request.get<any, RoleAssignRespType>(API.GETROLEASSIGN_URL + `/${roleId}`)
 
 //给角色分配权限
-export const reqDoAssignForRole=(roleId:number,permissionId:number[])=>request.post<any,DefaultType>(API.ADDASSIGNFORROLE_URL,null,{params:{roleId,permissionId:permissionId.join(',')}})
+export const reqDoAssignForRole = (roleId: number, permissionId: number[]) =>
+  request.post<any, DefaultType>(API.ADDASSIGNFORROLE_URL, null, {
+    params: { roleId, permissionId: permissionId.join(',') },
+  })

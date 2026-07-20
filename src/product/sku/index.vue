@@ -103,9 +103,17 @@
         <el-row :gutter="15" type="flex">
           <el-col :span="6">商品图片</el-col>
           <el-col :span="18">
-            <el-carousel indicator-position="outside" height="120px" :autoplay='true' :interval="3000">
+            <el-carousel
+              indicator-position="outside"
+              height="120px"
+              :autoplay="true"
+              :interval="3000"
+            >
               <el-carousel-item>
-                <el-image style="width: 100px; height: 100px" :src="SKUInfo?.skuDefaultImg"></el-image>
+                <el-image
+                  style="width: 100px; height: 100px"
+                  :src="SKUInfo?.skuDefaultImg"
+                ></el-image>
               </el-carousel-item>
             </el-carousel>
           </el-col>
@@ -212,7 +220,7 @@ const ShowSKUDetail = async (skuId: number) => {
 .el-drawer .el-row {
   margin: 20px 0;
 }
-.el-row .el-image{
+.el-row .el-image {
   margin-left: 80px;
 }
 </style>

@@ -1,16 +1,16 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getFirstCategory, getSecondCategory, getThirdCategory } from '@/apis/product/attr'
-import type { dataType} from '@/apis/product/attr/type' 
+import type { dataType } from '@/apis/product/attr/type'
 const useCategoryStore = defineStore('Category', () => {
   const selectFirst = ref<dataType[]>()
   const selectSecond = ref<dataType[]>()
   const selectThird = ref<dataType[]>()
-  const C1Id = ref<number|string>('')
-  const C2Id = ref<number|string>('')
-  const C3Id = ref<number|string>('')
+  const C1Id = ref<number | string>('')
+  const C2Id = ref<number | string>('')
+  const C3Id = ref<number | string>('')
   // 控制表单是否开启
-  const Isdisabled=ref<boolean>(false)
+  const Isdisabled = ref<boolean>(false)
   const getFirst = async () => {
     try {
       // 获取分类一数据
@@ -20,44 +20,43 @@ const useCategoryStore = defineStore('Category', () => {
       if (res.code === 200) {
         selectFirst.value = res.data
         // 将第一选项框的值默认为返回数据的第一个
-        C1Id.value=(res.data[0] as dataType).id
+        C1Id.value = (res.data[0] as dataType).id
         // 打印selectFirst
         // console.log(selectFirst.value);
-        
+
         await getSecond()
         return 'ok'
       } else {
-        throw('获取第一选项框失败')
+        throw '获取第一选项框失败'
       }
     } catch {
-      throw('网络异常')
+      throw '网络异常'
     }
   }
-  const getSecond=async()=>{
+  const getSecond = async () => {
     // 二级菜单变化默认三号获取第一个
-    try{
-      const res=await getSecondCategory(C1Id.value)
-      selectSecond.value=res.data
-      C2Id.value=(res.data[0] as dataType).id
+    try {
+      const res = await getSecondCategory(C1Id.value)
+      selectSecond.value = res.data
+      C2Id.value = (res.data[0] as dataType).id
       // console.log(2,selectSecond.value);
 
       await getThird()
       // console.log(selectSecond.value);
       return 'ok'
-    }catch{
-      throw('网络异常');
+    } catch {
+      throw '网络异常'
     }
   }
-  const getThird=async()=>{
-    try{
-      const res=await getThirdCategory(C2Id.value)
-      selectThird.value=res.data
-      C3Id.value=(res.data[0] as dataType).id
+  const getThird = async () => {
+    try {
+      const res = await getThirdCategory(C2Id.value)
+      selectThird.value = res.data
+      C3Id.value = (res.data[0] as dataType).id
       // console.log(3,selectThird.value);
       return 'ok'
-    }catch{
-      throw('没有id');
-      
+    } catch {
+      throw '没有id'
     }
   }
   //   返回数据
@@ -71,7 +70,7 @@ const useCategoryStore = defineStore('Category', () => {
     getFirst,
     getSecond,
     getThird,
-    Isdisabled
+    Isdisabled,
   }
 })
 export default useCategoryStore

@@ -46,7 +46,6 @@ import { storeToRefs } from 'pinia'
 
 // 接收父组件传递的getAttr函数
 
-
 const CategoryStore = useCategoryStore()
 const { selectFirst, selectSecond, selectThird, C1Id, C2Id, C3Id, Isdisabled } =
   storeToRefs(CategoryStore)

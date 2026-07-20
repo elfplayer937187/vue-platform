@@ -2,10 +2,6 @@
   <h1>404 NOT FOUND</h1>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup></script>
 
-</script>
-
-<style scoped lang="sass">
-
-</style>
+<style scoped lang="sass"></style>
