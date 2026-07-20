@@ -55,7 +55,10 @@ const {
 const defaultActive = computed(() => $route.path)
 // 需要展开的父级子菜单（截取路径中间部分）
 const defaultOpeneds = computed(() =>
-  $route.matched.slice(1, -1).map((r) => r.path).filter(Boolean),
+  $route.matched
+    .slice(1, -1)
+    .map((r) => r.path)
+    .filter(Boolean),
 )
 </script>
 
