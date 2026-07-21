@@ -1,7 +1,9 @@
 <template>
   <div class="top">
     <div class="left">
-      <span class="lbtn">首页</span>
+      <span class="lbtn" @click="GoIndex">
+        <span class="lbtn-text">首页</span>
+      </span>
     </div>
     <div class="center">智慧旅游可视化数据大平台</div>
     <div class="right">
@@ -14,12 +16,17 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 const now = ref(dayjs().format('YYYY-MM-DD HH:mm:ss'))
 onMounted(() => {
-  setInterval(()=>{
-    now.value=dayjs().format('YYYY-MM-DD HH:mm:ss')
-  },1000)
+  setInterval(() => {
+    now.value = dayjs().format('YYYY-MM-DD HH:mm:ss')
+  }, 1000)
 })
+const $router = useRouter()
+const GoIndex = () => {
+  $router.push('/')
+}
 </script>
 
 <style scoped lang="scss">
@@ -36,6 +43,7 @@ onMounted(() => {
     background-repeat: no-repeat;
 
     .lbtn {
+      cursor: pointer;
       position: absolute;
       right: 0;
       background-image: url(../images/dataScreen-header-btn-bg-l.png);
@@ -44,7 +52,19 @@ onMounted(() => {
       height: 100%;
       line-height: 40px;
       text-align: center;
-      color: skyblue;
+      color: rgb(76, 161, 194);
+      // transition: all 0.5s;
+      .lbtn-text {
+        transition: all 0.5s;
+        font-size: 16px;
+      }
+    }
+
+    .lbtn:hover .lbtn-text {
+      // transform: scale(1.2);
+
+      font-size: 20px;
+      color: rgb(142, 212, 240);
     }
   }
   .center {
