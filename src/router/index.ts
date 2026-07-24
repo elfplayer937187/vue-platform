@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-
 // 常量路由
 export const ConstedRoutes = [
   // 登录一级路由
@@ -165,19 +164,20 @@ export const AsyncRoutes = [
 ]
 // 任意路由
 export const AnyRoutes = [
-  // 任意路由
+  // 任意路由（不设 redirect，避免在动态路由注入前拦截刷新请求）
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/404',
+    component: () => import('@/views/404/404.vue'),
+    name: 'NotFound',
     meta: {
-      title: 'any',
-      hiddren: false,
+      title: '404页',
+      IsShow: false,
+      Icon: 'WarningFilled',
     },
   },
 ]
 // 注册路由器
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [...ConstedRoutes,...AnyRoutes],
+  routes: [...ConstedRoutes, ...AnyRoutes],
 })
-
