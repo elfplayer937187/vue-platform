@@ -4,4 +4,5 @@ export interface RouterType {
   menuRouter: any
   username: string
   avatar: string
+  avaliableButtons:string[]
 }

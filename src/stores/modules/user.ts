@@ -4,6 +4,8 @@ import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token'
 import { ConstedRoutes, AsyncRoutes, router } from '@/router/index'
 import type { RouterType } from './types/RouterType'
 import type { LoginType } from '@/apis/user/type'
+// 引入深拷贝
+import { cloneDeep } from 'lodash'
 // import {} from
 const useUserStore = defineStore('User', {
   // 数据
@@ -12,9 +14,9 @@ const useUserStore = defineStore('User', {
       // 持久化存储
       token: GET_TOKEN(),
       menuRouter: ConstedRoutes,
-      // newRouter:
       username: '',
       avatar: '',
+      avaliableButtons:[]
     }
   },
   actions: {
@@ -52,7 +54,8 @@ const useUserStore = defineStore('User', {
       if (res.code === 200) {
         this.username = res.data.name
         this.avatar = res.data.avatar
-        const MyAsyncRoutes = this.getUserAllRoutes(AsyncRoutes, res.data.routes) || []
+        this.avaliableButtons=res.data.buttons
+        const MyAsyncRoutes = this.getUserAllRoutes(cloneDeep(AsyncRoutes), res.data.routes) || []
         // console.log(MyAsyncRoutes);
         MyAsyncRoutes.forEach((Route: any) => {
           router.addRoute(Route)
