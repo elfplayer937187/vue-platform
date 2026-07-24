@@ -62,34 +62,33 @@ function getScale(w = 1920, h = 1080) {
     top: 50%;
     transform-origin: left top;
   }
-  .bottom{
+  .bottom {
     display: flex;
-    .left{
+    .left {
       margin-top: 20px;
       flex: 1;
       // background-color: pink;
       height: 1040px;
       display: flex;
       flex-direction: column;
-      .tourist{
+      .tourist {
         flex: 1.5;
         // background-color: skyblue;
       }
-      .sex{
-        flex:1;
+      .sex {
+        flex: 1;
         // background-color: white;
-        
       }
-      .age{
+      .age {
         flex: 1;
         // background-color: orange;
       }
     }
-    .middle{
-      flex:2;
+    .middle {
+      flex: 2;
     }
-    .right{
-      flex:1;
+    .right {
+      flex: 1;
     }
   }
 }
