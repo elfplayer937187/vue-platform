@@ -35,22 +35,19 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import Logo from './logo/index.vue'
-import useStore from '@/stores/modules/user.ts'
+import useUserStore from '@/stores/modules/user.ts'
 import Menup from '@/layout/menu/index.vue'
 import Main from '@/layout/main/index.vue'
 import Tabbar from '@/layout/tabbar/index.vue'
 import useLayoutSettings from '@/stores/modules/LayoutSettings.ts'
 import { storeToRefs } from 'pinia'
+// import useUserStore from '@/stores/modules/user.ts'
+// import type useUserStore from '@/stores/modules/user.ts'
 
 const $route = useRoute()
 const layoutSettings = useLayoutSettings()
 const { isFold } = storeToRefs(useLayoutSettings())
-const {
-  menuRouter: {
-    options: { routes },
-  },
-} = useStore()
-
+const { menuRouter: routes } = useUserStore()
 // 当前激活菜单项
 const defaultActive = computed(() => $route.path)
 // 需要展开的父级子菜单（截取路径中间部分）

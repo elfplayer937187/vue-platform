@@ -1,25 +1,39 @@
 import { defineStore } from 'pinia'
 import { reqLogin, reqUserInfo } from '@/apis/user'
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token'
-import router from '@/router/index'
+import { ConstedRoutes, AsyncRoutes, router } from '@/router/index'
 import type { RouterType } from './types/RouterType'
 import type { LoginType } from '@/apis/user/type'
+// import {} from
 const useUserStore = defineStore('User', {
   // 数据
   state(): RouterType {
     return {
       // 持久化存储
       token: GET_TOKEN(),
-      menuRouter: router,
+      menuRouter: ConstedRoutes,
+      // newRouter:
       username: '',
       avatar: '',
     }
   },
   actions: {
+    getUserAllRoutes(AsyncRoutes: any, HasedRoutes: string[]) {
+      if (!AsyncRoutes || AsyncRoutes.length === 0) {
+        return null
+      }
+      return AsyncRoutes.filter((Route: any) => {
+        if (HasedRoutes.includes(Route.name)) {
+          Route.children = this.getUserAllRoutes(Route.children, HasedRoutes)
+          return true
+        }
+      })
+    },
     // 用户登录
     async loginUser(LoginForm: LoginType) {
       const resp = await reqLogin(LoginForm)
       // 成功就记录token
+      // console.log(resp);
 
       if (resp.code === 200) {
         this.token = resp.data
@@ -35,10 +49,17 @@ const useUserStore = defineStore('User', {
     // 获取用户信息并存储在仓库
     async GetUserInfo() {
       const res = await reqUserInfo()
-
       if (res.code === 200) {
         this.username = res.data.name
         this.avatar = res.data.avatar
+        const MyAsyncRoutes = this.getUserAllRoutes(AsyncRoutes, res.data.routes) || []
+        // console.log(MyAsyncRoutes);
+        MyAsyncRoutes.forEach((Route: any) => {
+          router.addRoute(Route)
+        })
+        // 合并常量路由和动态路由，赋给 menuRouter 用于菜单渲染
+        this.menuRouter = [...ConstedRoutes.filter((r) => r.name !== 'unknown'), ...MyAsyncRoutes]
+
         return 'ok'
       } else {
         return Promise.reject('获取用户信息失败')

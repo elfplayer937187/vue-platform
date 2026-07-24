@@ -1,6 +1,6 @@
 // 配置全局路由守卫
 // 使用静态插件实现进度条
-import router from '@/router/index'
+import {router} from '@/router/index'
 import nprogress from 'nprogress'
 import useUserStore from '@/stores/modules/user'
 import 'nprogress/nprogress.css'
