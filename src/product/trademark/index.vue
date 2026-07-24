@@ -1,7 +1,14 @@
 ﻿<template>
   <el-card class="box-card">
     <!-- 添加品牌按钮 -->
-    <el-button type="primary" icon="Plus" class="Plus" @click="showDialog">添加品牌</el-button>
+    <el-button
+      v-has="`btn.Trademark.add`"
+      type="primary"
+      icon="Plus"
+      class="Plus"
+      @click="showDialog"
+      >添加品牌</el-button
+    >
     <!-- 对话框组件 -->
     <el-dialog
       v-model="dialogVisible"
@@ -36,7 +43,9 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="uploading1"> 上传 </el-button>
+          <el-button v-has="`btn.Trademark.add`" type="primary" @click="uploading1">
+            上传
+          </el-button>
         </div>
       </template>
     </el-dialog>
@@ -68,8 +77,18 @@
       </el-table-column>
       <el-table-column prop="prop" label="品牌操作" width="width">
         <template #default="{ row }">
-          <el-button type="primary" icon="Edit" @click="changeValue(row)"></el-button>
-          <el-button type="primary" icon="Delete" @click="showDeleteDialog(row)" v-has="`btn.Trademark.remove`"></el-button>
+          <el-button
+            v-has="`btn.Trademark.update`"
+            type="primary"
+            icon="Edit"
+            @click="changeValue(row)"
+          ></el-button>
+          <el-button
+            type="primary"
+            icon="Delete"
+            @click="showDeleteDialog(row)"
+            v-has="`btn.Trademark.remove`"
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -85,7 +104,9 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="DeleteDialogVisible = false">否</el-button>
-          <el-button type="primary" @click="deleteValue">是</el-button>
+          <el-button v-has="`btn.Trademark.remove`" type="primary" @click="deleteValue"
+            >是</el-button
+          >
         </div>
       </template>
     </el-dialog>

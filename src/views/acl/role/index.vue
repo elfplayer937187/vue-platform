@@ -19,7 +19,12 @@
     </template>
   </el-card>
   <el-card>
-    <el-button type="primary" icon="Plus" @click="HandleAUButton" class="add-role-button"
+    <el-button
+      v-has="`btn.Role.add`"
+      type="primary"
+      icon="Plus"
+      @click="HandleAUButton"
+      class="add-role-button"
       >添加角色</el-button
     >
     <!-- 整个列表 -->
@@ -48,11 +53,27 @@
       </el-table-column>
       <el-table-column prop="prop" label="操作" width="350px" align="center">
         <template #default="{ row }">
-          <el-button type="primary" icon="Key" @click="HandleAssignButton(row.id)"
+          <el-button
+            v-has="`btn.Role.assgin`"
+            type="primary"
+            icon="Key"
+            @click="HandleAssignButton(row.id)"
             >分配权限</el-button
           >
-          <el-button type="primary" icon="Edit" @click="HandleUpdateRole(row.id)">编辑</el-button>
-          <el-button type="primary" icon="Delete" @click="HandleDeleteRole(row.id)">删除</el-button>
+          <el-button
+            v-has="`btn.Role.update`"
+            type="primary"
+            icon="Edit"
+            @click="HandleUpdateRole(row.id)"
+            >编辑</el-button
+          >
+          <el-button
+            v-has="`btn.Role.remove`"
+            type="primary"
+            icon="Delete"
+            @click="HandleDeleteRole(row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -77,7 +98,9 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="AddRoleDialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="HandleSaveAddRole"> 确认 </el-button>
+        <el-button v-has="`btn.Role.add`" type="primary" @click="HandleSaveAddRole">
+          确认
+        </el-button>
       </div>
     </template>
   </el-dialog>
@@ -98,7 +121,9 @@
     </template>
     <template #footer>
       <el-button @click="ShowDrawer = false">取消</el-button>
-      <el-button type="primary" @click="HandleSaveDoAssign">确认</el-button>
+      <el-button v-has="`btn.Role.assgin`" type="primary" @click="HandleSaveDoAssign"
+        >确认</el-button
+      >
     </template>
   </el-drawer>
 </template>

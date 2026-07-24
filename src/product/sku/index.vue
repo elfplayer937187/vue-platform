@@ -36,16 +36,23 @@
       <el-table-column prop="prop" label="操作" width="400px">
         <template #default="{ row }">
           <el-button
+            v-has="`btn.Sku.updown`"
             type="success"
             :icon="row.isSale === 0 ? 'Bottom' : 'Top'"
             @click="ChangeOnSale(row.isSale, row.id)"
             >上架</el-button
           >
-          <el-button type="primary" icon="Edit">编辑</el-button>
-          <el-button type="warning" icon="InfoFilled" @click="ShowSKUDetail(row.id)"
+          <el-button v-has="`btn.Sku.update`" type="primary" icon="Edit">编辑</el-button>
+          <el-button
+            v-has="`btn.Sku.detail`"
+            type="warning"
+            icon="InfoFilled"
+            @click="ShowSKUDetail(row.id)"
             >查看</el-button
           >
-          <el-button type="danger" icon="Delete" @click="deleteSKU(row)">删除</el-button>
+          <el-button v-has="`btn.Sku.remove`" type="danger" icon="Delete" @click="deleteSKU(row)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>

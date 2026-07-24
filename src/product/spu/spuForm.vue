@@ -61,6 +61,7 @@
         </el-select>
 
         <el-button
+          v-has="`btn.Spu.add`"
           type="primary"
           icon="Plus"
           class="SPU-appendbtn"
@@ -115,7 +116,13 @@
       </el-form-item>
       <!-- 按钮 -->
       <el-form-item label="" label-width="100px">
-        <el-button type="primary" :disabled="!CheckIfTagMiss()" @click="SaveLoad">保存</el-button>
+        <el-button
+          v-has="`btn.Spu.add`"
+          type="primary"
+          :disabled="!CheckIfTagMiss()"
+          @click="SaveLoad"
+          >保存</el-button
+        >
         <el-button type="primary" @click="HandleCancel">取消</el-button>
       </el-form-item>
     </el-form>

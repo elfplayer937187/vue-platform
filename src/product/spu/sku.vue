@@ -70,7 +70,7 @@
     </el-form-item>
     <!-- 两个按钮 -->
     <el-form-item label="">
-      <el-button type="primary" @click="HandleSave">保存</el-button>
+      <el-button v-has="`btn.Spu.addsku`" type="primary" @click="HandleSave">保存</el-button>
       <el-button @click="$emit('ChangeShowWhat')">取消</el-button>
     </el-form-item>
   </el-form>
