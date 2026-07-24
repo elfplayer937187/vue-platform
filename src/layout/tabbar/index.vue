@@ -100,7 +100,7 @@ function fullScreen() {
   }
 }
 onMounted(() => {
-  UserStore.GetUserInfo()
+  // UserStore.GetUserInfo()
   // 恢复持久化的暗黑模式和主题颜色
   if (settingIsDark.value) {
     document.querySelector('html')?.classList.add('dark')
