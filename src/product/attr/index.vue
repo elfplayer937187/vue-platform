@@ -5,7 +5,12 @@
     <el-card style="margin-top: 10px">
       <div v-show="!showChange">
         <!-- 添加元素按钮 -->
-        <el-button type="primary" icon="Plus" style="margin-bottom: 10px" @click="AppendValue"
+        <el-button
+          v-has="`btn.Attr.add`"
+          type="primary"
+          icon="Plus"
+          style="margin-bottom: 10px"
+          @click="AppendValue"
           >添加元素</el-button
         >
         <!-- 第一视图表格 -->
@@ -28,8 +33,18 @@
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="200px" align="center">
             <template #default="{ row }">
-              <el-button type="primary" icon="Edit" @click="HandleEdit(row)"></el-button>
-              <el-button type="primary" icon="Delete" @click="HandleDelete(row.id)"></el-button>
+              <el-button
+                v-has="`btn.Attr.update`"
+                type="primary"
+                icon="Edit"
+                @click="HandleEdit(row)"
+              ></el-button>
+              <el-button
+                v-has="`btn.Attr.remove`"
+                type="primary"
+                icon="Delete"
+                @click="HandleDelete(row.id)"
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -49,6 +64,7 @@
           <!--添加属性值 取消(不保留数据)两个按钮 -->
           <el-form-item label="">
             <el-button
+              v-has="`btn.Attr.add`"
               type="primary"
               class="append-attr"
               icon="Plus"
@@ -75,6 +91,7 @@
               <el-table-column prop="prop" label="操作" width="200px" align="center">
                 <template #default="{ row }">
                   <el-button
+                    v-has="`btn.Attr.remove`"
                     type="primary"
                     icon="Delete"
                     @click="handleDelete2(row.valueName)"
@@ -84,7 +101,11 @@
             </el-table>
             <el-form-item label="" class="under-button">
               <!-- disabled:数组为空 -->
-              <el-button type="primary" :disabled="EachValueNameNotNull()" @click="saveAppendParams"
+              <el-button
+                v-has="`btn.Attr.add`"
+                type="primary"
+                :disabled="EachValueNameNotNull()"
+                @click="saveAppendParams"
                 >保存</el-button
               >
               <el-button @click="HandleSaveCancel">取消(保留数据)</el-button>

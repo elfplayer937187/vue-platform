@@ -55,8 +55,8 @@ const useUserStore = defineStore('User', {
         this.username = res.data.name
         this.avatar = res.data.avatar
         this.avaliableButtons = res.data.buttons
-        console.log(this.avaliableButtons);
-        
+        console.log(this.avaliableButtons)
+
         const MyAsyncRoutes = this.getUserAllRoutes(cloneDeep(AsyncRoutes), res.data.routes) || []
         // console.log(MyAsyncRoutes);
         MyAsyncRoutes.forEach((Route: any) => {

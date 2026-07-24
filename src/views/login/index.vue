@@ -1,40 +1,51 @@
 <template>
   <div class="login_container">
-    <el-row>
-      <!-- 占一半 -->
-      <!-- :xs小于768的占位栅格数 -->
-      <el-col :span="12" :xs="0">1</el-col>
+    <!-- 左侧品牌区 -->
+    <div class="login-left">
+      <div class="brand-content">
+        <h1 class="brand-title">硅谷甄选</h1>
+        <p class="brand-slogan">高效 · 智能 · 值得信赖</p>
+      </div>
+    </div>
 
-      <el-col :span="12" :xs="24">
-        <!-- 右侧表单 -->
-        <el-form ref="LoginRule" class="login_form" :rules="rules" :model="LoginForm">
-          <h1>Hello</h1>
-          <h2>欢迎来到硅谷甄选！</h2>
+    <!-- 右侧表单区 -->
+    <div class="login-right">
+      <div class="form-card">
+        <h2 class="form-title">欢迎回来</h2>
+        <p class="form-subtitle">请登录您的账号</p>
+        <el-form ref="LoginRule" :rules="rules" :model="LoginForm">
           <el-form-item prop="username">
-            <!-- 输入框 -->
             <el-input
               v-model="LoginForm.username"
-              type="text"
               :prefix-icon="User"
-              placeholder="admin"
+              placeholder="请输入用户名"
+              size="large"
             ></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <!-- 密码框 -->
             <el-input
               v-model="LoginForm.password"
               type="password"
               :prefix-icon="Lock"
-              placeholder="password"
+              placeholder="请输入密码"
               show-password
+              size="large"
             ></el-input>
           </el-form-item>
-          <el-form-item label="">
-            <el-button type="primary" :loading="isloading" @click="login">submit</el-button>
+          <el-form-item>
+            <el-button
+              type="primary"
+              :loading="isloading"
+              @click="login"
+              size="large"
+              class="login-btn"
+            >
+              登 录
+            </el-button>
           </el-form-item>
         </el-form>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -110,30 +121,114 @@ const rules = {
 }
 </script>
 
-<style scoped lang="scss" scope>
+<style scoped lang="scss">
 .login_container {
+  display: flex;
   width: 100%;
   height: 100vh;
-  background: url('@/assets/images/background.jpg') no-repeat;
-  background-size: cover;
-  .login_form {
-    padding: 2vh 4vh 2vh;
-    position: relative;
-    top: 30vh;
-    background-image: url('@/assets/images/login_form.png');
-    h1 {
-      font-size: 7vh;
-      margin: 1vh 1vh 1vh;
-      color: white;
-    }
-    h2 {
-      font-size: 4vh;
-      color: white;
-      margin-bottom: 1vh;
-    }
-    el-form-item {
-      margin: 0 2vh;
-    }
+}
+
+// ========== 左侧品牌区 ==========
+.login-left {
+  flex: 5;
+  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #3b82f6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  // 装饰圆形
+  &::before {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    top: -100px;
+    right: -100px;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    bottom: -80px;
+    left: -60px;
+  }
+}
+
+.brand-content {
+  text-align: center;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-title {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 8px;
+  margin: 0 0 16px;
+}
+
+.brand-slogan {
+  font-size: 18px;
+  letter-spacing: 6px;
+  opacity: 0.75;
+  margin: 0;
+}
+
+// ========== 右侧表单区 ==========
+.login-right {
+  flex: 4;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-card {
+  width: 420px;
+  max-width: 90%;
+  padding: 48px 40px 36px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+}
+
+.form-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px;
+}
+
+.form-subtitle {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0 0 32px;
+}
+
+.login-btn {
+  width: 100%;
+}
+
+// ========== 移动端适配 ==========
+@media (max-width: 768px) {
+  .login-left {
+    display: none;
+  }
+
+  .login-right {
+    flex: 1;
+  }
+
+  .form-card {
+    padding: 32px 24px 24px;
   }
 }
 </style>

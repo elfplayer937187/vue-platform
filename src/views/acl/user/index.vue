@@ -20,8 +20,10 @@
     <!-- 下边的card -->
     <el-card>
       <div class="card-header">
-        <el-button type="primary" @click="HandleAddUser">添加</el-button>
-        <el-button type="danger" @click="HandlePreDelete">批量删除</el-button>
+        <el-button v-has="`btn.User.add`" type="primary" @click="HandleAddUser">添加</el-button>
+        <el-button v-has="`btn.User.remove`" type="danger" @click="HandlePreDelete"
+          >批量删除</el-button
+        >
       </div>
       <!-- 表格 -->
       <el-table
@@ -70,16 +72,25 @@
         </el-table-column>
         <el-table-column prop="prop" label="操作" width="350px" align="center">
           <template #default="{ row }">
-            <el-button type="primary" icon="Arrow-left" @click="HandleGivenRole(row.name, row.id)"
+            <el-button
+              v-has="`btn.User.assgin`"
+              type="primary"
+              icon="Arrow-left"
+              @click="HandleGivenRole(row.name, row.id)"
               >分配角色</el-button
             >
             <el-button
+              v-has="`btn.User.update`"
               type="primary"
               icon="Edit"
               @click="HandleEditUser(row.id, row.name, row.username)"
               >编辑</el-button
             >
-            <el-button type="primary" icon="Delete" @click="HandleDeleteUser(row.id)"
+            <el-button
+              v-has="`btn.User.remove`"
+              type="primary"
+              icon="Delete"
+              @click="HandleDeleteUser(row.id)"
               >删除</el-button
             >
           </template>
@@ -123,7 +134,12 @@
           </el-form>
         </template>
         <template #footer>
-          <el-button type="primary" icon="Select" :disabled="SaveIsDisabled" @click="SaveAddUser"
+          <el-button
+            v-has="`btn.User.add`"
+            type="primary"
+            icon="Select"
+            :disabled="SaveIsDisabled"
+            @click="SaveAddUser"
             >保存</el-button
           >
         </template>
@@ -162,7 +178,9 @@
         </template>
         <template #footer>
           <el-button @click="ShowGivenRoleDrawer = false">取消</el-button>
-          <el-button type="primary" @click="HanldeUpdateRoleSave">保存</el-button>
+          <el-button v-has="`btn.User.assgin`" type="primary" @click="HanldeUpdateRoleSave"
+            >保存</el-button
+          >
         </template>
       </el-drawer>
     </el-card>

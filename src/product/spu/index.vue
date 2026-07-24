@@ -5,7 +5,12 @@
     <!-- spu列表和spuForm的显示 -->
     <el-card class="append-spu">
       <div v-show="ShowWhat === 0" class="SPUList">
-        <el-button type="primary" icon="Plus" class="Plus" @click="HandleAppendSPU"
+        <el-button
+          v-has="`btn.Spu.add`"
+          type="primary"
+          icon="Plus"
+          class="Plus"
+          @click="HandleAppendSPU"
           >添加SPU</el-button
         >
         <el-table style="width: 100%" :data="SPUList">
@@ -23,14 +28,30 @@
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="width">
             <template #default="{ row }">
-              <el-button type="primary" icon="Plus" @click="AppendSKU(row)"></el-button>
               <el-button
+                v-has="`btn.Spu.addsku`"
+                type="primary"
+                icon="Plus"
+                @click="AppendSKU(row)"
+              ></el-button>
+              <el-button
+                v-has="`btn.Spu.update`"
                 type="warning"
                 icon="Edit"
                 @click="HandleEdit(row, C3Id as number)"
               ></el-button>
-              <el-button type="info" icon="InfoFilled" @click="HandleInfo(row)"></el-button>
-              <el-button type="danger" icon="Delete" @click="HandleDelete(row.id)"></el-button>
+              <el-button
+                v-has="`btn.Spu.skus`"
+                type="info"
+                icon="InfoFilled"
+                @click="HandleInfo(row)"
+              ></el-button>
+              <el-button
+                v-has="`btn.Spu.delete`"
+                type="danger"
+                icon="Delete"
+                @click="HandleDelete(row.id)"
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>

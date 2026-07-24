@@ -18,15 +18,24 @@
     <el-table-column header-align="center" align="center" prop="prop" label="操作">
       <template #default="{ row }">
         <el-button
+          v-has="`btn.Permission.add`"
           type="primary"
           @click="HandleAddPermissionBtn(row)"
           :disabled="CheckIsDisabled(row)"
           >{{ row.level !== 3 ? '添加菜单' : '添加功能' }}</el-button
         >
-        <el-button type="primary" @click="HandleUpdatePermissionBtn(row)" :disabled="row.id === 1"
+        <el-button
+          v-has="`btn.Permission.update`"
+          type="primary"
+          @click="HandleUpdatePermissionBtn(row)"
+          :disabled="row.id === 1"
           >编辑</el-button
         >
-        <el-button type="primary" @click="HandleDeletePermission(row.id)" :disabled="row.id === 1"
+        <el-button
+          v-has="`btn.Permission.remove`"
+          type="primary"
+          @click="HandleDeletePermission(row.id)"
+          :disabled="row.id === 1"
           >删除</el-button
         >
       </template>
@@ -51,7 +60,9 @@
     </template>
     <template #footer>
       <el-button @click="ShowDialog = false">取消</el-button>
-      <el-button type="primary" @click="HandleSavePermission">确定</el-button>
+      <el-button v-has="`btn.Permission.add`" type="primary" @click="HandleSavePermission"
+        >确定</el-button
+      >
     </template>
   </el-dialog>
 </template>
