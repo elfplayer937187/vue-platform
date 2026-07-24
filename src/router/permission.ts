@@ -32,7 +32,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
           await UserStore.GetUserInfo()
           // 只传 path + query，不传 name/params（to 携带的是 catch-all 的 name，
           // 会导致 next() 按 name 解析又命中 catch-all，动态路由白加了）
-          next({ path: to.path, query: to.query})
+          next({ path: to.path, query: to.query })
         } catch (error) {
           // token过期和用户手动修改token->退出登录并且清除信息，跳转到登录页
           UserStore.userLogout()

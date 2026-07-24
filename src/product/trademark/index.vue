@@ -69,7 +69,7 @@
       <el-table-column prop="prop" label="品牌操作" width="width">
         <template #default="{ row }">
           <el-button type="primary" icon="Edit" @click="changeValue(row)"></el-button>
-          <el-button type="primary" icon="Delete" @click="showDeleteDialog(row)"></el-button>
+          <el-button type="primary" icon="Delete" @click="showDeleteDialog(row)" v-has="`btn.Trademark.remove`"></el-button>
         </template>
       </el-table-column>
     </el-table>
