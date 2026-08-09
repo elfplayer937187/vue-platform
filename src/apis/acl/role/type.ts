@@ -9,20 +9,20 @@ export interface DoAssignRoleType {
 export interface GetAllRolesResponseType extends BaseType {
   data: {
     assignRoles: RoleType[]
-    allRolesList: RoleType[]
+    allRoles: RoleType[]
   }
 }
 export interface RoleType {
   createTime?: string
   updateTime?: string
-  id: number
+  roleId: number
   roleName: string
   remark: string
 }
 
 // 角色分页列表 - 单条记录
 export interface RoleRecordType {
-  ID: number
+  roleId: number
   createTime: string
   id: number
   remark: string

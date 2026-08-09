@@ -57,21 +57,21 @@
             v-has="`btn.Role.assgin`"
             type="primary"
             icon="Key"
-            @click="HandleAssignButton(row.id)"
+            @click="HandleAssignButton(row.roleId)"
             >分配权限</el-button
           >
           <el-button
             v-has="`btn.Role.update`"
             type="primary"
             icon="Edit"
-            @click="HandleUpdateRole(row.id)"
+            @click="HandleUpdateRole(row.roleId)"
             >编辑</el-button
           >
           <el-button
             v-has="`btn.Role.remove`"
             type="primary"
             icon="Delete"
-            @click="HandleDeleteRole(row.id)"
+            @click="HandleDeleteRole(row.roleId)"
             >删除</el-button
           >
         </template>
@@ -89,7 +89,7 @@
     </el-pagination>
   </el-card>
   <!-- 添加角色的dialog -->
-  <el-dialog v-model="AddRoleDialogFormVisible" title="更新" width="500">
+  <el-dialog v-model="AddRoleDialogFormVisible" :title="nowTitle" width="500">
     <el-form @submit.prevent>
       <el-form-item label="角色名称">
         <el-input v-model="newRolename" autocomplete="off" @keyup.enter="HandleSaveAddRole" />
@@ -145,6 +145,7 @@ const defaultProps = {
   children: 'children',
   label: 'name',
 }
+const nowTitle = ref<string>('新增角色')
 const data = ref<RoleAssignType[]>([])
 const DefaultSelectIdList = ref<number[]>([])
 const treeRef = ref()
@@ -171,7 +172,6 @@ const newUpdateId = ref<number | undefined>()
 const GetRoleListPagination = async (roleName: string = '') => {
   const res = await reqGetRolePagination(pageNum.value, pageSize.value, roleName)
   if (res.code === 200) {
-    // console.log(res)
     RoleList.value = res.data.records
   }
 }
@@ -206,7 +206,7 @@ const HandleSaveAddRole = async () => {
       message: '角色已添加!',
     })
   }
-  const res = await reqAddRole({ roleName: newRolename.value, id: newUpdateId.value })
+  const res = await reqAddRole({ roleName: newRolename.value, roleId: newUpdateId.value })
   if (res.code === 200) {
     ElMessage({
       type: 'success',
@@ -233,14 +233,16 @@ const HandleDeleteRole = async (id: number) => {
   }
 }
 // 处理编辑角色按钮
-const HandleUpdateRole = async (id: number) => {
+const HandleUpdateRole = async (roleId: number) => {
+  nowTitle.value = '更新角色'
   AddRoleDialogFormVisible.value = true
   // 传递id值
-  newUpdateId.value = id
+  newUpdateId.value = roleId
 }
 // 处理新增按钮
 const HandleAUButton = (IsAdding: boolean = true) => {
   if (IsAdding) {
+    nowTitle.value = '新增角色'
     newUpdateId.value = undefined
   }
   AddRoleDialogFormVisible.value = true

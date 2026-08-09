@@ -52,10 +52,10 @@ const useUserStore = defineStore('User', {
     async GetUserInfo() {
       const res = await reqUserInfo()
       if (res.code === 200) {
+
         this.username = res.data.name
         this.avatar = res.data.avatar
         this.avaliableButtons = res.data.buttons
-        console.log(this.avaliableButtons)
 
         const MyAsyncRoutes = this.getUserAllRoutes(cloneDeep(AsyncRoutes), res.data.routes) || []
         // console.log(MyAsyncRoutes);

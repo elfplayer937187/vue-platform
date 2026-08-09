@@ -20,17 +20,16 @@ export interface PageListType extends BaseType {
 }
 // 用户类型
 export interface UserType {
-  ID: number
-  id: number
+  id: number,
+  userId:number,
+  name: string,
+  password: string,
+  phone: string,
+  roleName: string,
+  username: string,
 
-  name: string
-  password: string
-  phone: string
-  roleName: string
-  username: string
-
-  updateTime?: any
-  createTime?: any
+  updateTime?: any,
+  createTime?: any,
 }
 
 // AddUser接口参数类型
@@ -38,5 +37,5 @@ export interface AddUserType {
   name: string
   password?: string
   username: string
-  id?: number | string
+  userId?: number | string
 }
