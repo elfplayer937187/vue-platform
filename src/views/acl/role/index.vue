@@ -13,7 +13,7 @@
         </el-form-item>
         <div class="button-group">
           <el-button type="primary" @click="HandleSearchRole">搜索</el-button>
-          <el-button @click="GetRoleListPagination()">重置</el-button>
+          <el-button @click="ResetSearch">重置</el-button>
         </div>
       </el-form>
     </template>
@@ -113,7 +113,7 @@
         style="max-width: 600px"
         :data="data"
         show-checkbox
-        node-key="id"
+        node-key="menuId"
         :default-expanded-keys="[1, 2, 3, 4]"
         :default-checked-keys="DefaultSelectIdList"
         :props="defaultProps"
@@ -167,7 +167,11 @@ const AddRoleDialogFormVisible = ref<boolean>(false)
 // 新增的roleName
 const newRolename = ref<string>('')
 const newUpdateId = ref<number | undefined>()
-
+// 处理重置
+const ResetSearch = () => {
+  roleName.value=''
+  GetRoleListPagination()
+}
 // 获取列表信息
 const GetRoleListPagination = async (roleName: string = '') => {
   const res = await reqGetRolePagination(pageNum.value, pageSize.value, roleName)
@@ -227,7 +231,6 @@ const HandleDeleteRole = async (id: number) => {
   })
   const res = await reqDeleteRole(id)
   if (res.code === 200) {
-    console.log(res)
     // window.location.reload()
     await GetRoleListPagination()
   }
@@ -255,9 +258,11 @@ const DeeplySearchSelectData = (Assigns: RoleAssignType[] | null) => {
   }
   Assigns.forEach((Assign: RoleAssignType) => {
     // 只检查最后一层
-    if (Assign.children === null && Assign.select) {
-      DefaultSelectIdList.value.push(Assign.id)
-      return
+    if (!Assign.children || Assign.children.length === 0) {
+      if (Assign.select) {
+        DefaultSelectIdList.value.push(Assign.menuId)
+        return
+      }
     }
     DeeplySearchSelectData(Assign.children)
   })
@@ -268,7 +273,6 @@ const HandleAssignButton = async (RoleId: number) => {
   DefaultSelectIdList.value = []
   NowDrawerId.value = RoleId
   const res = await reqGetRoleAssign(RoleId)
-  // console.log(res);
   if (res.code === 200) {
     data.value = res.data
     // 递归遍历data把已有的id拿出来
@@ -284,6 +288,7 @@ const HandleSaveDoAssign = async () => {
     ...treeRef.value.getHalfCheckedKeys(),
   ] as number[]
   const res = await reqDoAssignForRole(NowDrawerId.value!, checkedKeys)
+
   if (res.code === 200) {
     ElMessage({ type: 'success', message: '权限分配成功!' })
     ShowDrawer.value = false

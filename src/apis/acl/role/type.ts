@@ -48,11 +48,11 @@ export interface RoleAssignRespType extends BaseType {
 }
 // 权限类型
 export interface RoleAssignType {
-  ID: number
+  id: number
   children: RoleAssignType[] | null
   code: string
   createTime?: any
-  id: number
+  menuId: number
   level: number
   name: string
   pid: number

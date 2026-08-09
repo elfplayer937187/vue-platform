@@ -26,4 +26,5 @@ export const reqDeleteUser = (id: number) =>
 export const reqUpdateUser = (obj: AddUserType) =>
   request.put<any, DefaultType>(API.UPDATEUSER_URL, obj)
 // 批量删除接口
-export const reqBatchRemoveUser = (idList: number[]) => request.delete<any,any>(API.BATCHREMOVE_URL,{data:{idList}})
+export const reqBatchRemoveUser = (idList: number[]) =>
+  request.delete<any, any>(API.BATCHREMOVE_URL, { data: { idList } })
