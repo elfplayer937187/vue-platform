@@ -76,21 +76,21 @@
               v-has="`btn.User.assgin`"
               type="primary"
               icon="Arrow-left"
-              @click="HandleGivenRole(row.name, row.id)"
+              @click="HandleGivenRole(row.name, row.userId)"
               >分配角色</el-button
             >
             <el-button
               v-has="`btn.User.update`"
               type="primary"
               icon="Edit"
-              @click="HandleEditUser(row.id, row.name, row.username)"
+              @click="HandleEditUser(row.userId, row.name, row.username)"
               >编辑</el-button
             >
             <el-button
               v-has="`btn.User.remove`"
               type="primary"
               icon="Delete"
-              @click="HandleDeleteUser(row.id)"
+              @click="HandleDeleteUser(row.userId)"
               >删除</el-button
             >
           </template>
@@ -238,7 +238,7 @@ const UserList = ref<UserType[]>()
 // 总数
 const total = ref<number>(0)
 // 保存 新增或者编辑 信息
-const AddUserInfo = ref<AddUserType>({ name: '', password: '', username: '', id: '' })
+const AddUserInfo = ref<AddUserType>({ name: '', password: '', username: '', userId: '' })
 // 实现drawer保存是否禁用
 const SaveIsDisabled = ref<boolean>(false)
 // 添加删除的id
@@ -277,7 +277,7 @@ const SaveAddUser = async () => {
           message: '保存成功',
         })
         // 清空添加数据
-        AddUserInfo.value = { name: '', password: '', username: '', id: '' }
+        AddUserInfo.value = { name: '', password: '', username: '', userId: '' }
         window.location.reload()
       }
     }
@@ -327,7 +327,6 @@ const HandleDeleteUser = async (id: number) => {
     type: 'warning',
   })
   const res = await reqDeleteUser(id)
-  console.log(res)
 
   if (res.code === 200) {
     ElMessage({
@@ -338,9 +337,9 @@ const HandleDeleteUser = async (id: number) => {
   }
 }
 // 处理更新User
-const HandleEditUser = async (id: number, name: string, rolename: string) => {
+const HandleEditUser = async (userId: number, name: string, rolename: string) => {
   // 传入id
-  AddUserInfo.value.id = id
+  AddUserInfo.value.userId = userId
   IsEdit.value = true
   ShowDrawer.value = true
   AddUserInfo.value.name = name
@@ -348,13 +347,13 @@ const HandleEditUser = async (id: number, name: string, rolename: string) => {
 }
 // 处理添加User
 const HandleAddUser = () => {
-  AddUserInfo.value = { name: '', password: '', username: '', id: '' }
+  AddUserInfo.value = { name: '', password: '', username: '', userId: '' }
   IsEdit.value = false
   ShowDrawer.value = true
 }
 // 处理每一行被选中的效果
 const HandleRowSelect = (selection: any) => {
-  RemoveIdList = selection.map((obj: Reactive<UserType>) => obj.id)
+  RemoveIdList = selection.map((obj: Reactive<UserType>) => obj.userId)
   // console.log(RemoveIdList);
 }
 // 删除之前
@@ -380,8 +379,8 @@ const BatchRemove = async () => {
       message: '请选择要删除的选项',
     })
   }
-  const res = await reqBatchRemoveUser(RemoveIdList)
-  if (res.code === 200) {
+  try {
+    await reqBatchRemoveUser(RemoveIdList)
     ElMessage({
       type: 'success',
       message: '批量删除成功',
@@ -390,18 +389,23 @@ const BatchRemove = async () => {
     RemoveIdList = []
     // 刷新
     GetUserPagination()
+  } catch (error) {
+    // 错误已在响应拦截器中处理
+    console.dir(error)
   }
 }
 // 处理分配角色
-const HandleGivenRole = async (name: string, id: number) => {
+const HandleGivenRole = async (name: string, userId: number) => {
   ShowGivenRoleDrawer.value = true
   AddUserInfo.value.name = name
-  currentUserId.value = id
-  const res = await reqGetAllUserRole(id)
+  currentUserId.value = userId
+  const res = await reqGetAllUserRole(userId)
+  console.log(res)
+
   // 保存完整角色数据用于后续反查ID
-  allRolesData.value = res.data.allRolesList
+  allRolesData.value = res.data.allRoles
   // 获取全部职位
-  AllRoles.value = res.data.allRolesList.map((obj) => obj.roleName)
+  AllRoles.value = res.data.allRoles.map((obj) => obj.roleName)
   // 清空ShowUpdateDrawer的数据
   checkAll.value = false
   isIndeterminate.value = false
@@ -432,12 +436,20 @@ const HanldeUpdateRoleSave = async () => {
   // 从角色名反查角色ID
   const roleIdList = allRolesData.value
     .filter((role) => RoleList.value.includes(role.roleName))
-    .map((role) => role.id)
+    .map((role) => role.roleId)
+  console.log(allRolesData.value)
+
+  console.log({
+    userId: currentUserId.value,
+    roleIdList,
+  })
+
   // 发送请求
   const res = await reqDoAssignRole({
     userId: currentUserId.value,
     roleIdList,
   })
+
   if (res.code === 200) {
     ElMessage({ type: 'success', message: '分配角色成功' })
     ShowGivenRoleDrawer.value = false

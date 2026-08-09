@@ -37,9 +37,10 @@ export const reqGetRolePagination = (page: number, limit: number, roleName: stri
     params: { roleName },
   })
 // 新增角色接口
-export const reqAddRole = (data: { roleName: string; id?: number }) => {
-  if (data.id) {
+export const reqAddRole = (data: { roleName: string; roleId?: number }) => {
+  if (data.roleId) {
     // 有id更新,没有就新增
+    console.log(data)
     return request.put<any, DefaultType>(API.UPDATEROLE_URL, data)
   } else {
     return request.post<any, DefaultType>(API.ADDROLE_URL, data)

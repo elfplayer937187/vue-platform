@@ -24,6 +24,9 @@ request.interceptors.response.use(
     let msg = ''
     const status = error.response.status
     switch (status) {
+      case 400:
+        msg = '请求参数错误'
+        break
       case 401:
         msg = 'token过期'
         break
