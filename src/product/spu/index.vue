@@ -13,7 +13,7 @@
           @click="HandleAppendSPU"
           >添加SPU</el-button
         >
-        <el-table style="width: 100%" :data="SPUList">
+        <el-table style="width: 100%" :data="SPUList" border>
           <el-table-column prop="prop" label="序号" width="100px" type="index" align="center">
           </el-table-column>
           <el-table-column prop="prop" label="SPU名称" width="150px">
@@ -50,7 +50,7 @@
                 v-has="`btn.Spu.delete`"
                 type="danger"
                 icon="Delete"
-                @click="HandleDelete(row.id)"
+                @click="HandleDelete(row.spuId)"
               ></el-button>
             </template>
           </el-table-column>
@@ -141,8 +141,9 @@ const ShowWhat = ref<number>(0)
 // 获取第三分类数据和total
 const getSPUpagination = async () => {
   try {
+    console.log('c3Id',C3Id.value)
+
     const res = await reqGetSPUpagination(currentPage.value, pageSize.value, C3Id.value)
-    // console.log(res);
     if (res.code === 200) {
       // 得到分页器数据和totalvalue
       SPUList.value = res.data.records

@@ -3,6 +3,7 @@ export type RecordsData = {
   createTime: number
   updateTime: string
   id?: number
+  tmId?: number
   tmName: string
   logoUrl: string
 }
@@ -21,7 +22,7 @@ export interface getTrademarkListResponseType {
   ok: boolean
 }
 export interface tradeMarkType {
-  id?: number
+  tmId?: number
   tmName: string
   logoUrl: string
 }

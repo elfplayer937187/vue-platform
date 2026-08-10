@@ -266,7 +266,7 @@ const initHasSpuData = async (row: SPUType, C3Id: number) => {
   FormParams.category3Id = C3Id
   FormParams.spuName = row.spuName
   FormParams.description = row.description
-  FormParams.id = row.id as number
+  FormParams.id = row.spuId as number
   FormParams.tmId = row.tmId
   const AllTrademark = await reqGetAllTradeMark()
   TradeMarkList.value = AllTrademark.data

@@ -21,8 +21,8 @@ export const getTrademarkList = (page: number, limit: number) =>
   request.get<any, getTrademarkListResponseType>(API.TRADEMARK_URL + `${page}/${limit}`)
 // any,返回类型
 export const appendTrademarkList = (trademarkparams: tradeMarkType) => {
-  // 根据有无id判断调用哪个api
-  if (trademarkparams.id) {
+  // 根据有无tmId判断调用哪个api
+  if (trademarkparams.tmId) {
     return request.put<any, AppendChangeType>(API.TRADEMARKCHANGE_URL, trademarkparams)
   } else {
     return request.post<any, AppendChangeType>(API.TRADEMARKAPPEND_URL, trademarkparams)

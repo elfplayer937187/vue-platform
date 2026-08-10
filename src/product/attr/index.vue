@@ -43,7 +43,7 @@
                 v-has="`btn.Attr.remove`"
                 type="primary"
                 icon="Delete"
-                @click="HandleDelete(row.id)"
+                @click="HandleDelete(row.attrId)"
               ></el-button>
             </template>
           </el-table-column>
@@ -169,36 +169,48 @@ const AppendValue = () => {
   // 点击切换菜单，并且禁用按钮
   showChange.value = true
   Isdisabled.value = true
+  // 清空数据
+  AppendParams.attrName = ''
+  AppendParams.attrValueList = []
+  AppendParams.attrId = undefined
 }
 
 const AttrList = ref<ListItemType[]>([])
 // 监视第三项api,如果有一个变了说明列表改变
+// immediate: true 确保切回页面时也能触发（C3Id 值没变时 watch 不会自动触发）
+onMounted(()=>{
+  if(C3Id.value){
+    getAttr()
+  }
+})
 watch(C3Id, () => {
+  if (!C3Id.value) return // 空值跳过
   // 得到元素，存储到AttrList,然后加载界面
-
   getAttr()
 })
 // 获取第一界面属性值列表
 const getAttr = async () => {
   try {
-    // console.log('##',C1Id.value,C2Id.value,C3Id.value);
     const res = await getCategoryTag(C1Id.value, C2Id.value, C3Id.value)
+
     if (res.code === 200) {
       AttrList.value = res.data
     } else {
       throw '响应失败'
     }
-    // console.log(res);
   } catch {
     throw '网络异常'
   }
 }
 // 处理第一界面编辑
 const HandleEdit = (row: any) => {
+
   // 跳转第二界面,附上该赋值的值，并且把id传给appendParams
   showChange.value = true
   // 深拷贝实现,浅拷贝会有标签bug
   Object.assign(AppendParams, JSON.parse(JSON.stringify(row)))
+  // 后端使用id作为attrId(时间戳)来更新，不是自增主键id
+  AppendParams.id = row.attrId
 }
 // 处理第一界面删除
 const HandleDelete = async (attrId: number) => {

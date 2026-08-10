@@ -6,9 +6,9 @@
         <el-select v-model="C1Id" placeholder="请选择" :disabled="Isdisabled" @change="getSecond">
           <el-option
             v-for="data in selectFirst"
-            :key="data.id"
+            :key="data.category1Id"
             :label="data.name"
-            :value="data.id"
+            :value="data.category1Id"
             >{{ data.name }}</el-option
           >
         </el-select>
@@ -17,9 +17,9 @@
         <el-select v-model="C2Id" placeholder="请选择" :disabled="Isdisabled" @change="getThird">
           <el-option
             v-for="data in selectSecond"
-            :key="data.id"
+            :key="data.category2Id"
             :label="data.name"
-            :value="data.id"
+            :value="data.category2Id"
             >{{ data.name }}</el-option
           >
         </el-select>
@@ -28,9 +28,9 @@
         <el-select v-model="C3Id" placeholder="请选择" :disabled="Isdisabled">
           <el-option
             v-for="data in selectThird"
-            :key="data.id"
+            :key="data.category3Id"
             :label="data.name"
-            :value="data.id"
+            :value="data.category3Id"
             >{{ data.name }}</el-option
           >
         </el-select>

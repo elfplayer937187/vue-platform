@@ -9,19 +9,21 @@ export interface dataType {
   name: string
   category1Id?: number
   category2Id?: number
+  category3Id?: number
 }
 export interface ResponseAttrType extends BaseAttrType {
   data: dataType[]
 }
 // 三级属性值对象基本类型
 interface attrValueListType {
-  id?: number
+  attrValueId?: number
   valueName: string
   attrId?: number
 }
 // 属性对象
 export interface ListItemType {
   id?: number //已有属性id
+  attrId?: number|undefined // 属性唯一标识(时间戳)
   attrName: string //新增添加属性名
   categoryId: number | string //给哪个三级分类新增的id
   categoryLevel: number

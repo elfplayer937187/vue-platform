@@ -263,7 +263,7 @@ const changeValue = (row: RecordsData) => {
   console.log(row)
   // 1.拿到id,url,name,   2.打开dialog    3.渲染到dialog
   dialogVisible.value = true
-  trademarkParams.id = row.id
+  trademarkParams.tmId = row.tmId
   trademarkParams.logoUrl = row.logoUrl
   trademarkParams.tmName = row.tmName
 }
@@ -310,7 +310,7 @@ const rules: FormRules<typeof trademarkParams> = {
 
 // 显示删除dialog
 const showDeleteDialog = (row: RecordsData) => {
-  deleteRow = row.id as number
+  deleteRow = row.tmId as number
   DeleteDialogVisible.value = true
 }
 </script>

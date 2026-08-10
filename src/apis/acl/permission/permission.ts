@@ -13,7 +13,7 @@ enum API {
 }
 export const reqGetPermission = () => request.get<any, GetPermissionRespType>(API.GETPERMISSION_URL)
 export const reqAddPermission = (obj: AddPermissionType) => {
-  if (!obj.id) {
+  if (!obj.menuId) {
     return request.post<any, DefaultType>(API.ADDPERMISSION_URL, obj)
   } else {
     return request.put<any, DefaultType>(API.UPDATEPERMISSION_URL, obj)
