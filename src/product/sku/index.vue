@@ -39,7 +39,7 @@
             v-has="`btn.Sku.updown`"
             type="success"
             :icon="row.isSale === 0 ? 'Bottom' : 'Top'"
-            @click="ChangeOnSale(row.isSale, row.id)"
+            @click="ChangeOnSale(row.isSale, row.skuId)"
             >上架</el-button
           >
           <el-button v-has="`btn.Sku.update`" type="primary" icon="Edit">编辑</el-button>
@@ -47,7 +47,7 @@
             v-has="`btn.Sku.detail`"
             type="warning"
             icon="InfoFilled"
-            @click="ShowSKUDetail(row.id)"
+            @click="ShowSKUDetail(row.skuId)"
             >查看</el-button
           >
           <el-button v-has="`btn.Sku.remove`" type="danger" icon="Delete" @click="deleteSKU(row)"
@@ -185,7 +185,7 @@ onMounted(async () => {
 })
 // 删除sku信息
 const deleteSKU = async (row: SKUType) => {
-  const res = await reqDeleteSKU(row.id as number)
+  const res = await reqDeleteSKU(row.skuId as number)
   console.log(res)
   // 重新获取SKU
   await getSKUPagination()

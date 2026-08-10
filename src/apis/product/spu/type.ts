@@ -23,6 +23,7 @@ interface DataType {
 // spuType
 export interface SPUType {
   id?: number | string //已有spuId
+  spuId?: number | string // spu唯一标识(时间戳)
   spuName: string
   description: string
   category3Id: number | string
@@ -73,6 +74,7 @@ export interface AttrType {
   saleAttrName: string //*
   spuSaleAttrValueList: spuSaleType[]
   id?: number
+  spuSaleAttrId?: number
   spuId?: number
   flag?: boolean
   InputContent?: string
@@ -85,6 +87,7 @@ export interface spuSaleType {
   saleAttrValueName: string
   createTime?: any
   id?: number
+  saleAttrValueId?: number
   spuId?: number
   updateTime?: any
   // flag?:boolean,

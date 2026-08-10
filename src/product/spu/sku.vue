@@ -16,13 +16,13 @@
       <!-- 平台属性下的select选择框 -->
       <!-- 平台属性 -->
       <el-form label-width="80px" :inline="true">
-        <el-form-item v-for="Attr in AttrList" :key="Attr.id" :label="Attr.attrName">
+        <el-form-item v-for="Attr in AttrList" :key="Attr.attrId" :label="Attr.attrName">
           <el-select v-model="Attr.platformChose" placeholder="请选择属性" style="width: 200px">
             <el-option
               v-for="AttrTag in Attr.attrValueList"
-              :key="AttrTag.id"
+              :key="AttrTag.attrValueId"
               :label="AttrTag.valueName"
-              :value="`${Attr.id}:${AttrTag.id}`"
+              :value="`${Attr.attrId}:${AttrTag.attrValueId}`"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -32,15 +32,15 @@
       <el-form :inline="true">
         <el-form-item
           v-for="TradeMark in AllTradeMarkList"
-          :key="TradeMark.id"
+          :key="TradeMark.spuSaleAttrId"
           style="width: 200px"
           :label="TradeMark.saleAttrName"
         >
           <el-select v-model="TradeMark.SaleChosed" placeholder="请选择销售属性">
             <el-option
               v-for="Tag in TradeMark.spuSaleAttrValueList"
-              :key="Tag.id"
-              :value="`${TradeMark.id}:${Tag.id}`"
+              :key="Tag.saleAttrValueId"
+              :value="`${TradeMark.spuSaleAttrId}:${Tag.saleAttrValueId}`"
               :label="Tag.saleAttrValueName"
             >
             </el-option>
@@ -96,7 +96,7 @@ const table = ref()
 // 存储对象模板（用于重置）
 const SKUSave = reactive<SKUType>({
   category3Id: '', //
-  spuID: '', //spuId
+  spuId: '', //spuId
   tmId: '', //品牌id
 
   //   基础属性
@@ -112,7 +112,7 @@ const SKUSave = reactive<SKUType>({
 // 存储保存的对象
 const SKUSaveForm = reactive<SKUType>({
   category3Id: '', //
-  spuID: '', //spuId
+  spuId: '', //spuId
   tmId: '', //品牌id
 
   //   基础属性
@@ -146,11 +146,11 @@ const initSKUData = async (
   // 获取属性列表
   const res1 = await getCategoryTag(C1Id, C2Id, row.category3Id)
   // 获取销售属性
-  const res2 = await reqGetAllTradeMarkAttrList(row.id as number)
+  const res2 = await reqGetAllTradeMarkAttrList(row.spuId as number)
   // 获取产品图片
-  const res3 = await reqGetAllTradeMarkImage(row.id as number)
+  const res3 = await reqGetAllTradeMarkImage(row.spuId as number)
   SKUSaveForm.category3Id = C3Id
-  SKUSaveForm.spuID = row.id as number
+  SKUSaveForm.spuId = row.spuId as number
   SKUSaveForm.tmId = row.tmId
   AttrList.value = res1.data
   AllTradeMarkList.value = res2.data

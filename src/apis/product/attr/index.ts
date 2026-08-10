@@ -7,9 +7,9 @@ import type {
 } from './type'
 enum API {
   // 获取第n个下拉框的接口
-  CATEGORYONE_URL = '/admin/product/getCategory1',
-  CATEGORYTWO_URL = '/admin/product/getCategory2',
-  CATEGORYTHREE_URL = '/admin/product/getCategory3',
+  CATEGORYONE_URL = '/admin/product/category1',
+  CATEGORYTWO_URL = '/admin/product/category2',
+  CATEGORYTHREE_URL = '/admin/product/category3',
   // 获取属性tag标签接口
   CATEGORYTAG_URL = '/admin/product/attrInfoList',
   // 新增修改三级属性标签接口

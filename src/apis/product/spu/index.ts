@@ -50,7 +50,7 @@ export const reqGetSPUHas = () => request.get<any, HasResponseType>(API.GETSPUHA
 export const reqAddSPU = (obj: SPUType) => {
   // 有id则更新已有
   if (obj.id) {
-    return request.post<any, BaseResponseType>(API.UPDATESPU_URL, obj)
+    return request.put<any, BaseResponseType>(API.UPDATESPU_URL, obj)
   } else {
     return request.post<any, BaseResponseType>(API.APPENDSPU_URL, obj)
   }

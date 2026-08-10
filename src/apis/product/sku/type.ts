@@ -17,11 +17,12 @@ export interface SKUResponseType extends BaseType {
 export interface SKUType {
   // 父级的
   category3Id: string | number //,
-  spuID: string | number //spuId,
+  spuId: string | number //spuId,
   tmId: string | number //品牌id,
   isSale?: number
   //   基础属性
   id?: number
+  skuId?: number
   weight: string | number
   price: string | number
   skuDesc: string

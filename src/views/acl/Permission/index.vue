@@ -34,7 +34,7 @@
         <el-button
           v-has="`btn.Permission.remove`"
           type="primary"
-          @click="HandleDeletePermission(row.id)"
+          @click="HandleDeletePermission(row.menuId)"
           :disabled="row.id === 1"
           >删除</el-button
         >
@@ -76,7 +76,7 @@ import {
   reqDeletePermission,
 } from '../../../apis/acl/permission/permission'
 import { ref, onMounted, reactive, watch } from 'vue'
-import { ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
 import type { FormInstance, FormRules } from 'element-plus'
 // 获取表单实例
@@ -126,29 +126,34 @@ const HandleAddPermissionBtn = (row: RoleAssignType) => {
   AddPermissionObj.name = ''
   AddPermissionObj.code = ''
   AddPermissionObj.level = row.level + 1
-  AddPermissionObj.pid = row.id
-  AddPermissionObj.id = undefined
+  AddPermissionObj.pid = row.menuId
+  AddPermissionObj.menuId = undefined
   ShowDialog.value = true
 }
 // 处理保存信息
 const HandleSavePermission = async () => {
   await form.value?.validate()
-  const res = await reqAddPermission(AddPermissionObj)
-  console.log(res)
-
+  await reqAddPermission(AddPermissionObj)
+  ElMessage({
+    type: 'success',
+    message: '保存信息成功',
+  })
   ShowDialog.value = false
   GetPermissionData()
 }
 // 删除列表行
 const HandleDeletePermission = async (id: number) => {
-  await ElMessageBox.confirm('你确定要删除这个角色?', '警告', {
+  await ElMessageBox.confirm('你确定要删除这个权限?', '警告', {
     confirmButtonText: '删除',
     cancelButtonText: '取消',
     type: 'warning',
   })
   const res = await reqDeletePermission(id)
   if (res.code === 200) {
-    console.log(res)
+    ElMessage({
+      type: 'success',
+      message: '删除信息成功',
+    })
     GetPermissionData()
   }
 }
