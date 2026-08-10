@@ -43,7 +43,7 @@ export interface TradeMarkType extends BaseType {
 }
 // 品牌类型data
 export interface TradeMarkDataType {
-  id: number
+  tmId: number
   tmName: string
   logoUrl: string
 }
@@ -99,6 +99,6 @@ export interface HasResponseType extends BaseType {
   data: HasType[]
 }
 export interface HasType {
-  id: number
-  name: string
+  saleAttrId: number
+  saleAttrName: string
 }

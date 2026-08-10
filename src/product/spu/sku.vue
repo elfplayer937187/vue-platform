@@ -147,13 +147,17 @@ const initSKUData = async (
   const res1 = await getCategoryTag(C1Id, C2Id, row.category3Id)
   // 获取销售属性
   const res2 = await reqGetAllTradeMarkAttrList(row.spuId as number)
+  // 后端返回的销售属性值字段是 spuSaleAttrList，映射为 spuSaleAttrValueList
+  AllTradeMarkList.value = res2.data.map((attr: any) => ({
+    ...attr,
+    spuSaleAttrValueList: attr.spuSaleAttrList || [],
+  }))
   // 获取产品图片
   const res3 = await reqGetAllTradeMarkImage(row.spuId as number)
   SKUSaveForm.category3Id = C3Id
   SKUSaveForm.spuId = row.spuId as number
   SKUSaveForm.tmId = row.tmId
   AttrList.value = res1.data
-  AllTradeMarkList.value = res2.data
   ImageList.value = res3.data
   // console.log(ImageList.value);
 }
@@ -195,13 +199,34 @@ const HandleSave = async () => {
         saleAttrId,
         saleAttrValueId,
       })
-      return prev
     }
+    return prev
   }, [])
+
+  // 整理图片列表
+  const skuImageList = ImageList.value
+    .filter((item) => item.imgUrl)
+    .map((item) => ({
+      imageName: item.imgName || item.name || '',
+      imageUrl: item.imgUrl || item.url || '',
+      spuImageId: item.id || item.ID || 0,
+      isDefault: SKUSaveForm.skuDefaultImg === (item.imgUrl || item.url) ? '1' : '0',
+    }))
+
+  // 构建完整的请求参数（确保字段类型正确）
+  const params: any = {
+    ...SKUSaveForm,
+    spuId: Number(SKUSaveForm.spuId),
+    category3Id: Number(SKUSaveForm.category3Id),
+    tmId: Number(SKUSaveForm.tmId),
+    weight: String(SKUSaveForm.weight),
+    price: Number(SKUSaveForm.price),
+    skuImageList,
+  }
 
   try {
     // 发送请求
-    const res = await reqAppendSKUInfo(SKUSaveForm)
+    const res = await reqAppendSKUInfo(params)
     if (res.code === 200) {
       ElMessage({
         type: 'success',

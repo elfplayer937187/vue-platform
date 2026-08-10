@@ -84,10 +84,10 @@
             @click="changeValue(row)"
           ></el-button>
           <el-button
+            v-has="`btn.Trademark.remove`"
             type="primary"
             icon="Delete"
             @click="showDeleteDialog(row)"
-            v-has="`btn.Trademark.remove`"
           ></el-button>
         </template>
       </el-table-column>

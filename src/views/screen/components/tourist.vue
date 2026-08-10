@@ -13,7 +13,7 @@
       <div class="total">
         <span v-for="(value, index) in strTotal" :key="index" class="value">{{ value }}</span>
       </div>
-      <div class="liquid-ball" ref="liquidCharts"></div>
+      <div ref="liquidCharts" class="liquid-ball"></div>
     </div>
   </div>
 </template>

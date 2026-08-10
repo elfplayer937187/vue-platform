@@ -10,9 +10,9 @@
         <el-select v-model="FormParams.tmId" placeholder="">
           <el-option
             v-for="data in TradeMarkList"
-            :key="data.id"
+            :key="data.tmId"
             :label="data.tmName"
-            :value="data.id"
+            :value="data.tmId"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -54,9 +54,9 @@
         >
           <el-option
             v-for="PerHas in has"
-            :key="PerHas.id"
-            :label="PerHas.name"
-            :value="PerHas.id"
+            :key="PerHas.saleAttrId"
+            :label="PerHas.saleAttrName"
+            :value="PerHas.saleAttrId"
           ></el-option>
         </el-select>
 
@@ -145,10 +145,10 @@ import type { UploadProps } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
 
-// 存储一下Has
+// Has是当前SPU能选的销售属性
 const has = ref<HasType[]>([])
+//选中之后下一个SPU销售属性的默认Id
 const UnchosedHasId = ref<string | number>('')
-// 临时存储添加的
 // 获得token
 const headers = { token: useUserStore().token }
 
@@ -175,7 +175,6 @@ const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
 const handleUploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
   if (response.code === 200) {
     // 服务器返回的图片地址赋给当前文件
-    console.log(response)
     // 去除前缀
     uploadFile.url = response.data
     const Prename = response.data.split('/')
@@ -212,7 +211,8 @@ const FormParamsSpace = reactive<SPUType>({
 // 表格数据
 const FormParams = reactive<SPUType>({
   // 存储id
-  id: '', //spu的id
+  id: '',
+  spuId: '',
   // 编辑初始化
   spuName: '',
   description: '',
@@ -237,16 +237,20 @@ const FilterHas = async () => {
   // 获取属性[共三种]
   const PreHas = await reqGetSPUHas()
   // 过滤元素赋值给has
-  if (FormParams.spuImageList !== null) {
+  if (FormParams.spuSaleAttrList.length > 0) {
     has.value = PreHas.data.filter((item) => {
-      // item:{id,name} name在spuSaleAttrList[i].saleAttrName
+      // item:{id,name} name在spuSaleAttrList[i].saleAttrName 或 SaleAttrName
       for (let i = 0; i < (FormParams.spuSaleAttrList?.length as number); i++) {
-        if (item.name === (FormParams.spuSaleAttrList as any)[i].saleAttrName) {
+        const attrName = FormParams.spuSaleAttrList[i]?.saleAttrName
+        if (item.saleAttrName === attrName) {
           return false
         }
       }
       return true
     })
+  } else {
+    // 还没有选择任何销售属性时，展示全部可选属性
+    has.value = PreHas.data
   }
 }
 // 处理父组件新增事件
@@ -282,7 +286,11 @@ const initHasSpuData = async (row: SPUType, C3Id: number) => {
 
   //   获取属性列表
   const PreAttrId = await reqGetAllTradeMarkAttrList(FormParams.id)
-  FormParams.spuSaleAttrList = PreAttrId.data
+  // 后端返回的销售属性值字段是 spuSaleAttrList，前端需要映射为 spuSaleAttrValueList
+  FormParams.spuSaleAttrList = PreAttrId.data.map((attr: any) => ({
+    ...attr,
+    spuSaleAttrValueList: attr.spuSaleAttrList || [],
+  }))
   // 获取属性赋值给has
   await FilterHas()
 }
@@ -290,18 +298,24 @@ const initHasSpuData = async (row: SPUType, C3Id: number) => {
 // 保存第二界面数据
 const SaveLoad = async () => {
   try {
-    // 将图片列表从 el-upload 格式 { name, url } 转回服务端格式 { imgName, imgUrl }
-    const params: SPUType = {
+    // 将图片列表从 el-upload 格式 { name, url } 转回服务端格式 { imageName, imageUrl }
+    const params: any = {
       ...FormParams,
+      // 销售属性字段转为后端要求的 PascalCase
+      spuSaleAttrList: FormParams.spuSaleAttrList?.map((attr) => ({
+        BaseSaleAttrId: attr.baseSaleAttrId,
+        SaleAttrName: attr.saleAttrName,
+        spuSaleAttrValueList: attr.spuSaleAttrValueList,
+      })),
       spuImageList: FormParams.spuImageList
         ? FormParams.spuImageList.map((item) => ({
-            imgName: (item.name || item.imgName)!,
-            imgUrl: (item.url || item.imgUrl)!,
+            imageName: (item.name || item.imgName)!,
+            imageUrl: (item.url || item.imgUrl)!,
           }))
         : [],
     }
-    // 新增时 id 为空字符串，后端 Long 类型解析会报"请求参数错误"，传 null 让后端忽略
-    if (!params.id) (params as any).id = null
+    // 新增时 id 为空字符串，后端 Long 类型解析会报"请求参数错误"，不传 id 让后端忽略
+    if (!params.id) delete params.id
     const res = await reqAddSPU(params)
     console.log(params)
 
@@ -338,13 +352,13 @@ const HandleRowDelete = async (row: AttrType) => {
 // 处理第二界面添加属性值按钮
 const HandleAppendAttr = async () => {
   // 处理添加属性值,has有值,根据id找name
-  if (has.value.length) {
+  if (has.value.length > 0) {
     // 遍历has添加与选中id相同的一列
     for (let i = 0; i < has.value.length; i++) {
-      if (UnchosedHasId.value === has.value[i]?.id) {
+      if (UnchosedHasId.value === has.value[i]?.saleAttrId) {
         FormParams.spuSaleAttrList.push({
-          baseSaleAttrId: UnchosedHasId.value,
-          saleAttrName: has.value[i]?.name as string,
+          baseSaleAttrId: UnchosedHasId.value as number,
+          saleAttrName: has.value[i]?.saleAttrName as string,
           spuSaleAttrValueList: [],
         })
         break
@@ -353,7 +367,7 @@ const HandleAppendAttr = async () => {
     // 更新列表
     await FilterHas()
     // 修改默认值
-    UnchosedHasId.value = has.value.length ? (has.value[0]?.id as number) : ''
+    UnchosedHasId.value = has.value.length ? (has.value[0]?.saleAttrId as number) : ''
   }
 }
 // 处理tag添加事件

@@ -141,8 +141,6 @@ const ShowWhat = ref<number>(0)
 // 获取第三分类数据和total
 const getSPUpagination = async () => {
   try {
-    console.log('c3Id',C3Id.value)
-
     const res = await reqGetSPUpagination(currentPage.value, pageSize.value, C3Id.value)
     if (res.code === 200) {
       // 得到分页器数据和totalvalue
@@ -229,7 +227,7 @@ const Handle2Save = async () => {
 // 处理第二视图查看Info事件
 const HandleInfo = async (row: SPUType) => {
   try {
-    const res = await reqShowSKUInfo(row.id as number)
+    const res = await reqShowSKUInfo(row.spuId as number)
     if (res.code === 200) {
       skuList.value = res.data
       console.log(skuList.value)

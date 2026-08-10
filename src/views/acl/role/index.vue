@@ -23,8 +23,8 @@
       v-has="`btn.Role.add`"
       type="primary"
       icon="Plus"
-      @click="HandleAUButton"
       class="add-role-button"
+      @click="HandleAUButton"
       >添加角色</el-button
     >
     <!-- 整个列表 -->
@@ -80,8 +80,8 @@
     <!-- 分页器 -->
     <el-pagination
       v-model:current-page="pageNum"
-      :page-sizes="pageSizes"
       v-model:page-size="pageSize"
+      :page-sizes="pageSizes"
       layout="total, jumper, prev, pager, next,->, sizes"
       :total="total"
       @change="HandlePaginationChange"
@@ -106,7 +106,7 @@
   </el-dialog>
 
   <!-- 分配权限的drawer -->
-  <el-drawer title="分配角色权限" v-model="ShowDrawer" :destroy-on-close="true">
+  <el-drawer v-model="ShowDrawer" title="分配角色权限" :destroy-on-close="true">
     <template #default>
       <el-tree
         ref="treeRef"

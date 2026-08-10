@@ -36,9 +36,9 @@
             <el-button
               type="primary"
               :loading="isloading"
-              @click="login"
               size="large"
               class="login-btn"
+              @click="login"
             >
               登 录
             </el-button>
