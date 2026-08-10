@@ -185,10 +185,18 @@ onMounted(async () => {
 })
 // 删除sku信息
 const deleteSKU = async (row: SKUType) => {
-  const res = await reqDeleteSKU(row.skuId as number)
-  console.log(res)
+  try {
+    const res = await reqDeleteSKU(row.skuId as number)
+    if (res.code === 200) {
+      ElMessage({ type: 'success', message: '删除成功' })
+    } else {
+      ElMessage({ type: 'error', message: '删除失败' })
+    }
+  } catch {
+    ElMessage({ type: 'error', message: '网络异常' })
+  }
   // 重新获取SKU
-  await getSKUPagination()
+  await getSKUPagination(false)
 }
 // 控制是否上架
 const ChangeOnSale = async (isSale: number, skuId: number) => {

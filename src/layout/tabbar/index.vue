@@ -40,7 +40,7 @@
         </template>
       </el-dropdown>
     </div>
-    <el-drawer title="主题设置" v-model="ShowDrawer">
+    <el-drawer v-model="ShowDrawer" title="主题设置">
       <el-form ref="form" label-width="80px">
         <el-form-item label="主题颜色" class="right-align-item">
           <el-color-picker v-model="color" size="large" @change="HandleColorChange" />

@@ -178,8 +178,8 @@ const AppendValue = () => {
 const AttrList = ref<ListItemType[]>([])
 // 监视第三项api,如果有一个变了说明列表改变
 // immediate: true 确保切回页面时也能触发（C3Id 值没变时 watch 不会自动触发）
-onMounted(()=>{
-  if(C3Id.value){
+onMounted(() => {
+  if (C3Id.value) {
     getAttr()
   }
 })
@@ -204,7 +204,6 @@ const getAttr = async () => {
 }
 // 处理第一界面编辑
 const HandleEdit = (row: any) => {
-
   // 跳转第二界面,附上该赋值的值，并且把id传给appendParams
   showChange.value = true
   // 深拷贝实现,浅拷贝会有标签bug

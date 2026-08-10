@@ -23,7 +23,7 @@ interface attrValueListType {
 // 属性对象
 export interface ListItemType {
   id?: number //已有属性id
-  attrId?: number|undefined // 属性唯一标识(时间戳)
+  attrId?: number | undefined // 属性唯一标识(时间戳)
   attrName: string //新增添加属性名
   categoryId: number | string //给哪个三级分类新增的id
   categoryLevel: number

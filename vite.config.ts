@@ -41,6 +41,12 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      // 静态资源（图片等）— 保留 /api 前缀，后端静态服务注册在 /api/uploads/
+      '/api/uploads': {
+        target: 'http://127.0.0.1:10086/',
+        changeOrigin: true,
+      },
+      // API 接口 — 去掉 /api 前缀，匹配后端路由
       '/api': {
         target: 'http://127.0.0.1:10086/',
         changeOrigin: true,
