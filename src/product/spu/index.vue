@@ -228,6 +228,7 @@ const Handle2Save = async () => {
 const HandleInfo = async (row: SPUType) => {
   try {
     const res = await reqShowSKUInfo(row.spuId as number)
+
     if (res.code === 200) {
       skuList.value = res.data
       console.log(skuList.value)

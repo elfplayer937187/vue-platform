@@ -53,8 +53,8 @@ export interface ImageType {
   ID?: number
   id?: number
   createTime?: any
-  imgName?: string
-  imgUrl?: string
+  imageName?: string
+  imageUrl?: string
   spuId?: number
   updateTime?: any
   name?: string
@@ -80,16 +80,14 @@ export interface AttrType {
   InputContent?: string
   SaleChosed?: string
 }
-// 销售属性tag对象
+// 销售属性值对象
 export interface spuSaleType {
   ID?: number
   baseSaleAttrId: number
   saleAttrValueName: string
-  createTime?: any
   id?: number
   saleAttrValueId?: number
   spuId?: number
-  updateTime?: any
   // flag?:boolean,
   // InputContent?:any
 }

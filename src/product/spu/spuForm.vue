@@ -212,7 +212,6 @@ const FormParamsSpace = reactive<SPUType>({
 const FormParams = reactive<SPUType>({
   // 存储id
   id: '',
-  spuId: '',
   // 编辑初始化
   spuName: '',
   description: '',
@@ -279,8 +278,8 @@ const initHasSpuData = async (row: SPUType, C3Id: number) => {
 
   FormParams.spuImageList = Images.data.map((item) => {
     return {
-      name: item.imgName || item.name,
-      url: item.imgUrl || item.url,
+      name: item.imageName || '',
+      url: item.imageUrl || '',
     }
   })
 
@@ -305,19 +304,21 @@ const SaveLoad = async () => {
       spuSaleAttrList: FormParams.spuSaleAttrList?.map((attr) => ({
         BaseSaleAttrId: attr.baseSaleAttrId,
         SaleAttrName: attr.saleAttrName,
-        spuSaleAttrValueList: attr.spuSaleAttrValueList,
+        spuSaleAttrValueList: attr.spuSaleAttrValueList?.map((value) => ({
+          saleAttrValueName: value.saleAttrValueName,
+          baseSaleAttrId: attr.baseSaleAttrId,
+        })),
       })),
       spuImageList: FormParams.spuImageList
         ? FormParams.spuImageList.map((item) => ({
-            imageName: (item.name || item.imgName)!,
-            imageUrl: (item.url || item.imgUrl)!,
+            imageName: (item.name || item.imageName)!,
+            imageUrl: (item.url || item.imageUrl)!,
           }))
         : [],
     }
     // 新增时 id 为空字符串，后端 Long 类型解析会报"请求参数错误"，不传 id 让后端忽略
     if (!params.id) delete params.id
     const res = await reqAddSPU(params)
-    console.log(params)
 
     if (res.code === 200) {
       ElMessage({
@@ -331,7 +332,6 @@ const SaveLoad = async () => {
         type: 'error',
         message: '保存失败',
       })
-      console.log(res)
     }
   } catch {
     ElMessage({
@@ -342,9 +342,11 @@ const SaveLoad = async () => {
 }
 // 处理SPU销售属性表单整行删除
 const HandleRowDelete = async (row: AttrType) => {
-  ;(FormParams.spuSaleAttrList as any) = FormParams.spuSaleAttrList?.filter((item) => {
-    console.log(item.id, row.id)
-    return item.id !== row.id
+  FormParams.spuSaleAttrList = FormParams.spuSaleAttrList?.filter((item) => {
+    // 已有行用id，新增行用baseSaleAttrId（新增时没有id）
+    const itemKey = item.baseSaleAttrId
+    const rowKey = row.baseSaleAttrId
+    return itemKey !== rowKey
   })
   // 重新渲染has
   await FilterHas()
