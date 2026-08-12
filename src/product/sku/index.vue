@@ -187,6 +187,7 @@ onMounted(async () => {
 const deleteSKU = async (row: SKUType) => {
   try {
     const res = await reqDeleteSKU(row.skuId as number)
+    
     if (res.code === 200) {
       ElMessage({ type: 'success', message: '删除成功' })
     } else {
@@ -220,7 +221,6 @@ const ShowSKUDetail = async (skuId: number) => {
   ShowDrawer.value = true
   // 获取详细信息
   const res = await reqGetSKUInfo(skuId)
-  console.log(res)
 
   if (res.code === 200) {
     SKUInfo.value = res.data
