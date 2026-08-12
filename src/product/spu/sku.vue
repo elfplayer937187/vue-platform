@@ -163,7 +163,7 @@ const initSKUData = async (
 }
 // 设置默认图片
 const SetDefaultImg = (row: ImageType) => {
-  console.log(row.imgUrl)
+  console.log(row.imageUrl)
 
   // 所有前面多选框全部不选中
   ImageList.value.forEach((item) => {
@@ -171,7 +171,7 @@ const SetDefaultImg = (row: ImageType) => {
   })
   table.value.toggleRowSelection(row, true)
   // 赋值
-  SKUSaveForm.skuDefaultImg = row.imgUrl as string
+  SKUSaveForm.skuDefaultImg = row.imageUrl as string
 }
 
 // 处理保存事件
@@ -205,12 +205,12 @@ const HandleSave = async () => {
 
   // 整理图片列表
   const skuImageList = ImageList.value
-    .filter((item) => item.imgUrl)
+    .filter((item) => item.imageUrl)
     .map((item) => ({
-      imageName: item.imgName || item.name || '',
-      imageUrl: item.imgUrl || item.url || '',
+      imageName: item.imageName || '',
+      imageUrl: item.imageUrl || '',
       spuImageId: item.id || item.ID || 0,
-      isDefault: SKUSaveForm.skuDefaultImg === (item.imgUrl || item.url) ? '1' : '0',
+      isDefault: SKUSaveForm.skuDefaultImg === item.imageUrl ? '1' : '0',
     }))
 
   // 构建完整的请求参数（确保字段类型正确）

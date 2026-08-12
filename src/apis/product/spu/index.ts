@@ -19,7 +19,7 @@ enum API {
   // 更新SPU接口
   UPDATESPU_URL = '/admin/product/updateSpuInfo',
   // 获取SPU分页列表
-  GETSPUPAGINATION_URL = '/admin/product',
+  GETSPUPAGINATION_URL = '/admin/product/spuPage',
   // 获取所有品牌接口
   GETALLTRADEMARK_URL = '/admin/product/baseTrademark/getTrademarkList',
   // 获取商品图片列表接口
