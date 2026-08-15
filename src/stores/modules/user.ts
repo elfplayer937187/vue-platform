@@ -35,7 +35,6 @@ const useUserStore = defineStore('User', {
     async loginUser(LoginForm: LoginType) {
       const resp = await reqLogin(LoginForm)
       // 成功就记录token
-      // console.log(resp);
 
       if (resp.code === 200) {
         this.token = resp.data
@@ -51,6 +50,8 @@ const useUserStore = defineStore('User', {
     // 获取用户信息并存储在仓库
     async GetUserInfo() {
       const res = await reqUserInfo()
+      console.log(res);
+      
       if (res.code === 200) {
         this.username = res.data.name
         this.avatar = res.data.avatar

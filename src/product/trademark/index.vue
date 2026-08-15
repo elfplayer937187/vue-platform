@@ -147,6 +147,7 @@ import { ElMessage } from 'element-plus'
 import 'element-plus/es/components/message/style/css'
 import type { UploadProps, FormRules } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
+import { beforeAvatarUpload } from '@/utils/picture'
 // 获取确认表单的元素
 const formRef = ref()
 
@@ -198,19 +199,6 @@ const ChangeSize = () => {
   HasTradeMark()
 }
 const handleClose = () => {}
-
-// 处理品牌logo上传函数，上传之前的钩子
-const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  // 不是jpg->1,是不是png
-  if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
-    ElMessage.error('Avatar picture must be JPG/PNG format!')
-    return false
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    ElMessage.error('Avatar picture size can not exceed 2MB!')
-    return false
-  }
-  return true
-}
 // 图片上传成功之后的钩子
 const handleSuccess: UploadProps['onSuccess'] = (response) => {
   trademarkParams.logoUrl = response.data

@@ -40,7 +40,7 @@
         </template>
       </el-dropdown>
     </div>
-    <el-drawer v-model="ShowDrawer" title="主题设置">
+    <el-drawer v-model="ShowDrawer" title="主题设置" class="setting-drawer">
       <el-form ref="form" label-width="80px">
         <el-form-item label="主题颜色" class="right-align-item">
           <el-color-picker v-model="color" size="large" @change="HandleColorChange" />
@@ -53,8 +53,36 @@
             @change="HandleDarkChange"
           />
         </el-form-item>
+        <el-form-item label="更改头像" class="right-align-item" @Click="SettingDialog = true">
+        </el-form-item>
       </el-form>
     </el-drawer>
+
+    <!-- 修改个人配置 -->
+
+    <el-dialog v-model="SettingDialog" title="更改个人配置" width="500">
+      <el-form>
+        <el-form-item label="修改头像：">
+          <el-upload
+            class="avatar-uploader"
+            :headers="headers"
+            action="/api/admin/product/fileUpload"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="AvatarUrl" :src="AvatarUrl" class="avatar" />
+            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="SettingDialog = false">取消</el-button>
+          <el-button type="primary" @click="HandleAvatarUpdate"> 确定 </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -65,6 +93,12 @@ import { useRoute } from 'vue-router'
 import useUserStore from '@/stores/modules/user'
 import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { beforeAvatarUpload } from '@/utils/picture'
+import { ElMessage, type UploadProps } from 'element-plus'
+import { reqUpdateAvatar } from '@/apis/acl/user/user'
+// 控制个人设置是否展示
+const SettingDialog = ref<boolean>(false)
+const AvatarUrl = ref<string>('')
 // 控制主题drawer
 const ShowDrawer = ref<boolean>(false)
 // 侧边栏主题颜色（从 localStorage 恢复）
@@ -83,8 +117,11 @@ const { ChangeFold } = layoutSettings
 const { refresh } = storeToRefs(layoutSettings)
 // 使用userStore挂载图片和姓名,退出登录操作
 const UserStore = useUserStore()
-const { username, avatar } = storeToRefs(UserStore)
+const { username, avatar, token } = storeToRefs(UserStore)
 const { userLogout } = UserStore
+// 设置上传图片携带的token头
+const headers = { token: token.value }
+
 // 刷新业务修改refresh值
 const $route = useRoute()
 function refreshComponent() {
@@ -148,6 +185,22 @@ const HandleColorChange = () => {
   // 设置 css 变量
   el.style.setProperty('--el-color-primary', color.value)
 }
+// 处理图片上传成功回调
+const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
+  AvatarUrl.value = response.data
+}
+// 修改图片保存
+const HandleAvatarUpdate = async () => {
+  const res = await reqUpdateAvatar({ avatar: AvatarUrl.value })
+  if (res.code === 200) {
+    ElMessage({
+      type: 'success',
+      message: '更改头像成功',
+    })
+    UserStore.avatar = AvatarUrl.value
+    SettingDialog.value = false
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -177,5 +230,34 @@ const HandleColorChange = () => {
     display: flex;
     justify-content: flex-end; /* 内容右对齐 */
   }
+}
+.setting-drawer {
+  .el-form-item:hover {
+    background-color: grey;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+}
+</style>
+<style>
+.avatar-uploader .el-upload {
+  margin-top: 10px;
+  margin-left: 20px;
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
 }
 </style>
