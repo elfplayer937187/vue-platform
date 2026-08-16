@@ -24,6 +24,13 @@
         <el-button v-has="`btn.User.remove`" type="danger" @click="HandlePreDelete"
           >批量删除</el-button
         >
+        <el-button
+          color="green"
+          type="primary"
+          class="export-excel-button"
+          @click="handleExportByExcel"
+          >导出为Excel</el-button
+        >
       </div>
       <!-- 表格 -->
       <el-table
@@ -202,6 +209,7 @@ import type { RoleType } from '@/apis/acl/role/type'
 import type { UserType, AddUserType } from '@/apis/acl/user/type'
 import { ElMessage, ElMessageBox, type CheckboxValueType, type FormRules } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
+import { ExportXlsx } from '@/utils/export-xlsx'
 // 控制isIndeterminate
 const isIndeterminate = ref<boolean>(false)
 // 全选
@@ -462,7 +470,20 @@ const HandleTargetSearch = async () => {
   await GetUserPagination(SearchUserName.value)
   SearchUserName.value = ''
 }
-// 处理重置
+// 处理导出excel
+const handleExportByExcel = () => {
+  ExportXlsx(UserList.value!, {
+    fileName: '用户列表',
+    mapper: (user) => ({
+      用户Id: user.userId || '无',
+      账号: user.username || '无',
+      用户昵称: user.name || '无',
+      用户角色: user.roleName || '无',
+      用户创建时间: user.createTime || '无',
+      用户更新时间: user.updateTime || '无',
+    }),
+  })
+}
 </script>
 
 <style scoped lang="scss">
@@ -479,6 +500,11 @@ const HandleTargetSearch = async () => {
   margin-bottom: 20px;
   .card-header {
     margin-bottom: 20px;
+    position: relative;
+    .export-excel-button {
+      position: absolute;
+      right: 0;
+    }
   }
 }
 .pagination {

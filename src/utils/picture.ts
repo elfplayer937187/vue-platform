@@ -1,4 +1,4 @@
-import { ElMessage, type UploadProps } from "element-plus"
+import { ElMessage, type UploadProps } from 'element-plus'
 import 'element-plus/dist/index.css'
 // 处理品牌logo上传函数，上传之前的钩子
 export const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {

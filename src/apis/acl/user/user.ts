@@ -12,7 +12,7 @@ enum API {
   // 批量删除接口
   BATCHREMOVE_URL = '/admin/acl/user/batchRemove',
   // 修改用户头像
-  UPDATEAVARTAR_URL = '/admin/acl/user/updateAvatar'
+  UPDATEAVARTAR_URL = '/admin/acl/user/updateAvatar',
 }
 // 获取分页列表
 export const reqGetUserPagination = (page: number, limit: number, username?: string) =>
@@ -31,4 +31,5 @@ export const reqUpdateUser = (obj: AddUserType) =>
 export const reqBatchRemoveUser = (idList: number[]) =>
   request.delete<any, any>(API.BATCHREMOVE_URL, { data: { idList } })
 
-export const reqUpdateAvatar = (data: { avatar: string }) => request.put<any, DefaultType>(API.UPDATEAVARTAR_URL, data)
+export const reqUpdateAvatar = (data: { avatar: string }) =>
+  request.put<any, DefaultType>(API.UPDATEAVARTAR_URL, data)
