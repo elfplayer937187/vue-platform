@@ -53,7 +53,7 @@
             @change="HandleDarkChange"
           />
         </el-form-item>
-        <el-form-item label="更改头像" class="right-align-item" @Click="SettingDialog = true">
+        <el-form-item label="更改头像" class="right-align-item" @click="SettingDialog = true">
         </el-form-item>
       </el-form>
     </el-drawer>

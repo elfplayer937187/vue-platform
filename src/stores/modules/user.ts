@@ -50,8 +50,8 @@ const useUserStore = defineStore('User', {
     // 获取用户信息并存储在仓库
     async GetUserInfo() {
       const res = await reqUserInfo()
-      console.log(res);
-      
+      console.log(res)
+
       if (res.code === 200) {
         this.username = res.data.name
         this.avatar = res.data.avatar

@@ -19,14 +19,19 @@
     </template>
   </el-card>
   <el-card>
-    <el-button
-      v-has="`btn.Role.add`"
-      type="primary"
-      icon="Plus"
-      class="add-role-button"
-      @click="HandleAUButton"
-      >添加角色</el-button
-    >
+    <div class="card-header">
+      <el-button
+        v-has="`btn.Role.add`"
+        type="primary"
+        icon="Plus"
+        class="add-role-button"
+        @click="HandleAUButton"
+        >添加角色</el-button
+      >
+      <el-button type="primary" color="green" class="xlsx-export" @click="HandleExportByExcel"
+        >导出为Excel</el-button
+      >
+    </div>
     <!-- 整个列表 -->
     <el-table :data="RoleList" style="width: 100%" border class="role-table">
       <el-table-column prop="prop" label="#" width="width" align="center" type="index">
@@ -140,6 +145,7 @@ import {
 import type { RoleRecordType, RoleAssignType } from '@/apis/acl/role/type'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
+import { ExportXlsx } from '@/utils/export-xlsx'
 // 树形控件配置
 const defaultProps = {
   children: 'children',
@@ -296,6 +302,18 @@ const HandleSaveDoAssign = async () => {
     ElMessage({ type: 'error', message: res.message || '权限分配失败' })
   }
 }
+// 处理导出为Excel
+const HandleExportByExcel = () => {
+  ExportXlsx(RoleList.value, {
+    fileName: '角色列表',
+    mapper: (role: RoleRecordType) => ({
+      角色id: role.roleId,
+      角色名称: role.roleName,
+      创建时间: role.createTime,
+      更新时间: role.updateTime,
+    }),
+  })
+}
 </script>
 
 <style scoped lang="scss">
@@ -314,5 +332,12 @@ const HandleSaveDoAssign = async () => {
 }
 .role-table {
   margin-bottom: 20px;
+}
+.card-header {
+  position: relative;
+  .xlsx-export {
+    position: absolute;
+    right: 0;
+  }
 }
 </style>
