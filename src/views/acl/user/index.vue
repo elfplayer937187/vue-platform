@@ -199,14 +199,14 @@ import { computed, onMounted, ref, reactive } from 'vue'
 import type { Reactive } from 'vue'
 import {
   reqGetUserPagination,
-  reqAddUser,
-  reqDeleteUser,
+  reqSaveUser,
+  reqRemoveUser,
   reqUpdateUser,
   reqBatchRemoveUser,
-} from '@/apis/acl/user/user'
-import { reqGetAllUserRole, reqDoAssignRole } from '@/apis/acl/role/role'
-import type { RoleType } from '@/apis/acl/role/type'
-import type { UserType, AddUserType } from '@/apis/acl/user/type'
+  reqGetUserRoles,
+  reqAssignRole,
+} from '@/apis/acl/user'
+import type { UserRecord, CreateUserDTO } from '@/apis/acl/user/type'
 import { ElMessage, ElMessageBox, type CheckboxValueType, type FormRules } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
 import { ExportXlsx } from '@/utils/export-xlsx'
@@ -219,7 +219,7 @@ const RoleList = ref<string[]>([])
 // 所有职位（展示用名称）
 const AllRoles = ref<string[]>([])
 // 所有职位原始数据（含id，用于保存时反查）
-const allRolesData = ref<RoleType[]>([])
+const allRolesData = ref<{ roleId: number; roleName: string }[]>([])
 // 当前分配角色的用户ID
 const currentUserId = ref<number>(0)
 // 是否展示分配角色drawer
@@ -242,11 +242,16 @@ const pageSizeList = [3, 5, 7, 9, 12]
 const pageSize = ref<number>(pageSizeList[Math.floor(pageSizeList.length / 2)] as number)
 
 // 整个表
-const UserList = ref<UserType[]>()
+const UserList = ref<UserRecord[]>()
 // 总数
 const total = ref<number>(0)
 // 保存 新增或者编辑 信息
-const AddUserInfo = ref<AddUserType>({ name: '', password: '', username: '', userId: '' })
+const AddUserInfo = ref<CreateUserDTO & { userId?: number | string }>({
+  name: '',
+  password: '',
+  username: '',
+  userId: '',
+})
 // 实现drawer保存是否禁用
 const SaveIsDisabled = ref<boolean>(false)
 // 添加删除的id
@@ -274,8 +279,7 @@ const SaveAddUser = async () => {
     if (valid) {
       const res = IsEdit.value
         ? await reqUpdateUser(AddUserInfo.value)
-        : await reqAddUser(AddUserInfo.value)
-      // console.log(res)
+        : await reqSaveUser(AddUserInfo.value)
 
       if (res.code === 200) {
         GetUserPagination()
@@ -293,8 +297,6 @@ const SaveAddUser = async () => {
 }
 // 验证姓名
 const validateName = (rule: any, value: any, callback: any) => {
-  // console.log(111);
-
   if (value.trim().length > 2 && value.trim().length <= 12) {
     callback()
   } else {
@@ -334,7 +336,7 @@ const HandleDeleteUser = async (id: number) => {
     cancelButtonText: '取消',
     type: 'warning',
   })
-  const res = await reqDeleteUser(id)
+  const res = await reqRemoveUser(id)
 
   if (res.code === 200) {
     ElMessage({
@@ -361,7 +363,7 @@ const HandleAddUser = () => {
 }
 // 处理每一行被选中的效果
 const HandleRowSelect = (selection: any) => {
-  RemoveIdList = selection.map((obj: Reactive<UserType>) => obj.userId)
+  RemoveIdList = selection.map((obj: Reactive<UserRecord>) => obj.userId)
   // console.log(RemoveIdList);
 }
 // 删除之前
@@ -407,7 +409,7 @@ const HandleGivenRole = async (name: string, userId: number) => {
   ShowGivenRoleDrawer.value = true
   AddUserInfo.value.name = name
   currentUserId.value = userId
-  const res = await reqGetAllUserRole(userId)
+  const res = await reqGetUserRoles(userId)
   console.log(res)
 
   // 保存完整角色数据用于后续反查ID
@@ -444,16 +446,9 @@ const HanldeUpdateRoleSave = async () => {
   // 从角色名反查角色ID
   const roleIdList = allRolesData.value
     .filter((role) => RoleList.value.includes(role.roleName))
-    .map((role) => role.roleId)
-  console.log(allRolesData.value)
-
-  console.log({
-    userId: currentUserId.value,
-    roleIdList,
-  })
-
+    .map((role) => role.roleId.toString())
   // 发送请求
-  const res = await reqDoAssignRole({
+  const res = await reqAssignRole({
     userId: currentUserId.value,
     roleIdList,
   })

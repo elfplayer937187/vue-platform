@@ -5,7 +5,7 @@ import type {
   RolePageListType,
   RoleAssignRespType,
 } from '@/apis/acl/role/type'
-import type { DefaultType } from '@/apis/acl/user/type'
+import type { baseResponseType } from '@/apis/others/baseType/base'
 
 enum API {
   GETALLUSERROLE_URL = '/admin/acl/user/toAssign',
@@ -29,7 +29,7 @@ export const reqGetAllUserRole = (adminId: number) =>
 
 // 为用户分配角色
 export const reqDoAssignRole = (data: DoAssignRoleType) =>
-  request.post<any, DefaultType>(API.DOASSIGNROLE_URL, data)
+  request.post<any, baseResponseType<string>>(API.DOASSIGNROLE_URL, data)
 
 // 获取角色分页列表
 export const reqGetRolePagination = (page: number, limit: number, roleName: string = '') =>
@@ -41,15 +41,15 @@ export const reqAddRole = (data: { roleName: string; roleId?: number }) => {
   if (data.roleId) {
     // 有id更新,没有就新增
     console.log(data)
-    return request.put<any, DefaultType>(API.UPDATEROLE_URL, data)
+    return request.put<any, baseResponseType<string>>(API.UPDATEROLE_URL, data)
   } else {
-    return request.post<any, DefaultType>(API.ADDROLE_URL, data)
+    return request.post<any, baseResponseType<string>>(API.ADDROLE_URL, data)
   }
 }
 
 //删除角色接口
 export const reqDeleteRole = (id: number) =>
-  request.delete<any, DefaultType>(API.DELETE_URL + `/${id}`)
+  request.delete<any, baseResponseType<string>>(API.DELETE_URL + `/${id}`)
 
 // 获取角色菜单
 export const reqGetRoleAssign = (roleId: number) =>
@@ -57,6 +57,6 @@ export const reqGetRoleAssign = (roleId: number) =>
 
 //给角色分配权限
 export const reqDoAssignForRole = (roleId: number, permissionId: number[]) =>
-  request.post<any, DefaultType>(API.ADDASSIGNFORROLE_URL, null, {
+  request.post<any, baseResponseType<string>>(API.ADDASSIGNFORROLE_URL, null, {
     params: { roleId, permissionId: permissionId.join(',') },
   })

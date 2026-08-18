@@ -1,41 +1,67 @@
-export interface BaseType {
-  code: number
-  message: string
-  ok: boolean
-  // data: PageListType,
+import type { baseResponseType } from '@/apis/others/baseType/base'
+
+// ------ 请求 DTO ------
+
+// 新增用户
+export interface CreateUserDTO {
+  username: string
+  name: string
+  password: string
 }
-export interface DefaultType extends BaseType {
-  data: string
+
+// 更新用户
+export interface UpdateUserDTO {
+  userId?: number | string | undefined
+  username: string
+  name: string
 }
-interface dataType {
-  current: number
-  pages: number
-  records: UserType[]
-  size: number
-  total: number
+
+// 批量删除
+export interface BatchRemoveDTO {
+  idList: number[]
 }
-// user分页列表类型返回值
-export interface PageListType extends BaseType {
-  data: dataType
+
+// 分配角色
+export interface AssignRoleDTO {
+  userId: number
+  roleIdList: string[]
 }
-// 用户类型
-export interface UserType {
+
+// ------ 响应数据类型 ------
+
+// 用户记录
+export interface UserRecord {
   id: number
   userId: number
   name: string
-  password: string
-  phone: string
-  roleName: string
   username: string
-
-  updateTime?: any
-  createTime?: any
-}
-
-// AddUser接口参数类型
-export interface AddUserType {
-  name: string
   password?: string
-  username: string
-  userId?: number | string
+  phone?: string
+  roleName?: string
+  createTime?: string
+  updateTime?: string
 }
+
+// 分页列表 - data 结构
+export interface UserPaginationData {
+  current: number
+  pages: number
+  records: UserRecord[]
+  size: number
+  total: number
+}
+
+// 分页列表 - 完整响应
+export type UserPaginationResp = baseResponseType<UserPaginationData>
+
+// 用户角色分配 - data 结构
+export interface UserRolesData {
+  assignRoles: { roleId: number; roleName: string }[]
+  allRoles: { roleId: number; roleName: string }[]
+}
+
+// 用户角色 - 完整响应
+export type UserRolesResp = baseResponseType<UserRolesData>
+
+// 通用操作响应（data 为 string 的情况）
+export type DefaultResp = baseResponseType<string>

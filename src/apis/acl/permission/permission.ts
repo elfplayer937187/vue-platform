@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { DefaultType } from '../user/type'
+import type { baseResponseType } from '@/apis/others/baseType/base'
 import type { GetPermissionRespType, AddPermissionType } from './type'
 enum API {
   // 获取权限列表
@@ -14,11 +14,11 @@ enum API {
 export const reqGetPermission = () => request.get<any, GetPermissionRespType>(API.GETPERMISSION_URL)
 export const reqAddPermission = (obj: AddPermissionType) => {
   if (!obj.menuId) {
-    return request.post<any, DefaultType>(API.ADDPERMISSION_URL, obj)
+    return request.post<any, baseResponseType<string>>(API.ADDPERMISSION_URL, obj)
   } else {
-    return request.put<any, DefaultType>(API.UPDATEPERMISSION_URL, obj)
+    return request.put<any, baseResponseType<string>>(API.UPDATEPERMISSION_URL, obj)
   }
 }
 
 export const reqDeletePermission = (id: number) =>
-  request.delete<any, DefaultType>(API.DELETEPERMISSION_URL + `/${id}`)
+  request.delete<any, baseResponseType<string>>(API.DELETEPERMISSION_URL + `/${id}`)

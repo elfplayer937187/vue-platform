@@ -1,6 +1,6 @@
-import type { BaseType, DefaultType } from '../user/type'
+import type { baseResponseType } from '@/apis/others/baseType/base'
 import type { RoleAssignType } from '../role/type'
-export interface GetPermissionRespType extends BaseType {
+export interface GetPermissionRespType extends baseResponseType<never> {
   data: RoleAssignType[]
 }
 export interface AddPermissionType {

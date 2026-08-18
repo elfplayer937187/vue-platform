@@ -95,7 +95,7 @@ import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { beforeAvatarUpload } from '@/utils/picture'
 import { ElMessage, type UploadProps } from 'element-plus'
-import { reqUpdateAvatar } from '@/apis/acl/user/user'
+import { reqUpdateUserAvatar } from '@/apis/acl/user'
 // 控制个人设置是否展示
 const SettingDialog = ref<boolean>(false)
 const AvatarUrl = ref<string>('')
@@ -191,7 +191,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
 }
 // 修改图片保存
 const HandleAvatarUpdate = async () => {
-  const res = await reqUpdateAvatar({ avatar: AvatarUrl.value })
+  const res = await reqUpdateUserAvatar({ avatar: AvatarUrl.value })
   if (res.code === 200) {
     ElMessage({
       type: 'success',
