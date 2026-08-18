@@ -6,5 +6,5 @@ export interface RouterType {
   avatar: string
   avaliableButtons: string[]
   dynamicRouteNames: string[]
-  RawRoutesName:string[]
+  RawRoutesName: string[]
 }

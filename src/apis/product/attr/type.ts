@@ -1,40 +1,41 @@
-// 三种顶部下拉菜单API类型
-interface BaseAttrType {
-  code: number
-  message: string
-  ok: boolean
-}
-export interface dataType {
+import type { baseResponseType } from '@/apis/others/baseType/base'
+
+// ------ 分类相关类型 ------
+
+// 分类记录（一级/二级/三级）
+export interface CategoryRecord {
   id: number
   name: string
   category1Id?: number
   category2Id?: number
   category3Id?: number
 }
-export interface ResponseAttrType extends BaseAttrType {
-  data: dataType[]
-}
-// 三级属性值对象基本类型
-interface attrValueListType {
+
+// 分类列表响应
+export type CategoryListResp = baseResponseType<CategoryRecord[]>
+
+// ------ 属性相关类型 ------
+
+// 属性值项
+export interface AttrValueItem {
   attrValueId?: number
   valueName: string
   attrId?: number
 }
-// 属性对象
-export interface ListItemType {
-  id?: number //已有属性id
-  attrId?: number | undefined // 属性唯一标识(时间戳)
-  attrName: string //新增添加属性名
-  categoryId: number | string //给哪个三级分类新增的id
+
+// 属性项
+export interface AttrItem {
+  id?: number
+  attrId?: number | undefined
+  attrName: string
+  categoryId: number | string
   categoryLevel: number
   platformChose?: string
-  attrValueList: attrValueListType[] //新增添加属性值数组
+  attrValueList: AttrValueItem[]
 }
-// 定义AttrINfo的响应式返回类型
-export interface getAttrInfoListResponseType extends BaseAttrType {
-  data: ListItemType[]
-}
-// 定义删除第三接口标签响应返回值类型
-export interface deleteThirdResponseType extends BaseAttrType {
-  data: string
-}
+
+// 属性列表响应
+export type AttrListResp = baseResponseType<AttrItem[]>
+
+// 通用操作响应
+export type DefaultResp = baseResponseType<string>

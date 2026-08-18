@@ -18,7 +18,7 @@ const useUserStore = defineStore('User', {
       avatar: '',
       avaliableButtons: [],
       dynamicRouteNames: [],
-      RawRoutesName: []
+      RawRoutesName: [],
     }
   },
   actions: {
@@ -60,7 +60,7 @@ const useUserStore = defineStore('User', {
         this.RawRoutesName = res.data.routes
 
         const MyAsyncRoutes = this.getUserAllRoutes(cloneDeep(AsyncRoutes), res.data.routes) || []
-        console.log(MyAsyncRoutes);
+        console.log(MyAsyncRoutes)
         // 记录动态路由名称，用于退出时清除
         const routeNames: string[] = []
         MyAsyncRoutes.forEach((Route: any) => {

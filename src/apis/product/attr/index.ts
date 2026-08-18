@@ -1,36 +1,44 @@
 import request from '@/utils/request'
 import type {
-  ListItemType,
-  ResponseAttrType,
-  getAttrInfoListResponseType,
-  deleteThirdResponseType,
+  CategoryListResp,
+  AttrListResp,
+  AttrItem,
+  DefaultResp,
 } from './type'
+
 enum API {
-  // 获取第n个下拉框的接口
-  CATEGORYONE_URL = '/admin/product/category1',
-  CATEGORYTWO_URL = '/admin/product/category2',
-  CATEGORYTHREE_URL = '/admin/product/category3',
-  // 获取属性tag标签接口
-  CATEGORYTAG_URL = '/admin/product/attrInfoList',
-  // 新增修改三级属性标签接口
-  APPENDTHIRDTAG_URL = '/admin/product/saveAttrInfo',
-  DELETETHIRDATTR_URL = '/admin/product/deleteAttr',
+  // 分类下拉
+  CATEGORY1_URL = '/admin/product/category1',
+  CATEGORY2_URL = '/admin/product/category2',
+  CATEGORY3_URL = '/admin/product/category3',
+  // 属性列表
+  ATTR_INFO_LIST_URL = '/admin/product/attrInfoList',
+  // 新增/更新属性
+  SAVE_ATTR_URL = '/admin/product/saveAttrInfo',
+  // 删除属性
+  DELETE_ATTR_URL = '/admin/product/deleteAttr',
 }
-// 一级分类地址
-export const getFirstCategory = () => request.get<any, ResponseAttrType>(API.CATEGORYONE_URL)
-export const getSecondCategory = (id: number | string) =>
-  request.get<any, ResponseAttrType>(API.CATEGORYTWO_URL + `/${id}`)
-export const getThirdCategory = (id: number | string) =>
-  request.get<any, ResponseAttrType>(API.CATEGORYTHREE_URL + `/${id}`)
-// 获取Attr列表每一项
-export const getCategoryTag = (
-  C1id: string | number,
-  C2Id: string | number,
-  C3Id: string | number,
-) => request.get<any, getAttrInfoListResponseType>(API.CATEGORYTAG_URL + `/${C1id}/${C2Id}/${C3Id}`)
-// 添加三级属性标签接口
-export const appendThridTag = (obj: ListItemType) =>
-  request.post<any, any>(API.APPENDTHIRDTAG_URL, obj)
-// 删除属性接口
-export const deleteThirdCategory = (attrId: number) =>
-  request.delete<any, deleteThirdResponseType>(API.DELETETHIRDATTR_URL + `/${attrId}`)
+
+// 一级分类
+export const reqGetFirstCategory = () =>
+  request.get<any, CategoryListResp>(API.CATEGORY1_URL)
+
+// 二级分类
+export const reqGetSecondCategory = (id: number | string) =>
+  request.get<any, CategoryListResp>(`${API.CATEGORY2_URL}/${id}`)
+
+// 三级分类
+export const reqGetThirdCategory = (id: number | string) =>
+  request.get<any, CategoryListResp>(`${API.CATEGORY3_URL}/${id}`)
+
+// 获取属性列表（三级分类级联）
+export const reqGetAttrList = (c1Id: number | string, c2Id: number | string, c3Id: number | string) =>
+  request.get<any, AttrListResp>(`${API.ATTR_INFO_LIST_URL}/${c1Id}/${c2Id}/${c3Id}`)
+
+// 新增/更新属性（有 attrId 则更新，无则新增）
+export const reqSaveAttr = (data: AttrItem) =>
+  request.post<any, DefaultResp>(API.SAVE_ATTR_URL, data)
+
+// 删除属性
+export const reqRemoveAttr = (attrId: number) =>
+  request.delete<any, DefaultResp>(`${API.DELETE_ATTR_URL}/${attrId}`)

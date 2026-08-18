@@ -78,10 +78,10 @@
 
 <script lang="ts" setup>
 import { reqGetAllTradeMarkAttrList, reqGetAllTradeMarkImage } from '@/apis/product/spu'
-import { getCategoryTag } from '@/apis/product/attr'
+import { reqGetAttrList } from '@/apis/product/attr'
 import { reactive, ref } from 'vue'
 import type { SPUType, AttrType, ImageType } from '@/apis/product/spu/type'
-import type { ListItemType } from '@/apis/product/attr/type'
+import type { AttrItem } from '@/apis/product/attr/type'
 import type { SKUType } from '@/apis/product/sku/type'
 import { reqAppendSKUInfo } from '@/apis/product/sku'
 import { ElMessage } from 'element-plus'
@@ -126,7 +126,7 @@ const SKUSaveForm = reactive<SKUType>({
   skuSaleAttrValueList: [],
 })
 // 存储表单元素
-const AttrList = ref<ListItemType[]>([])
+const AttrList = ref<AttrItem[]>([])
 // 存储销售属性
 const AllTradeMarkList = ref<AttrType[]>([])
 // 存储图片信息
@@ -144,7 +144,7 @@ const initSKUData = async (
   AllTradeMarkList.value = []
   ImageList.value = []
   // 获取属性列表
-  const res1 = await getCategoryTag(C1Id, C2Id, row.category3Id)
+  const res1 = await reqGetAttrList(C1Id, C2Id, row.category3Id)
   // 获取销售属性
   const res2 = await reqGetAllTradeMarkAttrList(row.spuId as number)
   // 后端返回的销售属性值字段是 spuSaleAttrList，映射为 spuSaleAttrValueList
