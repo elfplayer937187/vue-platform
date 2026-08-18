@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import { reqLogin, reqUserInfo } from '@/apis/user'
+import { reqLogin, reqUserInfo } from '@/apis/auth'
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token'
 import { ConstedRoutes, AsyncRoutes, router } from '@/router/index'
 import type { RouterType } from './types/RouterType'
-import type { LoginType } from '@/apis/user/type'
+import type { LoginType } from '@/apis/auth/type'
 // 引入深拷贝
 import { cloneDeep } from 'lodash'
 // import {} from

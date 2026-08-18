@@ -1,4 +1,4 @@
-import type { BaseType } from '@/apis/acl/user/type'
+import type { baseResponseType } from '@/apis/others/baseType/base'
 
 // doAssignRole 请求参数类型
 export interface DoAssignRoleType {
@@ -6,7 +6,7 @@ export interface DoAssignRoleType {
   userId: number
 }
 
-export interface GetAllRolesResponseType extends BaseType {
+export interface GetAllRolesResponseType extends baseResponseType<never> {
   data: {
     assignRoles: RoleType[]
     allRoles: RoleType[]
@@ -31,7 +31,7 @@ export interface RoleRecordType {
 }
 
 // 角色分页列表 - 响应类型
-export interface RolePageListType extends BaseType {
+export interface RolePageListType extends baseResponseType<never> {
   data: {
     current: number
     pages: number
@@ -43,7 +43,7 @@ export interface RolePageListType extends BaseType {
 }
 
 // 角色菜单响应类型
-export interface RoleAssignRespType extends BaseType {
+export interface RoleAssignRespType extends baseResponseType<never> {
   data: RoleAssignType[]
 }
 // 权限类型
