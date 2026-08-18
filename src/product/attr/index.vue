@@ -122,8 +122,8 @@ import Category from '@/components/Category/index.vue'
 import useCategoryStore from '@/stores/modules/Category'
 import { watch, ref, reactive, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { appendThridTag, deleteThirdCategory, getCategoryTag } from '@/apis/product/attr'
-import type { ListItemType } from '@/apis/product/attr/type'
+import { reqSaveAttr, reqRemoveAttr, reqGetAttrList } from '@/apis/product/attr'
+import type { AttrItem } from '@/apis/product/attr/type'
 import 'element-plus/dist/index.css'
 import { ElMessage } from 'element-plus'
 const CategoryStore = useCategoryStore()
@@ -139,7 +139,7 @@ const showChange = ref<boolean>(false)
   2.v-for动态渲染table
 */
 // 存储的收集第二界面表单的元素
-const AppendParams = reactive<ListItemType>({
+const AppendParams = reactive<AttrItem>({
   attrName: '',
   categoryId: C3Id.value,
   categoryLevel: 3,
@@ -175,7 +175,7 @@ const AppendValue = () => {
   AppendParams.attrId = undefined
 }
 
-const AttrList = ref<ListItemType[]>([])
+const AttrList = ref<AttrItem[]>([])
 // 监视第三项api,如果有一个变了说明列表改变
 // immediate: true 确保切回页面时也能触发（C3Id 值没变时 watch 不会自动触发）
 onMounted(() => {
@@ -191,7 +191,7 @@ watch(C3Id, () => {
 // 获取第一界面属性值列表
 const getAttr = async () => {
   try {
-    const res = await getCategoryTag(C1Id.value, C2Id.value, C3Id.value)
+    const res = await reqGetAttrList(C1Id.value, C2Id.value, C3Id.value)
 
     if (res.code === 200) {
       AttrList.value = res.data
@@ -215,7 +215,7 @@ const HandleEdit = (row: any) => {
 const HandleDelete = async (attrId: number) => {
   try {
     // 发请求删除当前attrid，并且重新渲染
-    const res = await deleteThirdCategory(attrId)
+    const res = await reqRemoveAttr(attrId)
     if (res.code === 200) {
       // 刷新界面并且提示删除成功
       ElMessage({
@@ -243,7 +243,7 @@ const HandleDelete = async (attrId: number) => {
 const saveAppendParams = async () => {
   // 收集参数发请求
   try {
-    const res = await appendThridTag(AppendParams)
+    const res = await reqSaveAttr(AppendParams)
     if (res.code === 200) {
       ElMessage({
         type: 'success',

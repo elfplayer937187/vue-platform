@@ -1,10 +1,6 @@
 // 角色管理相关接口（CRUD + 权限分配）
 import request from '@/utils/request'
-import type {
-  RolePaginationResp,
-  RoleAssignResp,
-  DefaultResp,
-} from './type'
+import type { RolePaginationResp, RoleAssignResp, DefaultResp } from './type'
 
 enum API {
   // 角色分页
