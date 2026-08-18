@@ -137,12 +137,12 @@
 import { onMounted, ref } from 'vue'
 import {
   reqGetRolePagination,
-  reqAddRole,
-  reqDeleteRole,
+  reqSaveRole,
+  reqRemoveRole,
   reqGetRoleAssign,
   reqDoAssignForRole,
-} from '@/apis/acl/role/role'
-import type { RoleRecordType, RoleAssignType } from '@/apis/acl/role/type'
+} from '@/apis/acl/role'
+import type { RoleRecord, RoleAssignType } from '@/apis/acl/role/type'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
 import { ExportXlsx } from '@/utils/export-xlsx'
@@ -161,7 +161,7 @@ const NowDrawerId = ref<number | null>()
 // 处理搜索的name
 const roleName = ref<string>('')
 // 整个列表数据
-const RoleList = ref<RoleRecordType[]>([])
+const RoleList = ref<RoleRecord[]>([])
 
 // 分页器配置
 const pageSizes = ref<number[]>([3, 5, 7, 9, 11])
@@ -216,7 +216,7 @@ const HandleSaveAddRole = async () => {
       message: '角色已添加!',
     })
   }
-  const res = await reqAddRole({ roleName: newRolename.value, roleId: newUpdateId.value })
+  const res = await reqSaveRole({ roleName: newRolename.value, roleId: newUpdateId.value })
   if (res.code === 200) {
     ElMessage({
       type: 'success',
@@ -235,7 +235,7 @@ const HandleDeleteRole = async (id: number) => {
     cancelButtonText: '取消',
     type: 'warning',
   })
-  const res = await reqDeleteRole(id)
+  const res = await reqRemoveRole(id)
   if (res.code === 200) {
     // window.location.reload()
     await GetRoleListPagination()
@@ -306,7 +306,7 @@ const HandleSaveDoAssign = async () => {
 const HandleExportByExcel = () => {
   ExportXlsx(RoleList.value, {
     fileName: '角色列表',
-    mapper: (role: RoleRecordType) => ({
+    mapper: (role: RoleRecord) => ({
       角色id: role.roleId,
       角色名称: role.roleName,
       创建时间: role.createTime,

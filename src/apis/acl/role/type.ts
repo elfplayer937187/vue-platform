@@ -1,52 +1,46 @@
 import type { baseResponseType } from '@/apis/others/baseType/base'
 
-// doAssignRole 请求参数类型
-export interface DoAssignRoleType {
-  roleIdList: number[]
-  userId: number
+// ------ 请求 DTO ------
+
+// 新增角色
+export interface CreateRoleDTO {
+  roleName: string
+  remark?: string
 }
 
-export interface GetAllRolesResponseType extends baseResponseType<never> {
-  data: {
-    assignRoles: RoleType[]
-    allRoles: RoleType[]
-  }
-}
-export interface RoleType {
-  createTime?: string
-  updateTime?: string
+// 更新角色
+export interface UpdateRoleDTO {
   roleId: number
   roleName: string
-  remark: string
+  remark?: string
 }
 
-// 角色分页列表 - 单条记录
-export interface RoleRecordType {
-  roleId: number
-  createTime: string
+// ------ 响应数据类型 ------
+
+// 角色记录
+export interface RoleRecord {
   id: number
-  remark: string
+  roleId: number
   roleName: string
+  remark: string
+  createTime: string
   updateTime: string
 }
 
-// 角色分页列表 - 响应类型
-export interface RolePageListType extends baseResponseType<never> {
-  data: {
-    current: number
-    pages: number
-    records: RoleRecordType[]
-    searchCount: boolean
-    size: number
-    total: number
-  }
+// 分页列表 - data 结构
+export interface RolePaginationData {
+  current: number
+  pages: number
+  records: RoleRecord[]
+  searchCount: boolean
+  size: number
+  total: number
 }
 
-// 角色菜单响应类型
-export interface RoleAssignRespType extends baseResponseType<never> {
-  data: RoleAssignType[]
-}
-// 权限类型
+// 分页列表 - 完整响应
+export type RolePaginationResp = baseResponseType<RolePaginationData>
+
+// 角色-权限树 - data 结构（节点）
 export interface RoleAssignType {
   id: number
   children: RoleAssignType[] | null
@@ -62,3 +56,9 @@ export interface RoleAssignType {
   type: number
   updateTime?: any
 }
+
+// 角色-权限树 - 完整响应
+export type RoleAssignResp = baseResponseType<RoleAssignType[]>
+
+// 通用操作响应
+export type DefaultResp = baseResponseType<string>

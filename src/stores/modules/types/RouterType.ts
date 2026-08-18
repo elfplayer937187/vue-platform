@@ -5,4 +5,6 @@ export interface RouterType {
   username: string
   avatar: string
   avaliableButtons: string[]
+  dynamicRouteNames: string[]
+  RawRoutesName:string[]
 }
