@@ -1,9 +1,12 @@
 import * as xlsx from 'xlsx'
-export const ExportXlsx = <T extends Record<string, any>>(exportData: T[], options: { fileName?: string, mapper: (item: T) => Record<string, any> }) => {
+export const ExportXlsx = <T extends Record<string, any>>(
+  exportData: T[],
+  options: { fileName?: string; mapper: (item: T) => Record<string, any> },
+) => {
   /**
    * @params exportData: 导出的json
-   * 
-   * @params 
+   *
+   * @params
    */
   const { fileName, mapper } = options
   // 导出的数据
@@ -14,7 +17,7 @@ export const ExportXlsx = <T extends Record<string, any>>(exportData: T[], optio
   for (let i = 0; i < xlength; i++) {
     cols_type.push({ wch: 20 })
   }
-  //创建xlsx表 
+  //创建xlsx表
   const xlsx_sheet = xlsx.utils.json_to_sheet(xlsxExportData)
   // 创建xlsx工作簿
   const xlsx_book = xlsx.utils.book_new()
@@ -23,8 +26,6 @@ export const ExportXlsx = <T extends Record<string, any>>(exportData: T[], optio
 
   xlsx_sheet['!cols'] = cols_type
 
-
   // 下载
   xlsx.writeFile(xlsx_book, (fileName ?? 'xlsx工作表') + '_' + Date.now().toString() + '.xlsx')
-
 }
