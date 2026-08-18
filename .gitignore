@@ -37,3 +37,11 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# Claude AI — 只忽略个人/本地文件，项目级配置保留
+.claude/settings.local.json
+.claude/plans/
+.claude/memory/
+
+# VS Code workspace（机器路径，不应提交）
+*.code-workspace
