@@ -75,7 +75,7 @@ const hour = getTime()
 const LoginRule = ref()
 // 获取route的query参数并且跳转
 const $router = useRoute()
-const path: any = $router.query.redirect
+const pathName: any = $router.query.redirect
 // 处理登录
 const login = async () => {
   // 当所有表单校验成功再发请求
@@ -88,8 +88,16 @@ const login = async () => {
     // 获取用户token和姓名
     await useUser.loginUser(LoginForm)
     await useUser.GetUserInfo()
-
-    router.push({ path: path || '/' })
+    const rawRouteNames = useUser.RawRoutesName
+    const IsPathExist = rawRouteNames.some((name) => {
+      return name === pathName
+    })
+    // 查看这个角色这个路径是否拥有这个路径
+    if (!IsPathExist) {
+      router.push({ name: 'home' })
+    } else {
+      router.push({ name: pathName || 'home' })
+    }
     ElNotification({
       title: `Hi,${hour}`,
       type: 'success',

@@ -36,8 +36,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
         } catch (error) {
           // token过期和用户手动修改token->退出登录并且清除信息，跳转到登录页
           UserStore.userLogout()
-          next({ path: '/login', query: { redirect: to.path } })
-          console.dir(error)
+          next({ path: '/login', query: { redirect: to.name } })
         }
       }
     }
@@ -46,7 +45,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
       next()
     } else {
       // 没有token重定向到login,并且把没去成的路径传给login
-      next({ path: '/login', query: { redirect: to.path } })
+      next({ path: '/login', query: { redirect: to.name } })
     }
   }
 })

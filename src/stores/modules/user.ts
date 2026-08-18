@@ -5,7 +5,7 @@ import { ConstedRoutes, AsyncRoutes, router } from '@/router/index'
 import type { RouterType } from './types/RouterType'
 import type { LoginType } from '@/apis/auth/type'
 // 引入深拷贝
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 // import {} from
 const useUserStore = defineStore('User', {
   // 数据
@@ -17,6 +17,8 @@ const useUserStore = defineStore('User', {
       username: '',
       avatar: '',
       avaliableButtons: [],
+      dynamicRouteNames: [],
+      RawRoutesName: []
     }
   },
   actions: {
@@ -50,18 +52,22 @@ const useUserStore = defineStore('User', {
     // 获取用户信息并存储在仓库
     async GetUserInfo() {
       const res = await reqUserInfo()
-      console.log(res)
 
       if (res.code === 200) {
         this.username = res.data.name
         this.avatar = res.data.avatar
         this.avaliableButtons = res.data.buttons
+        this.RawRoutesName = res.data.routes
 
         const MyAsyncRoutes = this.getUserAllRoutes(cloneDeep(AsyncRoutes), res.data.routes) || []
-        // console.log(MyAsyncRoutes);
+        console.log(MyAsyncRoutes);
+        // 记录动态路由名称，用于退出时清除
+        const routeNames: string[] = []
         MyAsyncRoutes.forEach((Route: any) => {
           router.addRoute(Route)
+          routeNames.push(Route.name)
         })
+        this.dynamicRouteNames = routeNames
         // 合并常量路由和动态路由，赋给 menuRouter 用于菜单渲染
         this.menuRouter = [...ConstedRoutes.filter((r) => r.name !== 'unknown'), ...MyAsyncRoutes]
 
@@ -72,9 +78,16 @@ const useUserStore = defineStore('User', {
     },
     // 退出登录
     userLogout() {
+      // 清除动态路由
+      this.dynamicRouteNames.forEach((name) => {
+        router.removeRoute(name)
+      })
+      this.dynamicRouteNames = []
       this.token = ''
       this.avatar = ''
       this.username = ''
+      this.avaliableButtons = []
+      this.menuRouter = ConstedRoutes
       // 删除TOKEN
       REMOVE_TOKEN()
       //

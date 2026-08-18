@@ -74,7 +74,7 @@ import {
   reqGetPermission,
   reqAddPermission,
   reqDeletePermission,
-} from '../../../apis/acl/permission/permission'
+} from '@/apis/acl/permission/permission'
 import { ref, onMounted, reactive, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
@@ -159,7 +159,12 @@ const HandleDeletePermission = async (id: number) => {
 }
 // 处理permission更新按钮
 const HandleUpdatePermissionBtn = (row: RoleAssignType) => {
-  Object.assign(AddPermissionObj, row)
+  // 只赋 AddPermissionType 需要的字段，避免 Object.assign 带入多余字段
+  AddPermissionObj.code = row.code
+  AddPermissionObj.name = row.name
+  AddPermissionObj.level = row.level
+  AddPermissionObj.pid = row.pid
+  AddPermissionObj.menuId = row.menuId
   ShowDialog.value = true
 }
 // 重置校验值

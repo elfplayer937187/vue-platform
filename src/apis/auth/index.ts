@@ -17,9 +17,7 @@ export const reqLogin = (data: LoginType) =>
   request.post<any, baseResponseType<string>>(API.LOGIN_URL, data)
 
 // 获取用户信息
-export const reqUserInfo = () =>
-  request.get<any, UserInfoRespType>(API.USERINFO_URL)
+export const reqUserInfo = () => request.get<any, UserInfoRespType>(API.USERINFO_URL)
 
 // 退出登录
-export const reqUserLogout = () =>
-  request.post<any, baseResponseType<string>>(API.LOGOUT_URL)
+export const reqUserLogout = () => request.post<any, baseResponseType<string>>(API.LOGOUT_URL)

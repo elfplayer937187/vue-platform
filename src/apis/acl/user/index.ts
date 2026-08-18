@@ -31,7 +31,7 @@ enum API {
 // 用户分页列表
 export const reqGetUserPagination = (page: number, limit: number, username?: string) =>
   request.get<any, UserPaginationResp>(
-    `${API.USER_PAGINATION_URL}/${page}/${limit}${username ? `?username=${username}` : ''}`
+    `${API.USER_PAGINATION_URL}/${page}/${limit}${username ? `?username=${username}` : ''}`,
   )
 
 // 新增用户

@@ -160,7 +160,7 @@ function logout() {
   // 清空数据[token|username|avatar]
   userLogout()
   // 跳转登录
-  $router.push({ path: '/login', query: { redirect: $route.path } })
+  $router.push({ path: '/login', query: { redirect: $route.name as string } })
 }
 // 处理主题设置按钮
 const HandleSettingBtn = () => {
