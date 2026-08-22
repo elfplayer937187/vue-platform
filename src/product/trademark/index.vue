@@ -9,12 +9,7 @@
       @click="showDialog"
       >添加品牌</el-button
     >
-    <el-button
-      type="primary"
-      icon="Download"
-      color="green"
-      class="Plus"
-      @click="HandleExport"
+    <el-button type="primary" icon="Download" color="green" class="Plus" @click="HandleExport"
       >导出为excel</el-button
     >
     <!-- 对话框组件 -->

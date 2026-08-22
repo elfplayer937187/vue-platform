@@ -13,12 +13,7 @@
           @click="HandleAppendSPU"
           >添加SPU</el-button
         >
-        <el-button
-          type="primary"
-          icon="Download"
-          color="green"
-          class="Plus"
-          @click="HandleExport"
+        <el-button type="primary" icon="Download" color="green" class="Plus" @click="HandleExport"
           >导出为excel</el-button
         >
         <el-table style="width: 100%" :data="SPUList" border>
