@@ -240,8 +240,13 @@ const HandleExport = () => {
   ExportXlsx(SPUList.value, {
     fileName: 'SPU列表',
     mapper: (item) => ({
+      SPUId: item.spuId ?? '',
       SPU名称: item.spuName,
       SPU描述: item.description,
+      三级分类id: item.category3Id,
+      品牌id: item.tmId,
+      图片列表: JSON.stringify(item.spuImageList ?? []),
+      销售属性列表: JSON.stringify(item.spuSaleAttrList ?? []),
     }),
   })
 }

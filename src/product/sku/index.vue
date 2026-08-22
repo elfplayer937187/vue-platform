@@ -243,10 +243,19 @@ const HandleExport = () => {
   ExportXlsx(SKUList.value, {
     fileName: 'SKU列表',
     mapper: (item) => ({
+      SKUid: item.skuId ?? '',
       SKU名称: item.skuName,
-      描述: item.skuDesc,
+      SPUid: item.spuId,
+      三级分类id: item.category3Id,
+      品牌id: item.tmId,
+      是否上架: item.isSale ?? '',
       重量g: item.weight,
       价格元: item.price,
+      描述: item.skuDesc,
+      默认图片: item.skuDefaultImg ?? '',
+      平台属性列表: JSON.stringify(item.skuAttrValueList ?? []),
+      销售属性列表: JSON.stringify(item.skuSaleAttrValueList ?? []),
+      图片列表: JSON.stringify(item.skuImageList ?? []),
     }),
   })
 }
@@ -262,18 +271,19 @@ const HandleExportSKUInfo = () => {
   ExportXlsx([SKUInfo.value], {
     fileName: `${SKUInfo.value.skuName}详情`,
     mapper: (item) => ({
+      SKUid: item.skuId ?? item.id ?? '',
       SKU名称: item.skuName,
-      描述: item.skuDesc,
+      SPUid: item.spuId,
+      三级分类id: item.category3Id,
+      品牌id: item.tmId,
+      是否上架: item.isSale ?? '',
       重量g: item.weight,
       价格元: item.price,
-      销售属性: item.skuSaleAttrValueList
-        .map((v) => v.saleAttrName)
-        .filter(Boolean)
-        .join('、'),
-      平台属性: item.skuAttrValueList
-        .map((v) => v.attrName)
-        .filter(Boolean)
-        .join('、'),
+      描述: item.skuDesc,
+      默认图片: item.skuDefaultImg,
+      平台属性列表: JSON.stringify(item.skuAttrValueList),
+      销售属性列表: JSON.stringify(item.skuSaleAttrValueList),
+      图片列表: JSON.stringify(item.skuImageList ?? []),
     }),
   })
 }

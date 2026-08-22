@@ -142,7 +142,7 @@ onMounted(() => {
   if (settingIsDark.value) {
     document.querySelector('html')?.classList.add('dark')
   }
-  if (color.value !== '#409EFF') {
+  if (color.value && color.value !== '#409EFF') {
     document.documentElement.style.setProperty('--el-color-primary', color.value)
   }
 })
@@ -152,7 +152,8 @@ watch(settingIsDark, (val) => {
 })
 // 持久化主题颜色
 watch(color, (val) => {
-  localStorage.setItem(THEME_COLOR_KEY, val)
+  // 清除时为 null，兜底为默认色，避免写入 "null" 字符串
+  localStorage.setItem(THEME_COLOR_KEY, val || '#409EFF')
 })
 // 退出登录点击的回调
 function logout() {
@@ -175,15 +176,14 @@ const HandleDarkChange = () => {
     : (html as HTMLHtmlElement).classList.remove('dark')
 }
 // 处理主题颜色
-const HandleColorChange = () => {
+const HandleColorChange = (val: string | null) => {
   const el = document.documentElement
-  // const el = document.getElementById('xxx')
-
-  // 获取 css 变量
-  getComputedStyle(el).getPropertyValue(`--el-color-primary`)
-
+  // 清除颜色时为 null，恢复默认主题色，避免变白
+  const resolved = val || '#409EFF'
+  // 同步回 picker，防止 v-model 停留在 null
+  color.value = resolved
   // 设置 css 变量
-  el.style.setProperty('--el-color-primary', color.value)
+  el.style.setProperty('--el-color-primary', resolved)
 }
 // 处理图片上传成功回调
 const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
