@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <el-card class="box-card">
     <!-- 添加品牌按钮 -->
     <el-button
@@ -205,8 +205,11 @@ const HandleExport = () => {
   ExportXlsx(tradeMarkList.value, {
     fileName: '品牌列表',
     mapper: (item) => ({
+      品牌id: item.tmId ?? '',
       品牌名称: item.tmName,
       品牌Logo: item.logoUrl,
+      创建时间: item.createTime ?? '',
+      更新时间: item.updateTime ?? '',
     }),
   })
 }

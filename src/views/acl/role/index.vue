@@ -309,6 +309,7 @@ const HandleExportByExcel = () => {
     mapper: (role: RoleRecord) => ({
       角色id: role.roleId,
       角色名称: role.roleName,
+      备注: role.remark,
       创建时间: role.createTime,
       更新时间: role.updateTime,
     }),

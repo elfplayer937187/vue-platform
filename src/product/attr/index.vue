@@ -307,8 +307,12 @@ const HandleExport = () => {
   ExportXlsx(AttrList.value, {
     fileName: '属性列表',
     mapper: (item) => ({
+      属性id: item.attrId ?? item.id ?? '',
       属性名称: item.attrName,
-      属性值: item.attrValueList.map((v) => v.valueName).join('、'),
+      分类id: item.categoryId,
+      分类层级: item.categoryLevel,
+      平台属性: item.platformChose ?? '',
+      属性值列表: JSON.stringify(item.attrValueList),
     }),
   })
 }
