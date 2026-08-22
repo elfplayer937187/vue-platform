@@ -1,4 +1,8 @@
 <template>
+  <el-button type="primary" color="green" class="export-excel" @click="HandleExportExcel"
+    >导出为Excel</el-button
+  >
+
   <el-table :data="tableData" style="width: 100%; margin-bottom: 20px" row-key="id" border>
     <el-table-column header-align="center" align="center" prop="prop" label="名称">
       <template #default="{ row }">
@@ -79,6 +83,8 @@ import { ref, onMounted, reactive, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
 import type { FormInstance, FormRules } from 'element-plus'
+import { ExportXlsx } from '@/utils/export-xlsx'
+
 // 获取表单实例
 const form = ref<FormInstance>()
 // 验证整个保存表单
@@ -102,12 +108,54 @@ const AddPermissionObj = reactive<AddPermissionType>({
 })
 // 存放整个表的值
 const tableData = ref<RoleAssignType[]>([])
+// 存放递归列表的值
+const layoutTableData: RoleAssignType[] = []
+// 递归遍历tableData获取平铺表
+function recursiveTableData(tableData: RoleAssignType[]) {
+  if (!tableData) {
+    return
+  }
+  for (const data of tableData) {
+    const newData: any = {}
+    Object.assign(newData, data)
+    delete newData.children
+    layoutTableData.push(newData)
+    // 进入下一层
+    if (data.children && data.children.length > 0) {
+      recursiveTableData(data.children)
+    }
+  }
+}
+// 监视tableData变化整理出平铺表
+watch(tableData, () => {
+  recursiveTableData(tableData.value)
+})
+
+// 处理导出为Excel
+const HandleExportExcel = () => {
+  ExportXlsx(layoutTableData, {
+    fileName: '菜单管理',
+    mapper: (item:RoleAssignType) => ({
+      "id":item.menuId,
+      "属性名称":item.name,
+      "权限值":item.code,
+      "层级":item.level,
+      "创建时间":item.createTime,
+      "更新时间":item.updateTime,
+      "父级节点":item.pid,
+      "是否拥有权限":item.select,
+      "状态":item.status,
+      "重定向":item.toCode,
+      "类型":item.type
+    })
+  })
+}
 
 // 获取表格数据
 const GetPermissionData = async () => {
   const res = await reqGetPermission()
   if (res.code === 200) {
-    // console.log(res.data)
+    console.log(res.data)
 
     tableData.value = res.data
   }
@@ -175,4 +223,8 @@ watch(ShowDialog, (val) => {
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.export-excel {
+  margin-bottom: 20px;
+}
+</style>

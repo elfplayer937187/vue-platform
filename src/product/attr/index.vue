@@ -13,6 +13,15 @@
           @click="AppendValue"
           >添加元素</el-button
         >
+        <!-- 导出按钮 -->
+        <el-button
+          type="primary"
+          icon="Download"
+          style="margin-bottom: 10px; margin-left: 10px"
+          color="green"
+          @click="HandleExport"
+          >导出为Excel</el-button
+        >
         <!-- 第一视图表格 -->
         <el-table style="width: 100%" :border="true" :data="AttrList">
           <el-table-column prop="prop" label="序号" width="80px" align="center" type="index">
@@ -124,6 +133,7 @@ import { watch, ref, reactive, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { reqSaveAttr, reqRemoveAttr, reqGetAttrList } from '@/apis/product/attr'
 import type { AttrItem } from '@/apis/product/attr/type'
+import { ExportXlsx } from '@/utils/export-xlsx'
 import 'element-plus/dist/index.css'
 import { ElMessage } from 'element-plus'
 const CategoryStore = useCategoryStore()
@@ -284,6 +294,23 @@ const HandleCancel = () => {
   AppendParams.attrValueList = []
   showChange.value = false
   Isdisabled.value = false
+}
+// 导出当前分类下的属性列表为 Excel
+const HandleExport = () => {
+  if (AttrList.value.length === 0) {
+    ElMessage({
+      type: 'warning',
+      message: '当前分类下没有可导出的属性',
+    })
+    return
+  }
+  ExportXlsx(AttrList.value, {
+    fileName: '属性列表',
+    mapper: (item) => ({
+      属性名称: item.attrName,
+      属性值: item.attrValueList.map((v) => v.valueName).join('、'),
+    }),
+  })
 }
 // 第二界面删除tag函数
 const handleDelete2 = (name: string) => {
