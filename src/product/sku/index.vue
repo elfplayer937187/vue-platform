@@ -136,11 +136,7 @@
         </el-row>
       </template>
       <template #footer>
-        <el-button
-          type="primary"
-          icon="Download"
-          color="green"
-          @click="HandleExportSKUInfo"
+        <el-button type="primary" icon="Download" color="green" @click="HandleExportSKUInfo"
           >导出为Excel</el-button
         >
       </template>

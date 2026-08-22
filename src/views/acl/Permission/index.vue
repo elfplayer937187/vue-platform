@@ -135,19 +135,19 @@ watch(tableData, () => {
 const HandleExportExcel = () => {
   ExportXlsx(layoutTableData, {
     fileName: '菜单管理',
-    mapper: (item:RoleAssignType) => ({
-      "id":item.menuId,
-      "属性名称":item.name,
-      "权限值":item.code,
-      "层级":item.level,
-      "创建时间":item.createTime,
-      "更新时间":item.updateTime,
-      "父级节点":item.pid,
-      "是否拥有权限":item.select,
-      "状态":item.status,
-      "重定向":item.toCode,
-      "类型":item.type
-    })
+    mapper: (item: RoleAssignType) => ({
+      id: item.menuId,
+      属性名称: item.name,
+      权限值: item.code,
+      层级: item.level,
+      创建时间: item.createTime,
+      更新时间: item.updateTime,
+      父级节点: item.pid,
+      是否拥有权限: item.select,
+      状态: item.status,
+      重定向: item.toCode,
+      类型: item.type,
+    }),
   })
 }
 

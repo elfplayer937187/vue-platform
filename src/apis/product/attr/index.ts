@@ -1,10 +1,5 @@
 import request from '@/utils/request'
-import type {
-  CategoryListResp,
-  AttrListResp,
-  AttrItem,
-  DefaultResp,
-} from './type'
+import type { CategoryListResp, AttrListResp, AttrItem, DefaultResp } from './type'
 
 enum API {
   // 分类下拉
@@ -20,8 +15,7 @@ enum API {
 }
 
 // 一级分类
-export const reqGetFirstCategory = () =>
-  request.get<any, CategoryListResp>(API.CATEGORY1_URL)
+export const reqGetFirstCategory = () => request.get<any, CategoryListResp>(API.CATEGORY1_URL)
 
 // 二级分类
 export const reqGetSecondCategory = (id: number | string) =>
@@ -32,8 +26,11 @@ export const reqGetThirdCategory = (id: number | string) =>
   request.get<any, CategoryListResp>(`${API.CATEGORY3_URL}/${id}`)
 
 // 获取属性列表（三级分类级联）
-export const reqGetAttrList = (c1Id: number | string, c2Id: number | string, c3Id: number | string) =>
-  request.get<any, AttrListResp>(`${API.ATTR_INFO_LIST_URL}/${c1Id}/${c2Id}/${c3Id}`)
+export const reqGetAttrList = (
+  c1Id: number | string,
+  c2Id: number | string,
+  c3Id: number | string,
+) => request.get<any, AttrListResp>(`${API.ATTR_INFO_LIST_URL}/${c1Id}/${c2Id}/${c3Id}`)
 
 // 新增/更新属性（有 attrId 则更新，无则新增）
 export const reqSaveAttr = (data: AttrItem) =>
