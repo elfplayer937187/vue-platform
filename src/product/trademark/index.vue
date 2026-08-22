@@ -9,6 +9,14 @@
       @click="showDialog"
       >添加品牌</el-button
     >
+    <el-button
+      type="primary"
+      icon="Download"
+      color="green"
+      class="Plus"
+      @click="HandleExport"
+      >导出为excel</el-button
+    >
     <!-- 对话框组件 -->
     <el-dialog
       v-model="dialogVisible"
@@ -142,6 +150,7 @@ import type {
   tradeMarkType,
   RecordsData,
 } from '@/apis/product/trademark/type'
+import { ExportXlsx } from '@/utils/export-xlsx'
 import useUserStore from '@/stores/modules/user'
 import { ElMessage } from 'element-plus'
 import 'element-plus/es/components/message/style/css'
@@ -189,6 +198,23 @@ const HasTradeMark = async () => {
 onMounted(() => {
   HasTradeMark()
 })
+// 导出当前页品牌列表为 Excel
+const HandleExport = () => {
+  if (tradeMarkList.value.length === 0) {
+    ElMessage({
+      type: 'warning',
+      message: '当前没有可导出的品牌',
+    })
+    return
+  }
+  ExportXlsx(tradeMarkList.value, {
+    fileName: '品牌列表',
+    mapper: (item) => ({
+      品牌名称: item.tmName,
+      品牌Logo: item.logoUrl,
+    }),
+  })
+}
 // 页面页数变化触发
 const ChangePage = () => {
   HasTradeMark()

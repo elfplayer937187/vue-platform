@@ -163,8 +163,6 @@ const initSKUData = async (
 }
 // 设置默认图片
 const SetDefaultImg = (row: ImageType) => {
-  console.log(row.imageUrl)
-
   // 所有前面多选框全部不选中
   ImageList.value.forEach((item) => {
     table.value.toggleRowSelection(item, false)

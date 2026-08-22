@@ -1,5 +1,14 @@
 <template>
   <div>
+    <!-- 导出按钮 -->
+    <el-button
+      type="primary"
+      icon="Download"
+      color="green"
+      style="margin-bottom: 10px"
+      @click="HandleExport"
+      >导出为Excel</el-button
+    >
     <el-table :data="SKUList" style="width: 100%" border>
       <el-table-column
         prop="prop"
@@ -126,6 +135,15 @@
           </el-col>
         </el-row>
       </template>
+      <template #footer>
+        <el-button
+          type="primary"
+          icon="Download"
+          color="green"
+          @click="HandleExportSKUInfo"
+          >导出为Excel</el-button
+        >
+      </template>
     </el-drawer>
   </div>
 </template>
@@ -139,6 +157,7 @@ import {
   reqGetSKUInfo,
 } from '@/apis/product/sku'
 import type { SKUType } from '@/apis/product/sku/type'
+import { ExportXlsx } from '@/utils/export-xlsx'
 import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
@@ -215,6 +234,52 @@ const ChangeOnSale = async (isSale: number, skuId: number) => {
     })
   }
   await getSKUPagination(false)
+}
+// 导出当前页 SKU 列表为 Excel
+const HandleExport = () => {
+  if (SKUList.value.length === 0) {
+    ElMessage({
+      type: 'warning',
+      message: '当前没有可导出的 SKU',
+    })
+    return
+  }
+  ExportXlsx(SKUList.value, {
+    fileName: 'SKU列表',
+    mapper: (item) => ({
+      SKU名称: item.skuName,
+      描述: item.skuDesc,
+      重量g: item.weight,
+      价格元: item.price,
+    }),
+  })
+}
+// 导出抽屉中当前查看的 SKU 为 Excel
+const HandleExportSKUInfo = () => {
+  if (!SKUInfo.value) {
+    ElMessage({
+      type: 'warning',
+      message: '当前没有可导出的 SKU',
+    })
+    return
+  }
+  ExportXlsx([SKUInfo.value], {
+    fileName: `${SKUInfo.value.skuName}详情`,
+    mapper: (item) => ({
+      SKU名称: item.skuName,
+      描述: item.skuDesc,
+      重量g: item.weight,
+      价格元: item.price,
+      销售属性: item.skuSaleAttrValueList
+        .map((v) => v.saleAttrName)
+        .filter(Boolean)
+        .join('、'),
+      平台属性: item.skuAttrValueList
+        .map((v) => v.attrName)
+        .filter(Boolean)
+        .join('、'),
+    }),
+  })
 }
 // 显示SKU详细信息
 const ShowSKUDetail = async (skuId: number) => {

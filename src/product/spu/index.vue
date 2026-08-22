@@ -13,6 +13,14 @@
           @click="HandleAppendSPU"
           >添加SPU</el-button
         >
+        <el-button
+          type="primary"
+          icon="Download"
+          color="green"
+          class="Plus"
+          @click="HandleExport"
+          >导出为excel</el-button
+        >
         <el-table style="width: 100%" :data="SPUList" border>
           <el-table-column prop="prop" label="序号" width="100px" type="index" align="center">
           </el-table-column>
@@ -110,6 +118,7 @@ import { reqGetDeleteSPU, reqGetSPUpagination } from '@/apis/product/spu'
 import useCategoryStore from '@/stores/modules/Category'
 import { storeToRefs } from 'pinia'
 import type { SPUType } from '@/apis/product/spu/type'
+import { ExportXlsx } from '@/utils/export-xlsx'
 import { ElMessage } from 'element-plus'
 import 'element-plus/dist/index.css' // 关键：引入所有组件样式
 import { reqShowSKUInfo } from '@/apis/product/sku'
@@ -223,6 +232,23 @@ const Handle2Save = async () => {
   ShowWhat.value = 0
   // 重新渲染列表
   await getSPUpagination()
+}
+// 导出当前页 SPU 列表为 Excel
+const HandleExport = () => {
+  if (!SPUList.value || SPUList.value.length === 0) {
+    ElMessage({
+      type: 'warning',
+      message: '当前没有可导出的 SPU',
+    })
+    return
+  }
+  ExportXlsx(SPUList.value, {
+    fileName: 'SPU列表',
+    mapper: (item) => ({
+      SPU名称: item.spuName,
+      SPU描述: item.description,
+    }),
+  })
 }
 // 处理第二视图查看Info事件
 const HandleInfo = async (row: SPUType) => {
