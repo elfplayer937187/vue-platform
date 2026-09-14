@@ -4,7 +4,7 @@
     <el-image style="width: 100px; height: 100px" :src="avatar" class="card-avartar"></el-image>
     <div class="right-text">
       <h3>{{ getTime() }},{{ username }}</h3>
-      <p>硅谷甄选运营平台</p>
+      <p>电商运营平台</p>
     </div>
   </el-card>
   <div class="welcome">

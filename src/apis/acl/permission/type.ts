@@ -1,8 +1,6 @@
 import type { baseResponseType } from '@/apis/others/baseType/base'
 import type { RoleAssignType } from '../role/type'
-export interface GetPermissionRespType extends baseResponseType<never> {
-  data: RoleAssignType[]
-}
+export type GetPermissionRespType = baseResponseType<RoleAssignType[]>
 export interface AddPermissionType {
   menuId?: number
   code: string //权限数值

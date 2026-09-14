@@ -13,7 +13,7 @@ import 'nprogress/nprogress.css'
 nprogress.configure({ showSpinner: false })
 router.beforeEach(async (to: any, from: any, next: any) => {
   // 设置标题
-  document.title = '硅谷甄选' + '-' + to.meta.title
+  document.title = `${import.meta.env.VITE_APP_TITLE}-${to.meta.title}`
   // 初始化获取token来判断是否能登录
   nprogress.start()
   const UserStore = useUserStore()
