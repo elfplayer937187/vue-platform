@@ -3,7 +3,7 @@
     <!-- 左侧品牌区 -->
     <div class="login-left">
       <div class="brand-content">
-        <h1 class="brand-title">硅谷甄选</h1>
+        <h1 class="brand-title">电商运营平台</h1>
         <p class="brand-slogan">高效 · 智能 · 值得信赖</p>
       </div>
     </div>

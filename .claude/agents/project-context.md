@@ -4,11 +4,11 @@ description: 项目全局信息：技术栈、架构、目录结构、编码规�
 model: sonnet
 ---
 
-# 项目全局上下文 — `vue-guigu`
+# 项目全局上下文 — `电商运营平台`
 
 ## 📦 项目概述
 
-**项目名称**: 硅谷甄选 (Silicon Valley Selection)  
+**项目名称**: 电商运营平台  
 **项目类型**: 企业级后台管理系统 (Admin Management System)  
 **技术栈**: Vue 3 + TypeScript + Element Plus + Pinia + Vue Router + Vite  
 
@@ -39,7 +39,7 @@ model: sonnet
 ## 📁 项目目录结构
 
 ```
-vue-guigu/
+电商运营平台/
 ├── src/
 │   ├── main.ts                       # 入口，注册 router/pinia/组件/指令
 │   ├── App.vue                       # 根组件 (<RouterView>)

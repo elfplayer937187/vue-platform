@@ -1,4 +1,4 @@
-# vue-guigu
+# 电商运营平台 (vue-platform)
 
 ## 项目信息
 

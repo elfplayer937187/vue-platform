@@ -1,7 +1,7 @@
 <template>
   <div class="logo" :class="{ fold: isFold }">
     <img src="../../../public/logo.png" alt="" />
-    <p v-show="!isFold">硅谷甄选</p>
+    <p v-show="!isFold">电商运营平台</p>
   </div>
 </template>
 
