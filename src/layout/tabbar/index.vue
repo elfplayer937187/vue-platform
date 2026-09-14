@@ -2,9 +2,11 @@
   <div class="tabbar">
     <div class="tabbar-left">
       <!-- 图标静态 -->
-      <el-icon @click="ChangeFold">
-        <component :is="iconComponent"></component>
-      </el-icon>
+      <el-button type="" @click="ChangeFold">
+        <el-icon>
+          <component :is="iconComponent"></component>
+        </el-icon>
+      </el-button>
       <!-- 左侧面包屑 -->
       <el-breadcrumb separator-icon="ArrowRight" style="margin-left: 10px">
         <el-breadcrumb-item
@@ -215,6 +217,7 @@ const HandleAvatarUpdate = async () => {
   .tabbar-left {
     margin-left: 20px;
     display: flex;
+    align-items: center;
     .fold-icon {
       cursor: pointer;
       margin-right: 20px;

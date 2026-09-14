@@ -11,6 +11,8 @@ import 'nprogress/nprogress.css'
     next:放行函数
 */
 nprogress.configure({ showSpinner: false })
+// 无需登录即可访问的白名单
+const WhiteList = ['/login', '/register']
 router.beforeEach(async (to: any, from: any, next: any) => {
   // 设置标题
   document.title = `${import.meta.env.VITE_APP_TITLE}-${to.meta.title}`
@@ -21,7 +23,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   const username = UserStore.username
 
   if (token) {
-    if (to.path === '/login') {
+    if (WhiteList.includes(to.path)) {
       next({ path: '/' })
     } else {
       // 成功放行否则获取用户信息
@@ -41,7 +43,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
       }
     }
   } else {
-    if (to.path === '/login') {
+    if (WhiteList.includes(to.path)) {
       next()
     } else {
       // 没有token重定向到login,并且把没去成的路径传给login

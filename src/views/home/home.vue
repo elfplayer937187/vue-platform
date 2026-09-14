@@ -1,14 +1,14 @@
 <!-- layout下默认二级组件 -->
 <template>
-  <el-card class="card">
-    <el-image style="width: 100px; height: 100px" :src="avatar" class="card-avartar"></el-image>
-    <div class="right-text">
-      <h3>{{ getTime() }},{{ username }}</h3>
-      <p>电商运营平台</p>
-    </div>
-  </el-card>
-  <div class="welcome">
-    <svg-icon name="welcome" width="500px" height="500px" class="welcome"></svg-icon>
+  <div class="">
+    <el-card class="card">
+      <el-image style="width: 100px; height: 100px" :src="avatar" class="card-avartar"></el-image>
+      <div class="right-text">
+        <h3>{{ getTime() }},{{ username }}</h3>
+        <p>电商运营平台</p>
+      </div>
+    </el-card>
+    <div class="welcome"></div>
   </div>
 </template>
 

@@ -1,13 +1,71 @@
 @use './reset.scss';
 
+// ── 左侧导航配色 ──────────────────────────────────────────
+// 浅色侧边栏：白底，靠右侧 1px 分割线和内容区区分
+// 激活态取主题色，跟着右上角「主题设置」里的取色器一起变
+//
+// 放在全局而不是组件里：折叠后弹出的子菜单会被 teleport 到 body，
+// 组件内的 scoped 样式够不着它
+:root {
+  --app-menu-bg: #fff;
+  --app-menu-border: #e9ecf2;
+
+  --app-menu-title: #1e293b; // logo 旁边的平台名
+  --app-menu-text-l1: #334155; // 一级项 / 父级标题
+  --app-menu-text-l2: #64748b; // 二级项，往后退一档
+  --app-menu-text-hover: #0f172a;
+
+  --app-menu-hover-bg: #f1f5f9;
+  --app-menu-active-bg: color-mix(in srgb, var(--el-color-primary) 8%, #fff);
+  --app-menu-active-text: var(--el-color-primary);
+}
+
+// 暗黑模式一起翻，否则白侧边栏压在深色内容区上会很刺眼
+html.dark {
+  --app-menu-bg: #1d1e1f;
+  --app-menu-border: #363637;
+
+  --app-menu-title: #f0f2f5;
+  --app-menu-text-l1: #e5eaf3;
+  --app-menu-text-l2: #a3a6ad;
+  --app-menu-text-hover: #fff;
+
+  --app-menu-hover-bg: #262727;
+  --app-menu-active-bg: color-mix(in srgb, var(--el-color-primary) 22%, #1d1e1f);
+  // 深色底上把主题色提亮一点，避免选中项的文字发闷
+  --app-menu-active-text: color-mix(in srgb, var(--el-color-primary) 75%, #fff);
+}
+
+// el-menu 目前只有左侧导航在用，这里统一换成 Element Plus 自己的变量，
+// 折叠弹层继承的就是这套，不用再逐个写 !important
+.el-menu {
+  --el-menu-bg-color: var(--app-menu-bg);
+  --el-menu-text-color: var(--app-menu-text-l1);
+  --el-menu-hover-bg-color: var(--app-menu-hover-bg);
+  --el-menu-hover-text-color: var(--app-menu-text-hover);
+  --el-menu-active-color: var(--app-menu-active-text);
+  --el-menu-border-color: var(--app-menu-border);
+}
+
 // 滚动条样式设置
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background-color: $base-menu-bgc;
+  background-color: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: white;
+  background-color: #cbd5e1;
   border-radius: 10px;
+
+  &:hover {
+    background-color: #94a3b8;
+  }
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background-color: #4c4d4f;
+
+  &:hover {
+    background-color: #5c5d5f;
+  }
 }

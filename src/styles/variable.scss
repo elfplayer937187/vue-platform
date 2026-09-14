@@ -4,13 +4,6 @@
 // 宽
 $base-menu-width: 260px;
 $base-menu-minwidth: 50px;
-// 颜色
-$base-menu-bgc: #0f172a;
-$base-menu-hover-bgc: #1e293b;
-$base-menu-text-color: #e2e8f0;
-$base-menu-text-dim-color: #94a3b8;
-$base-menu-active-text-color: #fff;
-$base-menu-border-color: rgba(255, 255, 255, 0.06);
 
 // home顶部
 $base-menu-topheight: 60px;
@@ -18,10 +11,6 @@ $base-menu-topheight: 60px;
 // logo的高
 $base-menu-logoheight: 60px;
 
-// tabbar的颜色
-$base-tabbar-bgc-light: white;
-$base-tabbar-bgc-dark: black;
-
-// content背景颜色
-$base-content-bgc-light: white;
-$base-content-bgc-dark: black;
+// 左侧菜单的颜色放在 styles/index.scss 的 --app-menu-* 里，不再用 SCSS 变量：
+// 1) 激活态要跟着主题色 --el-color-primary 走（右上角取色器可改），SCSS 变量是编译期的
+// 2) 需要按 html.dark 切换深浅

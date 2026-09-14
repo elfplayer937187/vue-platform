@@ -1,6 +1,5 @@
 <template>
   <div class="logo" :class="{ fold: isFold }">
-    <img src="../../../public/logo.png" alt="" />
     <p v-show="!isFold">电商运营平台</p>
   </div>
 </template>
@@ -18,7 +17,7 @@ defineProps<{ isFold: boolean }>()
   justify-content: center;
   transition: all 0.3s ease;
   overflow: hidden;
-  border-bottom: 1px solid $base-menu-border-color;
+  border-bottom: 1px solid var(--app-menu-border);
 
   &.fold {
     width: $base-menu-minwidth;
@@ -30,7 +29,7 @@ defineProps<{ isFold: boolean }>()
     flex-shrink: 0;
   }
   p {
-    color: $base-menu-active-text-color;
+    color: var(--app-menu-title);
     white-space: nowrap;
     font-size: 16px;
     font-weight: 600;

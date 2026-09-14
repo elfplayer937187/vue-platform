@@ -1,12 +1,7 @@
 <template>
   <div class="login_container">
     <!-- 左侧品牌区 -->
-    <div class="login-left">
-      <div class="brand-content">
-        <h1 class="brand-title">电商运营平台</h1>
-        <p class="brand-slogan">高效 · 智能 · 值得信赖</p>
-      </div>
-    </div>
+    <BrandPanel />
 
     <!-- 右侧表单区 -->
     <div class="login-right">
@@ -44,6 +39,10 @@
             </el-button>
           </el-form-item>
         </el-form>
+        <div class="form-footer">
+          <span class="footer-text">还没有账号？</span>
+          <router-link class="footer-link" to="/register">立即注册</router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -57,6 +56,7 @@ import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
 import { getTime } from '@/utils/time'
 import { useRoute } from 'vue-router'
+import BrandPanel from '@/components/BrandPanel/index.vue'
 // 手动导入 ElNotification 的样式（函数式调用不会被 unplugin 自动加载）
 import 'element-plus/es/components/notification/style/css'
 // 引入用户仓库
@@ -114,8 +114,8 @@ const login = async () => {
   isloading.value = false
 }
 function CheckUsername(rule: any, value: string, callback: (error?: string | Error) => void) {
-  if (!(value.length > 4 && value.length < 12)) {
-    callback(new Error('长度必须大于4小于12'))
+  if (!(value.length > 2 && value.length < 20)) {
+    callback(new Error('长度必须大于2小于20'))
   } else {
     callback()
   }
@@ -124,7 +124,7 @@ function CheckUsername(rule: any, value: string, callback: (error?: string | Err
 const rules = {
   username: [{ required: true, validator: CheckUsername }],
   password: [
-    { required: true, min: 6, max: 12, message: '密码长度必须大于5或者小于13!', trigger: 'change' },
+    { required: true, min: 2, max: 20, message: '密码长度必须大于2或者小于20!', trigger: 'change' },
   ],
 }
 </script>
@@ -134,60 +134,6 @@ const rules = {
   display: flex;
   width: 100%;
   height: 100vh;
-}
-
-// ========== 左侧品牌区 ==========
-.login-left {
-  flex: 5;
-  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #3b82f6 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-
-  // 装饰圆形
-  &::before {
-    content: '';
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    top: -100px;
-    right: -100px;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.04);
-    bottom: -80px;
-    left: -60px;
-  }
-}
-
-.brand-content {
-  text-align: center;
-  color: #fff;
-  position: relative;
-  z-index: 1;
-}
-
-.brand-title {
-  font-size: 48px;
-  font-weight: 700;
-  letter-spacing: 8px;
-  margin: 0 0 16px;
-}
-
-.brand-slogan {
-  font-size: 18px;
-  letter-spacing: 6px;
-  opacity: 0.75;
-  margin: 0;
 }
 
 // ========== 右侧表单区 ==========
@@ -225,12 +171,28 @@ const rules = {
   width: 100%;
 }
 
+.form-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.footer-text {
+  color: #94a3b8;
+}
+
+.footer-link {
+  color: #4f83c4;
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 // ========== 移动端适配 ==========
 @media (max-width: 768px) {
-  .login-left {
-    display: none;
-  }
-
   .login-right {
     flex: 1;
   }

@@ -14,6 +14,18 @@ export const ConstedRoutes = [
       Icon: 'User',
     },
   },
+  // 注册一级路由
+  {
+    path: '/register',
+    // 懒加载
+    component: () => import('@/views/register/index.vue'),
+    name: 'register',
+    meta: {
+      title: '注册',
+      IsShow: false,
+      Icon: 'User',
+    },
+  },
   // 首页一级路由
   {
     path: '',

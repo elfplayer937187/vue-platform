@@ -1,6 +1,7 @@
 <template>
-  <!-- 上方的card -->
-  <el-card class="search-card">
+  <div class="role-container">
+    <!-- 上方的card -->
+    <el-card class="search-card">
     <template #default>
       <el-form ref="form" label-width="80px" class="search-card-form" @submit.prevent>
         <el-form-item label="角色名称">
@@ -131,6 +132,7 @@
       >
     </template>
   </el-drawer>
+  </div>
 </template>
 
 <script lang="ts" setup>

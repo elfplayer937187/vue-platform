@@ -1,7 +1,8 @@
 <template>
-  <el-button type="primary" color="green" class="export-excel" @click="HandleExportExcel"
-    >导出为Excel</el-button
-  >
+  <div class="permission-container">
+    <el-button type="primary" color="green" class="export-excel" @click="HandleExportExcel"
+      >导出为Excel</el-button
+    >
 
   <el-table :data="tableData" style="width: 100%; margin-bottom: 20px" row-key="id" border>
     <el-table-column header-align="center" align="center" prop="prop" label="名称">
@@ -69,6 +70,7 @@
       >
     </template>
   </el-dialog>
+  </div>
 </template>
 
 <script lang="ts" setup>

@@ -6,6 +6,15 @@ export interface LoginType {
   password: string
 }
 
+// 注册请求参数
+export interface RegisterType {
+  username: string
+  name: string
+  password: string
+  confirmPassword: string
+  phone: string
+}
+
 // 用户信息 - data 结构
 export interface UserInfoDataType {
   avatar: string
