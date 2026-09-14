@@ -38,6 +38,11 @@ __screenshots__/
 # Vite
 *.timestamp-*-*.mjs
 
+# 环境变量文件（本地配置，不提交；如需共享模板用 .env.example）
+.env
+.env.*
+!.env.example
+
 # Claude AI — 只忽略个人/本地文件，项目级配置保留
 .claude/settings.local.json
 .claude/plans/
@@ -45,3 +50,7 @@ __screenshots__/
 
 # VS Code workspace（机器路径，不应提交）
 *.code-workspace
+
+#
+项目经历.md
+simple
